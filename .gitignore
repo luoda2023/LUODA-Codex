@@ -21,3 +21,8 @@ Thumbs.db
 # Temp scripts
 _*.py
 修改记录.txt
+# Token and session files
+*修改记录*.txt
+*session-*.md
+品牌化*
+_build_logs*

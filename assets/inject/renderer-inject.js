@@ -1,4 +1,4 @@
-﻿(() => {
+(() => {
   const helperBase = window.__CODEX_SESSION_DELETE_HELPER__ || "http://127.0.0.1:56789";
   const buttonClass = "codex-delete-button";
   const exportButtonClass = "codex-export-button";
