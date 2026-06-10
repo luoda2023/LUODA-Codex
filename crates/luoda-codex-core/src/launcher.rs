@@ -254,7 +254,7 @@ where
             } else {
                 let degraded = launch_status(
                     "running_degraded",
-                    "Codex 已启动，Codex++ 增强仍在等待页面就绪。",
+                    "Codex 已启动，LuodaCodex 增强仍在等待页面就绪。",
                     debug_port,
                     helper_port,
                     &app_dir,
@@ -268,7 +268,7 @@ where
         if !settings.enhancements_enabled || !injection_degraded {
             let status = launch_status(
                 "running",
-                "Codex++ launcher ready",
+                "LuodaCodex launcher ready",
                 debug_port,
                 helper_port,
                 &app_dir,

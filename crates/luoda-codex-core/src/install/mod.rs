@@ -6,7 +6,7 @@ pub mod macos;
 pub mod windows;
 
 pub const SILENT_NAME: &str = "LuoDaCodex";
-pub const MANAGER_NAME: &str = "Codex++ 绠＄悊宸ュ叿";
+pub const MANAGER_NAME: &str = "LuodaCodex 绠＄悊宸ュ叿";
 pub const SILENT_BINARY: &str = "luoda-codex";
 pub const MANAGER_BINARY: &str = "luoda-codex-manager";
 
@@ -72,11 +72,11 @@ impl ShortcutState {
 }
 
 pub fn shortcut_names() -> (&'static str, &'static str) {
-    ("Codex++.lnk", "Codex++ 绠＄悊宸ュ叿.lnk")
+    ("LuodaCodex.lnk", "LuodaCodex 绠＄悊宸ュ叿.lnk")
 }
 
 pub fn app_bundle_names() -> (&'static str, &'static str) {
-    ("Codex++.app", "Codex++ 绠＄悊宸ュ叿.app")
+    ("LuodaCodex.app", "LuodaCodex 绠＄悊宸ュ叿.app")
 }
 
 pub fn inspect_entrypoints() -> EntryPointState {
@@ -164,7 +164,7 @@ fn platform_install(options: &InstallOptions) -> anyhow::Result<()> {
     #[cfg(not(any(windows, target_os = "macos")))]
     {
         let _ = options;
-        anyhow::bail!("褰撳墠骞冲彴鏆備笉鏀寔瀹夎 Codex++ 鍏ュ彛")
+        anyhow::bail!("褰撳墠骞冲彴鏆備笉鏀寔瀹夎 LuodaCodex 鍏ュ彛")
     }
 }
 
@@ -182,7 +182,7 @@ fn platform_uninstall(options: &InstallOptions) -> anyhow::Result<()> {
     #[cfg(not(any(windows, target_os = "macos")))]
     {
         let _ = options;
-        anyhow::bail!("褰撳墠骞冲彴鏆備笉鏀寔鍗歌浇 Codex++ 鍏ュ彛")
+        anyhow::bail!("褰撳墠骞冲彴鏆備笉鏀寔鍗歌浇 LuodaCodex 鍏ュ彛")
     }
 }
 

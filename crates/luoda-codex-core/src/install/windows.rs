@@ -7,7 +7,7 @@ use super::{
 
 const UNINSTALL_SUBKEY: &str = r"Software\Microsoft\Windows\CurrentVersion\Uninstall\CodexPlusPlus";
 const LEGACY_UNINSTALL_SUBKEY: &str =
-    r"Software\Microsoft\Windows\CurrentVersion\Uninstall\Codex++";
+    r"Software\Microsoft\Windows\CurrentVersion\Uninstall\LuodaCodex";
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct WindowsEntrypointPlan {
@@ -35,7 +35,7 @@ pub fn build_windows_entrypoint_plan(options: &InstallOptions) -> WindowsEntrypo
             .to_string_lossy()
             .to_string(),
         manager_shortcut: install_root
-            .join("Codex++ 绠＄悊宸ュ叿.lnk")
+            .join("LuodaCodex 绠＄悊宸ュ叿.lnk")
             .to_string_lossy()
             .to_string(),
         install_root: install_root.to_string_lossy().to_string(),

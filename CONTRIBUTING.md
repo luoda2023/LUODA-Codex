@@ -33,7 +33,7 @@ Thank you for your interest in contributing to CodexPlusPlus!
 CodexPlusPlus/
 ├── crates/
 │   ├── luoda-codex-data/    # Data handling and provider sync
-│   └── luoda-codex-core/    # Core Codex++ logic
+│   └── luoda-codex-core/    # Core LuodaCodex logic
 └── README.md               # Project documentation
 ```
 

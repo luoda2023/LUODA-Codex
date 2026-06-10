@@ -2318,14 +2318,14 @@ fn default_user_script_manager() -> UserScriptManager {
 fn user_scripts_config_dir() -> PathBuf {
     if cfg!(windows) {
         if let Some(roaming) = std::env::var_os("APPDATA") {
-            return PathBuf::from(roaming).join("Codex++");
+            return PathBuf::from(roaming).join("LuodaCodex");
         }
     }
     std::env::var_os("XDG_CONFIG_HOME")
         .map(PathBuf::from)
         .or_else(|| directories::BaseDirs::new().map(|dirs| dirs.home_dir().join(".config")))
         .unwrap_or_else(|| PathBuf::from(".config"))
-        .join("Codex++")
+        .join("LuodaCodex")
 }
 
 fn builtin_user_scripts_dir() -> PathBuf {
