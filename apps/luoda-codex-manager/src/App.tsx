@@ -482,7 +482,7 @@ type StartupResult = CommandResult<{
   showUpdate: boolean;
 }>;
 
-type Route = "home" | "overview" | "relay" | "sessions" | "context" | "enhance" | "zedRemote" | "maintenance" | "about" | "settings";
+type Route = "home" | "overview" | "relay" | "sessions" | "context" | "enhance" | "zedRemote" | "maintenance" | "about" | "settings" | "userScripts" | "recommendations";
 type Theme = "dark" | "light";
 
 const routes: Array<{ id: Route; label: string; icon: LucideIcon }> = [
