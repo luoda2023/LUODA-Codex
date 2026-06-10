@@ -1,4 +1,4 @@
-#[cfg(windows)]
+﻿#[cfg(windows)]
 #[test]
 fn manager_binary_uses_windows_gui_subsystem_in_debug_and_release() {
     let main_rs = std::fs::read_to_string(concat!(env!("CARGO_MANIFEST_DIR"), "/src/main.rs"))
@@ -63,7 +63,7 @@ fn windows_binaries_request_administrator_privileges() {
         .and_then(std::path::Path::parent)
         .and_then(std::path::Path::parent)
         .unwrap()
-        .join("scripts/installer/windows/CodexPlusPlus.nsi");
+        .join("scripts/installer/windows/LuodaCodex.nsi");
     let windows_installer =
         std::fs::read_to_string(&windows_installer).expect("read windows installer");
 
@@ -99,7 +99,7 @@ fn macos_packager_hides_silent_launcher_but_not_manager() {
     assert!(script.contains("<key>LSUIElement</key>"));
     assert!(script.contains("ARCH=\"${2:-$(uname -m)}\""));
     assert!(script.contains("BINARY_DIR=\"${BINARY_DIR:-$ROOT/target/release}\""));
-    assert!(script.contains("CodexPlusPlus-${VERSION}-macos-${ARCH}.dmg"));
+    assert!(script.contains("LuodaCodex-${VERSION}-macos-${ARCH}.dmg"));
     assert!(script.contains(
         "create_app \"LuodaCodex\" \"CodexPlusPlus\" \"$BINARY_DIR/luoda-codex\" \"com.dicad.luodacodex\" \"true\""
     ));
