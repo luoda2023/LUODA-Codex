@@ -1,4 +1,4 @@
-#![cfg_attr(windows, windows_subsystem = "windows")]
+﻿#![cfg_attr(windows, windows_subsystem = "windows")]
 
 use anyhow::{Context, Result};
 use luoda_codex_core::launcher::{
@@ -207,7 +207,72 @@ fn open_manager_with_update_prompt() -> anyhow::Result<()> {
     command
         .spawn()
         .map(|_| ())
-        .map_err(|error| anyhow::anyhow!("?????????{error}"))?;
+        .map_err(|error| anyhow::anyhow!("启动管理工具失败error}"))
+}
+
+fn parse_launch_options<I, S>(args: I) -> LaunchOptions
+where
+    I: IntoIterator<Item = S>,
+    S: AsRef<str>,
+{
+    let mut options = LaunchOptions::default();
+    let mut iter = args.into_iter();
+    while let Some(arg) = iter.next() {
+        match arg.as_ref() {
+            "--app-path" => {
+                if let Some(value) = iter.next() {
+                    let value = value.as_ref().trim();
+                    if !value.is_empty() {
+                        options.app_dir = Some(PathBuf::from(value));
+                    }
+                }
+            }
+            "--debug-port" => {
+                if let Some(value) = iter.next() {
+                    if let Ok(port) = value.as_ref().parse::<u16>() {
+                        options.debug_port = port;
+                    }
+                }
+            }
+            "--helper-port" => {
+                if let Some(value) = iter.next() {
+                    if let Ok(port) = value.as_ref().parse::<u16>() {
+                        options.helper_port = port;
+                    }
+                }
+            }
+            _ => {}
+        }
+    }
+    options
+}
+
+#[async_trait::async_trait(?Send)]
+impl LaunchHooks for LauncherHooks {
+    fn resolve_app_dir(
+        &self,
+        app_dir: Option<&std::path::Path>,
+        settings: &luoda_codex_core::settings::BackendSettings,
+    ) -> anyhow::Result<std::path::PathBuf> {
+        self.core.resolve_app_dir(app_dir, settings)
+    }
+
+    fn select_debug_port(&self, requested: u16) -> u16 {
+        self.core.select_debug_port(requested)
+    }
+
+    fn select_helper_port(&self, requested: u16) -> u16 {
+        self.core.select_helper_port(requested)
+    }
+
+    async fn load_settings(&self) -> anyhow::Result<luoda_codex_core::settings::BackendSettings> {
+        self.core.load_settings().await
+    }
+
+    async fn run_provider_sync(&self) -> anyhow::Result<()> {
+        let _ = tokio::task::spawn_blocking(|| luoda_codex_data::run_provider_sync(None))
+            .await
+            .map_err(|error| anyhow::anyhow!("provider sync task failed: {error}"))?;
         Ok(())
     }
 
@@ -446,7 +511,162 @@ impl BridgeRuntimeService for LauncherRuntimeService {
             std::process::Command::new(&manager_path)
                 .creation_flags(luoda_codex_core::windows_create_no_window())
                 .spawn()
-                .map_err(|error| anyhow::anyhow!("鍚启动管理工具失败：{error}"))
+                .map_err(|error| anyhow::anyhow!("启动管理工具失败error}"))?;
+        }
+        #[cfg(not(windows))]
+        {
+            std::process::Command::new(&manager_path)
+                .spawn()
+                .map_err(|error| anyhow::anyhow!("启动管理工具失败error}"))?;
+        }
+        Ok(json!({
+            "status": "ok",
+            "path": manager_path.to_string_lossy()
+        }))
+    }
+
+    async fn backend_status(&self) -> anyhow::Result<Value> {
+        Ok(
+            json!({"status": "ok", "message": "后端已连接, "version": luoda_codex_core::version::VERSION}),
+        )
+    }
+
+    async fn repair_backend(&self) -> anyhow::Result<Value> {
+        self.backend_status().await
+    }
+
+    async fn codex_model_catalog(&self) -> anyhow::Result<Value> {
+        Ok(luoda_codex_core::model_catalog::read_codex_model_catalog().await)
+    }
+
+    async fn ads(&self) -> anyhow::Result<Value> {
+        luoda_codex_core::ads::fetch_ad_list().await
+    }
+
+    async fn zed_remote_status(&self) -> anyhow::Result<Value> {
+        Ok(luoda_codex_core::zed_remote::zed_remote_status())
+    }
+
+    async fn resolve_zed_remote_host(&self, payload: Value) -> anyhow::Result<Value> {
+        Ok(luoda_codex_core::zed_remote::resolve_ssh_target_response(
+            &payload,
+        ))
+    }
+
+    async fn fallback_zed_remote_request(&self, payload: Value) -> anyhow::Result<Value> {
+        Ok(luoda_codex_core::zed_remote::fallback_open_request_response(
+            &payload,
+        ))
+    }
+
+    async fn open_zed_remote(&self, payload: Value) -> anyhow::Result<Value> {
+        Ok(luoda_codex_core::zed_remote::open_zed_remote(&payload))
+    }
+
+    async fn list_zed_remote_projects(&self, payload: Value) -> anyhow::Result<Value> {
+        Ok(luoda_codex_core::zed_remote::list_zed_remote_projects_response(&payload))
+    }
+
+    async fn remember_zed_remote_project(&self, payload: Value) -> anyhow::Result<Value> {
+        Ok(luoda_codex_core::zed_remote::remember_zed_remote_project_response(&payload))
+    }
+
+    async fn forget_zed_remote_project(&self, payload: Value) -> anyhow::Result<Value> {
+        Ok(luoda_codex_core::zed_remote::forget_zed_remote_project_response(&payload))
+    }
+
+    async fn upstream_worktree_status(&self) -> anyhow::Result<Value> {
+        Ok(luoda_codex_core::upstream_worktree::status_response())
+    }
+
+    async fn upstream_worktree_defaults(&self, payload: Value) -> anyhow::Result<Value> {
+        Ok(luoda_codex_core::upstream_worktree::defaults_response(
+            &payload,
+        ))
+    }
+
+    async fn upstream_worktree_prepare(&self, payload: Value) -> anyhow::Result<Value> {
+        Ok(luoda_codex_core::upstream_worktree::prepare_response(
+            &payload,
+        ))
+    }
+
+    async fn upstream_worktree_create(&self, payload: Value) -> anyhow::Result<Value> {
+        Ok(luoda_codex_core::upstream_worktree::create_response(
+            &payload,
+        ))
+    }
+}
+
+async fn inject_with_context(
+    debug_port: u16,
+    helper_port: u16,
+    ctx: BridgeContext,
+    runtime: Arc<LauncherRuntimeService>,
+) -> anyhow::Result<()> {
+    let mut last_error = None;
+    for _ in 0..20 {
+        match try_inject_with_context(debug_port, helper_port, ctx.clone(), runtime.clone()).await {
+            Ok(()) => return Ok(()),
+            Err(error) => {
+                last_error = Some(error);
+                tokio::time::sleep(std::time::Duration::from_millis(500)).await;
+            }
+        }
+    }
+    Err(last_error.unwrap_or_else(|| anyhow::anyhow!("Codex injection failed")))
+}
+
+async fn try_inject_with_context(
+    debug_port: u16,
+    helper_port: u16,
+    ctx: BridgeContext,
+    runtime: Arc<LauncherRuntimeService>,
+) -> anyhow::Result<()> {
+    let targets = luoda_codex_core::cdp::list_targets(debug_port).await?;
+    let target = luoda_codex_core::cdp::pick_page_target(&targets)?;
+    let websocket_url = target
+        .web_socket_debugger_url
+        .as_deref()
+        .ok_or_else(|| anyhow::anyhow!("selected CDP target has no websocket URL"))?;
+    runtime.set_websocket_url(websocket_url);
+    let script = luoda_codex_core::assets::injection_script(helper_port);
+    let user_bundle = runtime
+        .user_scripts
+        .build_enabled_bundle()
+        .unwrap_or_default();
+    let new_document_scripts = if user_bundle.is_empty() {
+        vec![script]
+    } else {
+        vec![script, user_bundle]
+    };
+    luoda_codex_core::bridge::install_bridge(
+        websocket_url,
+        luoda_codex_core::bridge::BRIDGE_BINDING_NAME,
+        Arc::new(move |path, payload| {
+            let ctx = ctx.clone();
+            Box::pin(async move {
+                Ok(luoda_codex_core::routes::handle_bridge_request(ctx, &path, payload).await)
+            })
+        }),
+        &new_document_scripts,
+    )
+    .await
+}
+
+fn default_codex_db_path() -> PathBuf {
+    directories::BaseDirs::new()
+        .map(|dirs| dirs.home_dir().to_path_buf())
+        .unwrap_or_else(|| PathBuf::from("."))
+        .join(".codex")
+        .join("state_5.sqlite")
+}
+
+fn open_url(url: &str) -> anyhow::Result<()> {
+    #[cfg(windows)]
+    {
+        luoda_codex_core::windows_open_url(url)
+            .map_err(|error| anyhow::anyhow!("failed to open DevTools URL: {error}"))
     }
 
     #[cfg(target_os = "macos")]
