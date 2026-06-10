@@ -1,0 +1,23 @@
+﻿__pycache__/
+.venv/
+venv/
+.worktrees/
+*.egg-info/
+build/
+dist/
+target/
+apps/luoda-codex-manager/src-tauri/gen/
+
+.codex_asar_extract/
+.codex_asar_extract_latest/
+.superpowers/
+.claude/
+docs/superpowers/
+
+*.log
+.DS_Store
+Thumbs.db
+
+# Temp scripts
+_*.py
+修改记录.txt
