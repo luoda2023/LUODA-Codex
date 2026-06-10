@@ -35,7 +35,7 @@ pub fn build_windows_entrypoint_plan(options: &InstallOptions) -> WindowsEntrypo
             .to_string_lossy()
             .to_string(),
         manager_shortcut: install_root
-            .join("LuodaCodex 绠＄悊宸ュ叿.lnk")
+            .join("LuodaCodex 管理工具.lnk")
             .to_string_lossy()
             .to_string(),
         install_root: install_root.to_string_lossy().to_string(),

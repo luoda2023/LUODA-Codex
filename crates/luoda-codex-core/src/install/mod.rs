@@ -6,7 +6,7 @@ pub mod macos;
 pub mod windows;
 
 pub const SILENT_NAME: &str = "LuoDaCodex";
-pub const MANAGER_NAME: &str = "LuodaCodex 绠＄悊宸ュ叿";
+pub const MANAGER_NAME: &str = "LuodaCodex 管理工具";
 pub const SILENT_BINARY: &str = "luoda-codex";
 pub const MANAGER_BINARY: &str = "luoda-codex-manager";
 
@@ -72,11 +72,11 @@ impl ShortcutState {
 }
 
 pub fn shortcut_names() -> (&'static str, &'static str) {
-    ("LuodaCodex.lnk", "LuodaCodex 绠＄悊宸ュ叿.lnk")
+    ("LuodaCodex.lnk", "LuodaCodex 管理工具.lnk")
 }
 
 pub fn app_bundle_names() -> (&'static str, &'static str) {
-    ("LuodaCodex.app", "LuodaCodex 绠＄悊宸ュ叿.app")
+    ("LuodaCodex.app", "LuodaCodex 管理工具.app")
 }
 
 pub fn inspect_entrypoints() -> EntryPointState {
@@ -89,7 +89,7 @@ pub fn inspect_entrypoints() -> EntryPointState {
 
 pub fn install_entrypoints(options: &InstallOptions) -> InstallActionResult {
     let result = platform_install(options);
-    action_result(result, "鍏ュ彛宸插畨瑁呫€?)
+    action_result(result, "入口已安装。")
 }
 
 pub fn uninstall_entrypoints(options: &InstallOptions) -> InstallActionResult {
@@ -97,12 +97,12 @@ pub fn uninstall_entrypoints(options: &InstallOptions) -> InstallActionResult {
     if result.is_ok() && options.remove_owned_data {
         let _ = remove_owned_data();
     }
-    action_result(result, "鍏ュ彛宸插嵏杞姐€?)
+    action_result(result, "入口已卸载。")
 }
 
 pub fn repair_entrypoints(options: &InstallOptions) -> InstallActionResult {
     let result = platform_install(options);
-    action_result(result, "鍏ュ彛宸蹭慨澶嶃€?)
+    action_result(result, "入口已修复。")
 }
 
 pub fn build_windows_entrypoint_plan(options: &InstallOptions) -> windows::WindowsEntrypointPlan {
@@ -164,7 +164,7 @@ fn platform_install(options: &InstallOptions) -> anyhow::Result<()> {
     #[cfg(not(any(windows, target_os = "macos")))]
     {
         let _ = options;
-        anyhow::bail!("褰撳墠骞冲彴鏆備笉鏀寔瀹夎 LuodaCodex 鍏ュ彛")
+        anyhow::bail!("当前平台暂不支持安装 LuodaCodex 入口")
     }
 }
 
@@ -182,7 +182,7 @@ fn platform_uninstall(options: &InstallOptions) -> anyhow::Result<()> {
     #[cfg(not(any(windows, target_os = "macos")))]
     {
         let _ = options;
-        anyhow::bail!("褰撳墠骞冲彴鏆備笉鏀寔鍗歌浇 LuodaCodex 鍏ュ彛")
+        anyhow::bail!("当前平台暂不支持卸载 LuodaCodex 入口")
     }
 }
 
