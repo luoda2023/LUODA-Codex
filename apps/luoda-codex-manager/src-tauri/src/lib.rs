@@ -1,5 +1,12 @@
-pub mod commands;
+﻿pub mod commands;
 pub mod install;
+
+use tauri::{
+    Manager,
+    tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent},
+    menu::{MenuBuilder, MenuItemBuilder},
+    Runtime,
+};
 
 pub fn run() {
     install_panic_logger();
@@ -16,16 +23,29 @@ pub fn run() {
     let run_result = tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
         .setup(move |app| {
+            // 设置系统托盘
+            setup_tray(app)?;
+
             let url = if show_update {
                 "index.html?showUpdate=1"
             } else {
                 "index.html"
             };
-            tauri::WebviewWindowBuilder::new(app, "main", tauri::WebviewUrl::App(url.into()))
-                .title("LuodaCodex 管理工具")
+            let window = tauri::WebviewWindowBuilder::new(app, "main", tauri::WebviewUrl::App(url.into()))
+                .title("LuodaCodex")
                 .inner_size(1180.0, 820.0)
                 .min_inner_size(960.0, 720.0)
                 .build()?;
+
+            // 窗口事件：关闭时隐藏到托盘
+            let win_clone = window.clone();
+            window.on_window_event(move |event| {
+                if let tauri::WindowEvent::CloseRequested { api, .. } = event {
+                    api.prevent_close();
+                    let _ = win_clone.hide();
+                }
+            });
+
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
@@ -93,6 +113,42 @@ pub fn run() {
     }
 }
 
+fn setup_tray<R: Runtime>(app: &tauri::AppHandle<R>) -> Result<(), Box<dyn std::error::Error>> {
+    // 创建托盘菜单
+    let show_item = MenuItemBuilder::with_id("show", "显示窗口").build(app)?;
+    let quit_item = MenuItemBuilder::with_id("quit", "退出").build(app)?;
+    
+    let menu = MenuBuilder::new(app)
+        .item(&show_item)
+        .separator()
+        .item(&quit_item)
+        .build()?;
+
+    // 创建托盘图标
+    let icon = tauri::image::Image::from_bytes(include_bytes!("../icons/icon.png"))?;
+
+    let tray = TrayIconBuilder::new()
+        .icon(icon)
+        .menu(&menu)
+        .on_menu_event(move |app, event| {
+            match event.id().as_ref() {
+                "show" => {
+                    if let Some(window) = app.get_webview_window("main") {
+                        let _ = window.show();
+                        let _ = window.set_focus();
+                    }
+                }
+                "quit" => {
+                    app.exit(0);
+                }
+                _ => {}
+            }
+        })
+        .build(app)?;
+
+    Ok(())
+}
+
 fn install_panic_logger() {
     std::panic::set_hook(Box::new(|panic_info| {
         let payload = panic_info
@@ -100,7 +156,7 @@ fn install_panic_logger() {
             .downcast_ref::<&str>()
             .map(|message| (*message).to_string())
             .or_else(|| panic_info.payload().downcast_ref::<String>().cloned())
-            .unwrap_or_else(|| "非字符串 panic payload".to_string());
+            .unwrap_or_else(|| "panic payload".to_string());
         let location = panic_info.location().map(|location| {
             serde_json::json!({
                 "file": location.file(),
