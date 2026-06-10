@@ -1,4 +1,4 @@
-﻿﻿#![cfg_attr(windows, windows_subsystem = "windows")]
+#![cfg_attr(windows, windows_subsystem = "windows")]
 
 use anyhow::{Context, Result};
 use luoda_codex_core::launcher::{

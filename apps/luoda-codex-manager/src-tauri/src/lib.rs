@@ -3,7 +3,7 @@ pub mod install;
 
 use tauri::{
     Manager,
-    tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent},
+    tray::{TrayIconBuilder},
     menu::{MenuBuilder, MenuItemBuilder},
     Runtime,
 };
@@ -24,14 +24,14 @@ pub fn run() {
         .plugin(tauri_plugin_dialog::init())
         .setup(move |app| {
             // 设置系统托盘
-            setup_tray(app)?;
+            setup_tray(app.handle())?;
 
             let url = if show_update {
                 "index.html?showUpdate=1"
             } else {
                 "index.html"
             };
-            let window = tauri::WebviewWindowBuilder::new(app, "main", tauri::WebviewUrl::App(url.into()))
+            let window = tauri::WebviewWindowBuilder::new(app.handle(), "main", tauri::WebviewUrl::App(url.into()))
                 .title("LuodaCodex")
                 .inner_size(1180.0, 820.0)
                 .min_inner_size(960.0, 720.0)
