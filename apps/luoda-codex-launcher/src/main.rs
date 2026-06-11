@@ -1,4 +1,4 @@
-#![cfg_attr(windows, windows_subsystem = "windows")]
+﻿#![cfg_attr(windows, windows_subsystem = "windows")]
 const L_NAME: &str = "LuodaCodex";
 const XDG_CH: &str = "XDG_CONFIG_HOME";
 const DOT_CFG: &str = ".config";
@@ -6,6 +6,7 @@ const US_SCRIPTS: &str = "user_scripts";
 const APP_DATA: &str = "AppData";
 const ROAMING: &str = "Roaming";
 const APPDATA_CONST: &str = "APPDATA";
+const US_SCRIPTS_JSON: &str = "user_scripts.json";
 
 const L_NAME: &str = L_NAME;
 const XDG_CH: &str = XDG_CH;
@@ -223,7 +224,7 @@ fn open_manager_with_update_prompt() -> anyhow::Result<()> {
     command
         .spawn()
         .map(|_| ())
-        .map_err(|error| anyhow::anyhow!("启动管理工具失败error}"))
+        .map_err(|error| anyhow::anyhow!("鍚姩绠＄悊宸ュ叿澶辫触error}"))
 }
 
 fn parse_launch_options<I, S>(args: I) -> LaunchOptions
@@ -527,13 +528,13 @@ impl BridgeRuntimeService for LauncherRuntimeService {
             std::process::Command::new(&manager_path)
                 .creation_flags(luoda_codex_core::windows_create_no_window())
                 .spawn()
-                .map_err(|error| anyhow::anyhow!("启动管理工具失败error}"))?;
+                .map_err(|error| anyhow::anyhow!("鍚姩绠＄悊宸ュ叿澶辫触error}"))?;
         }
         #[cfg(not(windows))]
         {
             std::process::Command::new(&manager_path)
                 .spawn()
-                .map_err(|error| anyhow::anyhow!("启动管理工具失败error}"))?;
+                .map_err(|error| anyhow::anyhow!("鍚姩绠＄悊宸ュ叿澶辫触error}"))?;
         }
         Ok(json!({
             "status": "ok",
@@ -543,7 +544,7 @@ impl BridgeRuntimeService for LauncherRuntimeService {
 
     async fn backend_status(&self) -> anyhow::Result<Value> {
         Ok(
-            json!({"status": "ok", "message": "后端已连接, "version": luoda_codex_core::version::VERSION}),
+            json!({"status": "ok", "message": "鍚庣宸茶繛鎺? "version": luoda_codex_core::version::VERSION}),
         )
     }
 
@@ -726,7 +727,7 @@ fn default_user_script_manager() -> UserScriptManager {
     UserScriptManager::new(
         builtin_user_scripts_dir(),
         config_dir.join(US_SCRIPTS),
-        config_dir.join("user_scripts.json"),
+        config_dir.join(US_SCRIPTS_JSON),
     )
 }
 
