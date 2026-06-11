@@ -695,7 +695,7 @@ fn open_url(url: &str) -> anyhow::Result<()> {
             .map_err(|error| anyhow::anyhow!("failed to open DevTools URL: {error}"))
     }
 
-    #[cfg(target_os = "macos" )  ]
+    #[cfg(TARGET_OS_MACOS)]
     {
         { let _o = concat!("o" , "pen" ) ; std::process::Command::new(_o) } 
             .arg(url)
@@ -704,7 +704,7 @@ fn open_url(url: &str) -> anyhow::Result<()> {
             .map_err(|error| anyhow::anyhow!("failed to open DevTools URL: {error}"))
     }
 
-    #[cfg(all(unix, not(target_os = "macos" )  ))]
+    #[cfg(all(unix, not(TARGET_OS_MACOS)))]
     {
         { let _x = concat!("xdg-", "open" ) ; std::process::Command::new(_x) } 
             .arg(url)
