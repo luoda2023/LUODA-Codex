@@ -1,11 +1,11 @@
-use std::path::{Path, PathBuf};
+﻿use std::path::{Path, PathBuf};
 
 use serde::{Deserialize, Serialize};
 
 pub mod macos;
 pub mod windows;
 
-pub const SILENT_NAME: &str = "LuoDaCodex";
+pub const SILENT_NAME: &str = "LuodaCodex";
 pub const MANAGER_NAME: &str = "LuodaCodex 管理工具";
 pub const SILENT_BINARY: &str = "luoda-codex";
 pub const MANAGER_BINARY: &str = "luoda-codex-manager";

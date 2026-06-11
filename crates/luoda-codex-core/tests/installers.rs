@@ -1,4 +1,4 @@
-use luoda_codex_core::install::{
+﻿use luoda_codex_core::install::{
     InstallOptions, SILENT_BINARY, app_bundle_names, build_macos_app_bundle,
     build_windows_entrypoint_plan, companion_binary_path_from_exe, default_install_root_strategy,
     shortcut_names,
@@ -24,7 +24,7 @@ fn windows_entrypoint_plan_contains_silent_and_manager_entrypoints() {
         plan.manager_icon_path,
         "C:/Tools/luoda-codex-manager.exe"
     );
-    assert_eq!(plan.uninstall_key, "CodexPlusPlus");
+    assert_eq!(plan.uninstall_key, "LuodaCodex");
     assert_eq!(plan.legacy_uninstall_key, "LuodaCodex");
 }
 

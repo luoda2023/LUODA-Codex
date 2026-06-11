@@ -1,4 +1,4 @@
-use std::path::{Path, PathBuf};
+﻿use std::path::{Path, PathBuf};
 
 use super::{
     InstallOptions, MANAGER_BINARY, MANAGER_NAME, SILENT_BINARY, SILENT_NAME,
@@ -45,7 +45,7 @@ pub fn build_windows_entrypoint_plan(options: &InstallOptions) -> WindowsEntrypo
         silent_icon_path: launcher_path.to_string_lossy().to_string(),
         manager_icon_path: manager_path.to_string_lossy().to_string(),
         uninstall_key: "LuodaCodex".to_string(),
-        legacy_uninstall_key: "LuoDaCodex".to_string(),
+        legacy_uninstall_key: "LuodaCodex".to_string(),
         remove_owned_data: options.remove_owned_data,
     }
 }
