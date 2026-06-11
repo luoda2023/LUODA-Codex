@@ -715,7 +715,6 @@ fn manager_exe_path() -> PathBuf {
     let exe = std::env::current_exe().unwrap_or_else(|_| PathBuf::from(DOT_CURRENT));
     let dir = exe.parent().unwrap_or_else(|| Path::new(DOT_CURRENT));
     let suffix = if cfg!(windows) { SUFFIX_EXE } else { SUFFIX_EMPTY };
-    dir.join(format!(
     dir.join(format!("{}{}",
         luoda_codex_core::install::MANAGER_BINARY,
         suffix
