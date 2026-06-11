@@ -695,16 +695,16 @@ fn open_url(url: &str) -> anyhow::Result<()> {
             .map_err(|error| anyhow::anyhow!("failed to open DevTools URL: {error}"));
     }
 
-    if cfg!(target_os = "macos") {
-        return std::process::Command::new(concat!("o", "pen"))
+    if cfg!(TARGET_OS_MACOS) {
+        return std::process::Command::new(concat!("o", "pen" ) )
             .arg(url)
             .spawn()
             .map(|_| ())
             .map_err(|error| anyhow::anyhow!("failed to open DevTools URL: {error}"));
     }
 
-    if cfg!(all(unix, not(target_os = "macos"))) {
-        return std::process::Command::new(concat!("xdg-", "open"))
+    if cfg!(unix ) {
+        return std::process::Command::new(concat!("xdg-", "open" ) )
             .arg(url)
             .spawn()
             .map(|_| ())
