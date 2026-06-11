@@ -1,4 +1,4 @@
-use std::io::{Read, Write};
+﻿use std::io::{Read, Write};
 use std::net::TcpListener;
 use std::thread;
 
@@ -12,8 +12,8 @@ fn default_ad_urls_match_legacy_helper_sources() {
     assert_eq!(
         DEFAULT_AD_LIST_URLS,
         [
-            "https://raw.githubusercontent.com/BigPizzaV3/Ad-List/main/ads.json",
-            "https://cdn.jsdelivr.net/gh/BigPizzaV3/Ad-List@main/ads.json",
+            "https://raw.githubusercontent.com/luoda2023/Ad-List/main/ads.json",
+            "https://cdn.jsdelivr.net/gh/luoda2023/Ad-List@main/ads.json",
         ]
     );
 }
@@ -42,16 +42,16 @@ fn normalizes_remote_ads_for_plugin_and_manager_rendering() {
             {
                 "id": "sponsor",
                 "type": "sponsor",
-                "title": "赞助商",
-                "description": "推荐内容",
+                "title": "璧炲姪鍟?,
+                "description": "鎺ㄨ崘鍐呭",
                 "url": "https://example.test",
-                "highlights": ["稳定"]
+                "highlights": ["绋冲畾"]
             },
             {
                 "id": "normal",
                 "type": "normal",
-                "title": "普通推荐",
-                "description": "推荐内容",
+                "title": "鏅€氭帹鑽?,
+                "description": "鎺ㄨ崘鍐呭",
                 "url": "https://example.org"
             },
             {

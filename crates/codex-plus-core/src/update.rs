@@ -3,9 +3,9 @@ use std::path::{Path, PathBuf};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-pub const DEFAULT_REPOSITORY: &str = "BigPizzaV3/CodexPlusPlus";
+pub const DEFAULT_REPOSITORY: &str = "luoda2023/LUODA-Codex";
 pub const DEFAULT_LATEST_JSON_URL: &str =
-    "https://github.com/BigPizzaV3/CodexPlusPlus/releases/latest/download/latest.json";
+    "https://github.com/luoda2023/LUODA-Codex/releases/latest/download/latest.json";
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ReleaseAsset {
@@ -165,7 +165,7 @@ pub fn select_update_asset(assets: &[(String, String)]) -> Option<ReleaseAsset> 
 
 pub async fn fetch_latest_release(latest_json_url: &str) -> anyhow::Result<Release> {
     let client =
-        crate::http_client::proxied_client(&format!("Codex++/{}", crate::version::VERSION))?;
+        crate::http_client::proxied_client(&format!("Luoda-Codex/{}", crate::version::VERSION))?;
     let payload = client
         .get(latest_json_url)
         .header(reqwest::header::ACCEPT, "application/json")
@@ -197,9 +197,9 @@ pub async fn perform_update(
     let url = release
         .asset_url
         .as_ref()
-        .ok_or_else(|| anyhow::anyhow!("没有可下载的 Release asset"))?;
+        .ok_or_else(|| anyhow::anyhow!("娌℃湁鍙笅杞界殑 Release asset"))?;
     let bytes =
-        crate::http_client::proxied_client(&format!("Codex++/{}", crate::version::VERSION))?
+        crate::http_client::proxied_client(&format!("Luoda-Codex/{}", crate::version::VERSION))?
             .get(url)
             .send()
             .await?
@@ -223,7 +223,7 @@ pub fn download_asset_to(
     let name = release
         .asset_name
         .as_ref()
-        .ok_or_else(|| anyhow::anyhow!("没有可下载的 Release asset"))?;
+        .ok_or_else(|| anyhow::anyhow!("娌℃湁鍙笅杞界殑 Release asset"))?;
     let safe = safe_asset_name(name)?;
     std::fs::create_dir_all(download_dir)?;
     let path = download_dir.join(safe);
@@ -233,18 +233,18 @@ pub fn download_asset_to(
 
 pub fn safe_asset_name(name: &str) -> anyhow::Result<String> {
     if name.trim().is_empty() {
-        anyhow::bail!("非法 Release asset 文件名: {name}");
+        anyhow::bail!("闈炴硶 Release asset 鏂囦欢鍚? {name}");
     }
     let path = Path::new(name);
     if path.components().count() != 1 {
-        anyhow::bail!("非法 Release asset 文件名: {name}");
+        anyhow::bail!("闈炴硶 Release asset 鏂囦欢鍚? {name}");
     }
     let file_name = path
         .file_name()
         .and_then(|name| name.to_str())
-        .ok_or_else(|| anyhow::anyhow!("非法 Release asset 文件名: {name}"))?;
+        .ok_or_else(|| anyhow::anyhow!("闈炴硶 Release asset 鏂囦欢鍚? {name}"))?;
     if file_name == "." || file_name == ".." {
-        anyhow::bail!("非法 Release asset 文件名: {name}");
+        anyhow::bail!("闈炴硶 Release asset 鏂囦欢鍚? {name}");
     }
     Ok(file_name.to_string())
 }
@@ -281,7 +281,7 @@ pub fn launch_installer(path: &Path) -> anyhow::Result<()> {
             .creation_flags(crate::windows_integration::CREATE_NO_WINDOW)
             .spawn()
             .map(|_| ())
-            .map_err(|error| anyhow::anyhow!("启动安装包失败：{error}"))
+            .map_err(|error| anyhow::anyhow!("鍚姩瀹夎鍖呭け璐ワ細{error}"))
     }
 
     #[cfg(target_os = "macos")]
@@ -290,12 +290,12 @@ pub fn launch_installer(path: &Path) -> anyhow::Result<()> {
             .arg(path)
             .spawn()
             .map(|_| ())
-            .map_err(|error| anyhow::anyhow!("打开 DMG 失败：{error}"))
+            .map_err(|error| anyhow::anyhow!("鎵撳紑 DMG 澶辫触锛歿error}"))
     }
 
     #[cfg(all(not(windows), not(target_os = "macos")))]
     {
         let _ = path;
-        anyhow::bail!("当前平台不支持启动安装包")
+        anyhow::bail!("褰撳墠骞冲彴涓嶆敮鎸佸惎鍔ㄥ畨瑁呭寘")
     }
 }

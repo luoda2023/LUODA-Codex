@@ -1,4 +1,4 @@
-(() => {
+﻿(() => {
   const helperBase = window.__CODEX_SESSION_DELETE_HELPER__ || "http://127.0.0.1:57321";
   const buttonClass = "codex-delete-button";
   const exportButtonClass = "codex-export-button";
@@ -111,7 +111,7 @@
     appHeader: ".app-header-tint",
     nativeMenuBar: "[class*=\"ms-auto\"][class*=\"flex\"][class*=\"items-center\"]",
     headerContextMenuSurface: '[data-testid="app-shell-header-context-menu-surface"]',
-    archiveNav: 'button[aria-label="已归档对话"], button[aria-label="Archived conversations"]',
+    archiveNav: 'button[aria-label="宸插綊妗ｅ璇?], button[aria-label="Archived conversations"]',
     disabledInstallButton: 'button:disabled, button[aria-disabled="true"], [role="button"][aria-disabled="true"], button[data-disabled], [role="button"][data-disabled], button.cursor-not-allowed, [role="button"].cursor-not-allowed, button.pointer-events-none, [role="button"].pointer-events-none',
     pluginNavButton: 'nav[role="navigation"] button.h-token-nav-row.w-full',
     pluginSvgPath: 'svg path[d^="M7.94562 14.0277"]',
@@ -418,7 +418,7 @@
       /* Dark theme overrides for delete-confirm and project-move dialogs.
          Triggered either by Codex applying a "dark" class / data-theme="dark"
          on its document root, or by the OS-level prefers-color-scheme hint.
-         Palette matches the existing Codex++ dark modal (.codex-plus-modal-content). */
+         Palette matches the existing Luoda-Codex dark modal (.codex-plus-modal-content). */
       html.dark .codex-delete-confirm-overlay,
       html[data-theme="dark"] .codex-delete-confirm-overlay,
       :root[data-theme="dark"] .codex-delete-confirm-overlay {
@@ -684,7 +684,7 @@
       .codex-plus-toggle[data-enabled="true"] span { transform: translateX(18px); }
       .codex-plus-toggle[data-relay-unneeded="true"] { width: 72px; cursor: default; background: rgba(16,163,127,.16); color: #6ee7b7; }
       .codex-plus-toggle[data-relay-unneeded="true"] span { display: none; }
-      .codex-plus-toggle[data-relay-unneeded="true"]::after { content: "无需开启"; font-size: 12px; font-weight: 650; line-height: 1; }
+      .codex-plus-toggle[data-relay-unneeded="true"]::after { content: "鏃犻渶寮€鍚?; font-size: 12px; font-weight: 650; line-height: 1; }
       .codex-plus-width-control { display: flex; align-items: center; justify-content: flex-end; gap: 8px; min-width: 176px; align-self: center; }
       .codex-plus-width-input {
         width: 78px;
@@ -1076,7 +1076,7 @@
   let codexServiceTierState = {
     status: "loading",
     serviceTier: null,
-    message: "正在读取…",
+    message: "姝ｅ湪璇诲彇鈥?,
     fastTierValue: "priority",
     controlMode: "inherit",
     defaultMode: "inherit",
@@ -1107,7 +1107,7 @@
     if (!codexServiceTierModulePromises.has(namePart)) {
       const promise = Promise.resolve().then(async () => {
         const url = codexAppAssetUrl(namePart);
-        if (!url) throw new Error(`未找到 Codex App asset: ${namePart}`);
+        if (!url) throw new Error(`鏈壘鍒?Codex App asset: ${namePart}`);
         return await import(url);
       }).catch((error) => {
         codexServiceTierModulePromises.delete(namePart);
@@ -1121,7 +1121,7 @@
   async function codexSettingStorageModule() {
     const module = await loadCodexAppModule("setting-storage-");
     if (typeof module.n !== "function" || typeof module.s !== "function") {
-      throw new Error("Codex setting-storage 接口不可用");
+      throw new Error("Codex setting-storage 鎺ュ彛涓嶅彲鐢?);
     }
     return module;
   }
@@ -1184,8 +1184,8 @@
   }
 
   function codexServiceTierFastUnsupportedMessage(modelName = codexServiceTierCurrentModelName()) {
-    const modelText = modelName ? `当前模型 ${modelName} 不支持` : "当前模型未读取";
-    return `Fast 仅支持 ${codexServiceTierFastModelListLabel()}，${modelText}`;
+    const modelText = modelName ? `褰撳墠妯″瀷 ${modelName} 涓嶆敮鎸乣 : "褰撳墠妯″瀷鏈鍙?;
+    return `Fast 浠呮敮鎸?${codexServiceTierFastModelListLabel()}锛?{modelText}`;
   }
 
   function codexServiceTierMaybeLoadModelCatalog(force = false) {
@@ -1254,9 +1254,9 @@
   }
 
   function serviceTierGlobalStatusMessage(serviceTier) {
-    if (isFastServiceTierValue(serviceTier)) return "Fast 已开启";
-    if (!serviceTier) return "默认服务模式";
-    return `当前：${serviceTier}`;
+    if (isFastServiceTierValue(serviceTier)) return "Fast 宸插紑鍚?;
+    if (!serviceTier) return "榛樿鏈嶅姟妯″紡";
+    return `褰撳墠锛?{serviceTier}`;
   }
 
   function serviceTierStatusMessage(
@@ -1265,13 +1265,13 @@
     effectiveMode = codexServiceTierState.effectiveMode || "standard",
     defaultMode = codexServiceTierState.defaultMode || "inherit"
   ) {
-    if (codexServiceTierState.status === "loading") return "正在读取…";
-    if (codexServiceTierState.status === "failed") return "读取失败";
-    if (controlMode === "inherit") return `继承 config.toml：${effectiveMode}`;
-    if (controlMode === "global-standard") return "全局 Standard";
-    if (controlMode === "global-fast") return "全局 Fast";
-    if (threadMode === "inherit") return `自定义：默认 ${defaultMode}`;
-    return `自定义：当前 thread ${threadMode}`;
+    if (codexServiceTierState.status === "loading") return "姝ｅ湪璇诲彇鈥?;
+    if (codexServiceTierState.status === "failed") return "璇诲彇澶辫触";
+    if (controlMode === "inherit") return `缁ф壙 config.toml锛?{effectiveMode}`;
+    if (controlMode === "global-standard") return "鍏ㄥ眬 Standard";
+    if (controlMode === "global-fast") return "鍏ㄥ眬 Fast";
+    if (threadMode === "inherit") return `鑷畾涔夛細榛樿 ${defaultMode}`;
+    return `鑷畾涔夛細褰撳墠 thread ${threadMode}`;
   }
 
   function readThreadServiceTierState() {
@@ -1389,7 +1389,7 @@
 
   function setCodexServiceTierControlMode(mode) {
     if (codexPlusBackendStatus.status !== "ok") {
-      showToast("后端未连接，无法切换服务模式", null);
+      showToast("鍚庣鏈繛鎺ワ紝鏃犳硶鍒囨崲鏈嶅姟妯″紡", null);
       refreshCodexServiceTierControls();
       return;
     }
@@ -1415,12 +1415,12 @@
     writeThreadServiceTierState(state);
     refreshCodexServiceTierControls();
     const labels = {
-      inherit: "继承 config.toml",
-      "global-standard": "全局 Standard",
-      "global-fast": "全局 Fast",
-      custom: "自定义",
+      inherit: "缁ф壙 config.toml",
+      "global-standard": "鍏ㄥ眬 Standard",
+      "global-fast": "鍏ㄥ眬 Fast",
+      custom: "鑷畾涔?,
     };
-    showToast(`服务模式：${labels[normalizedMode] || normalizedMode}`, null);
+    showToast(`鏈嶅姟妯″紡锛?{labels[normalizedMode] || normalizedMode}`, null);
   }
 
   function syncCodexServiceTierEffectiveState() {
@@ -1431,7 +1431,7 @@
         threadMode: "inherit",
         effectiveServiceTier: codexServiceTierState.serviceTier || null,
         effectiveMode: codexServiceTierEffectiveMode(codexServiceTierState.serviceTier),
-        message: "未启用",
+        message: "鏈惎鐢?,
       };
       return;
     }
@@ -1463,22 +1463,22 @@
   }
 
   function codexServiceTierBadgeState() {
-    if (codexPlusBackendStatus.status === "checking") return { tier: "loading", label: "...", disabled: true, title: "服务模式：正在检查后端连接" };
-    if (codexPlusBackendStatus.status && codexPlusBackendStatus.status !== "ok") return { tier: "failed", label: "未连接", disabled: true, title: "服务模式：后端未连接，无法切换" };
-    if (codexServiceTierState.status === "loading") return { tier: "loading", label: "...", title: "服务模式：正在读取" };
-    if (codexServiceTierState.status === "failed") return { tier: "failed", label: "?", title: "服务模式：读取失败" };
+    if (codexPlusBackendStatus.status === "checking") return { tier: "loading", label: "...", disabled: true, title: "鏈嶅姟妯″紡锛氭鍦ㄦ鏌ュ悗绔繛鎺? };
+    if (codexPlusBackendStatus.status && codexPlusBackendStatus.status !== "ok") return { tier: "failed", label: "鏈繛鎺?, disabled: true, title: "鏈嶅姟妯″紡锛氬悗绔湭杩炴帴锛屾棤娉曞垏鎹? };
+    if (codexServiceTierState.status === "loading") return { tier: "loading", label: "...", title: "鏈嶅姟妯″紡锛氭鍦ㄨ鍙? };
+    if (codexServiceTierState.status === "failed") return { tier: "failed", label: "?", title: "鏈嶅姟妯″紡锛氳鍙栧け璐? };
     const fastAvailability = codexServiceTierFastAvailability();
     const effectiveMode = codexServiceTierState.effectiveMode || "standard";
     const scope = codexServiceTierState.controlMode === "custom" && codexServiceTierState.threadMode !== "inherit"
-      ? `当前 thread：${codexServiceTierState.threadMode}`
+      ? `褰撳墠 thread锛?{codexServiceTierState.threadMode}`
       : serviceTierStatusMessage(codexServiceTierState.controlMode, codexServiceTierState.threadMode, effectiveMode, codexServiceTierState.defaultMode);
     const title = [
-      `服务模式：${scope}`,
-      "Standard：使用标准处理；不在请求上设置 priority。",
-      `Fast：仅支持 ${codexServiceTierFastModelListLabel()}；对支持模型使用 service_tier=\"priority\"，官方说明其延迟更低且更一致，但会按更高价格计费；rate limit 与 Standard 共享，流量快速上涨时可能回落到 Standard。`,
+      `鏈嶅姟妯″紡锛?{scope}`,
+      "Standard锛氫娇鐢ㄦ爣鍑嗗鐞嗭紱涓嶅湪璇锋眰涓婅缃?priority銆?,
+      `Fast锛氫粎鏀寔 ${codexServiceTierFastModelListLabel()}锛涘鏀寔妯″瀷浣跨敤 service_tier=\"priority\"锛屽畼鏂硅鏄庡叾寤惰繜鏇翠綆涓旀洿涓€鑷达紝浣嗕細鎸夋洿楂樹环鏍艰璐癸紱rate limit 涓?Standard 鍏变韩锛屾祦閲忓揩閫熶笂娑ㄦ椂鍙兘鍥炶惤鍒?Standard銆俙,
     ].join("\n");
     if (effectiveMode === "fast" && !fastAvailability.supported) {
-      return { tier: "unsupported", label: "不支持", title: `${title}\n${codexServiceTierFastUnsupportedMessage(fastAvailability.modelName)}；当前请求会按 Standard 发送。` };
+      return { tier: "unsupported", label: "涓嶆敮鎸?, title: `${title}\n${codexServiceTierFastUnsupportedMessage(fastAvailability.modelName)}锛涘綋鍓嶈姹備細鎸?Standard 鍙戦€併€俙 };
     }
     if (effectiveMode === "fast") return { tier: "fast", label: "fast", title };
     return { tier: "standard", label: "standard", title };
@@ -1504,7 +1504,7 @@
     const fastAvailability = codexServiceTierFastAvailability();
     const fastDisabled = !featureEnabled || !backendConnected || codexServiceTierState.status === "loading" || !fastAvailability.supported;
     const fastTitle = fastAvailability.supported
-      ? "Fast：使用 service_tier=\"priority\""
+      ? "Fast锛氫娇鐢?service_tier=\"priority\""
       : codexServiceTierFastUnsupportedMessage(fastAvailability.modelName);
     const fastUnsupportedActive = codexServiceTierState.effectiveMode === "fast" && !fastAvailability.supported;
     document.querySelectorAll("[data-codex-service-tier-controls]").forEach((node) => {
@@ -1513,8 +1513,8 @@
     document.querySelectorAll("[data-codex-service-tier-status]").forEach((node) => {
       node.dataset.status = fastUnsupportedActive ? "unsupported" : (featureEnabled && backendConnected ? (codexServiceTierState.status || "loading") : (backendChecking ? "loading" : "failed"));
       node.textContent = featureEnabled
-        ? (backendConnected ? (codexServiceTierState.message || "未读取") : (backendChecking ? "正在检查后端…" : "未连接"))
-        : "未启用";
+        ? (backendConnected ? (codexServiceTierState.message || "鏈鍙?) : (backendChecking ? "姝ｅ湪妫€鏌ュ悗绔€? : "鏈繛鎺?))
+        : "鏈惎鐢?;
     });
     document.querySelectorAll("[data-codex-service-tier-inherit]").forEach((button) => {
       button.disabled = !featureEnabled || !backendConnected || codexServiceTierState.status === "loading";
@@ -1536,7 +1536,7 @@
     document.querySelectorAll("[data-codex-service-tier-thread-inherit]").forEach((button) => {
       button.disabled = !featureEnabled || !backendConnected || codexServiceTierState.status === "loading";
       button.dataset.active = String(codexServiceTierState.controlMode === "custom" && codexServiceTierState.threadMode === "inherit");
-      button.title = `当前 thread 不单独覆盖，继承自定义默认 ${codexServiceTierState.defaultMode || "inherit"}`;
+      button.title = `褰撳墠 thread 涓嶅崟鐙鐩栵紝缁ф壙鑷畾涔夐粯璁?${codexServiceTierState.defaultMode || "inherit"}`;
     });
     document.querySelectorAll("[data-codex-service-tier-thread-standard]").forEach((button) => {
       button.disabled = !featureEnabled || !backendConnected || codexServiceTierState.status === "loading";
@@ -1552,11 +1552,11 @@
 
   async function loadCodexServiceTierState() {
     if (!codexPlusSettings().serviceTierControls) {
-      codexServiceTierState = { ...codexServiceTierState, status: "idle", message: "未启用" };
+      codexServiceTierState = { ...codexServiceTierState, status: "idle", message: "鏈惎鐢? };
       refreshCodexServiceTierControls();
       return;
     }
-    codexServiceTierState = { ...codexServiceTierState, status: "loading", message: "正在读取…" };
+    codexServiceTierState = { ...codexServiceTierState, status: "loading", message: "姝ｅ湪璇诲彇鈥? };
     refreshCodexServiceTierControls();
     try {
       const serviceTier = await getCodexServiceTierSetting();
@@ -1570,7 +1570,7 @@
       codexServiceTierState = {
         ...codexServiceTierState,
         status: "failed",
-        message: "读取失败",
+        message: "璇诲彇澶辫触",
       };
       sendCodexPlusDiagnostic("service_tier_read_failed", {
         errorName: error?.name || "",
@@ -1583,7 +1583,7 @@
 
   function setCodexThreadServiceTierMode(mode) {
     if (codexPlusBackendStatus.status !== "ok") {
-      showToast("后端未连接，无法切换服务模式", null);
+      showToast("鍚庣鏈繛鎺ワ紝鏃犳硶鍒囨崲鏈嶅姟妯″紡", null);
       refreshCodexServiceTierControls();
       return;
     }
@@ -1600,13 +1600,13 @@
     const threadId = validThreadScrollSessionKey(currentSessionRef().session_id);
     setCodexThreadServiceTierOverride(threadId, normalizedMode);
     refreshCodexServiceTierControls();
-    const target = threadId ? "当前 thread" : "新 thread 草稿";
-    showToast(`${target}服务模式：${normalizedMode === "inherit" ? "继承" : normalizedMode}`, null);
+    const target = threadId ? "褰撳墠 thread" : "鏂?thread 鑽夌";
+    showToast(`${target}鏈嶅姟妯″紡锛?{normalizedMode === "inherit" ? "缁ф壙" : normalizedMode}`, null);
   }
 
   function toggleCodexServiceTierFromBadge() {
     if (codexPlusBackendStatus.status !== "ok") {
-      showToast("后端未连接，无法切换服务模式", null);
+      showToast("鍚庣鏈繛鎺ワ紝鏃犳硶鍒囨崲鏈嶅姟妯″紡", null);
       refreshCodexServiceTierControls();
       return;
     }
@@ -1827,7 +1827,7 @@
   }
 
   let codexPlusUserScripts = { enabled: true, builtin_dir: "", user_dir: "", scripts: [] };
-  let codexPlusBackendStatus = { status: "checking", message: "正在检查后端…" };
+  let codexPlusBackendStatus = { status: "checking", message: "姝ｅ湪妫€鏌ュ悗绔€? };
   let codexPlusBackendCheckSeq = 0;
 
   function setCodexPlusTriggerLabel(trigger) {
@@ -1838,7 +1838,7 @@
       label.dataset.codexPlusTriggerLabel = "true";
       trigger.appendChild(label);
     }
-    label.textContent = `Codex++ ${codexPlusVersion}`;
+    label.textContent = `Luoda-Codex ${codexPlusVersion}`;
   }
 
   function ensureCodexPlusTriggerIndicator(trigger) {
@@ -1858,11 +1858,11 @@
     const label = document.querySelector("[data-codex-backend-status]");
     if (label) {
       label.dataset.status = status;
-      label.textContent = codexPlusBackendStatus.message || (status === "ok" ? "后端已连接" : "未连接");
+      label.textContent = codexPlusBackendStatus.message || (status === "ok" ? "鍚庣宸茶繛鎺? : "鏈繛鎺?);
     }
     document.querySelectorAll("[data-codex-backend-indicator]").forEach((indicator) => {
       indicator.dataset.status = status;
-      indicator.title = status === "ok" ? "后端已连接" : status === "checking" ? "正在检查后端" : "未连接";
+      indicator.title = status === "ok" ? "鍚庣宸茶繛鎺? : status === "checking" ? "姝ｅ湪妫€鏌ュ悗绔? : "鏈繛鎺?;
     });
     const repair = document.querySelector("[data-codex-backend-repair]");
     if (repair) repair.hidden = status === "ok" || status === "checking";
@@ -1872,7 +1872,7 @@
   function withBackendTimeout(request) {
     return Promise.race([
       request,
-      new Promise((resolve) => setTimeout(() => resolve({ status: "failed", message: "后端检查超时", timeout: true }), 2000)),
+      new Promise((resolve) => setTimeout(() => resolve({ status: "failed", message: "鍚庣妫€鏌ヨ秴鏃?, timeout: true }), 2000)),
     ]);
   }
 
@@ -1892,12 +1892,12 @@
   }
 
   async function repairBackend() {
-    codexPlusBackendStatus = { status: "checking", message: "正在修复后端…" };
+    codexPlusBackendStatus = { status: "checking", message: "姝ｅ湪淇鍚庣鈥? };
     renderBackendStatus();
     try {
       codexPlusBackendStatus = await postJson("/backend/repair", {});
     } catch (error) {
-      codexPlusBackendStatus = { status: "failed", message: "后端修复失败" };
+      codexPlusBackendStatus = { status: "failed", message: "鍚庣淇澶辫触" };
     }
     renderBackendStatus();
   }
@@ -1905,9 +1905,9 @@
   async function openManagerFromCodex() {
     const result = await postJson("/manager/open", {});
     if (result.status === "ok") {
-      showToast("管理工具已打开", null);
+      showToast("绠＄悊宸ュ叿宸叉墦寮€", null);
     } else {
-      showToast(result.message || "打开管理工具失败", null);
+      showToast(result.message || "鎵撳紑绠＄悊宸ュ叿澶辫触", null);
     }
   }
 
@@ -1918,25 +1918,25 @@
   }
 
   function userScriptStatusLabel(status) {
-    return { loaded: "已加载", failed: "失败", disabled: "已禁用", not_loaded: "未加载", loading: "加载中" }[status] || status || "未知";
+    return { loaded: "宸插姞杞?, failed: "澶辫触", disabled: "宸茬鐢?, not_loaded: "鏈姞杞?, loading: "鍔犺浇涓? }[status] || status || "鏈煡";
   }
 
   function renderUserScripts() {
     const enabledToggle = document.querySelector("[data-codex-user-scripts-enabled]");
     if (enabledToggle) enabledToggle.dataset.enabled = String(!!codexPlusUserScripts.enabled);
     const dirs = document.querySelector("[data-codex-user-script-dirs]");
-    if (dirs) dirs.textContent = `内置：${codexPlusUserScripts.builtin_dir || "未找到"}  用户：${codexPlusUserScripts.user_dir || "未找到"}`;
+    if (dirs) dirs.textContent = `鍐呯疆锛?{codexPlusUserScripts.builtin_dir || "鏈壘鍒?}  鐢ㄦ埛锛?{codexPlusUserScripts.user_dir || "鏈壘鍒?}`;
     const list = document.querySelector("[data-codex-user-script-list]");
     if (!list) return;
     if (!codexPlusUserScripts.scripts?.length) {
-      list.textContent = "未发现用户脚本。";
+      list.textContent = "鏈彂鐜扮敤鎴疯剼鏈€?;
       return;
     }
     list.innerHTML = codexPlusUserScripts.scripts.map((script) => `
       <div class="codex-plus-user-script-item">
         <div>
           <div class="codex-plus-user-script-name">${escapeHtml(script.name || script.key)}</div>
-          <div class="codex-plus-user-script-meta">${script.source === "builtin" ? "内置" : "用户"} · ${userScriptStatusLabel(script.status)}</div>
+          <div class="codex-plus-user-script-meta">${script.source === "builtin" ? "鍐呯疆" : "鐢ㄦ埛"} 路 ${userScriptStatusLabel(script.status)}</div>
           ${script.error ? `<div class="codex-plus-user-script-error">${escapeHtml(script.error)}</div>` : ""}
         </div>
         <button type="button" class="codex-plus-toggle" data-codex-user-script-key="${escapeHtml(script.key)}" data-enabled="${String(!!script.enabled)}"><span></span></button>
@@ -1988,23 +1988,23 @@
           <div class="codex-plus-ad-highlights">
             ${ad.highlights.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
           </div>
-          <a class="codex-plus-ad-link" href="${escapeHtml(ad.url)}" target="_blank" rel="noreferrer">访问 ${escapeHtml(new URL(ad.url).hostname)}</a>
+          <a class="codex-plus-ad-link" href="${escapeHtml(ad.url)}" target="_blank" rel="noreferrer">璁块棶 ${escapeHtml(new URL(ad.url).hostname)}</a>
         </div>
       </article>
     `).join("");
   }
 
   function renderCodexPlusAds() {
-    if (!codexPlusAdsLoaded) return `<div class="codex-plus-ad-empty">推荐内容加载中…</div>`;
-    if (!codexPlusAds.length) return `<div class="codex-plus-ad-empty">暂无推荐内容。</div>`;
+    if (!codexPlusAdsLoaded) return `<div class="codex-plus-ad-empty">鎺ㄨ崘鍐呭鍔犺浇涓€?/div>`;
+    if (!codexPlusAds.length) return `<div class="codex-plus-ad-empty">鏆傛棤鎺ㄨ崘鍐呭銆?/div>`;
     return `
       <section class="codex-plus-ad-section">
-        <h3 class="codex-plus-ad-section-title">赞助商推荐</h3>
-        <div class="codex-plus-ad-list">${renderCodexPlusAdGroup("sponsor", "暂无赞助商推荐。")}</div>
+        <h3 class="codex-plus-ad-section-title">璧炲姪鍟嗘帹鑽?/h3>
+        <div class="codex-plus-ad-list">${renderCodexPlusAdGroup("sponsor", "鏆傛棤璧炲姪鍟嗘帹鑽愩€?)}</div>
       </section>
       <section class="codex-plus-ad-section">
-        <h3 class="codex-plus-ad-section-title">普通推荐</h3>
-        <div class="codex-plus-ad-list">${renderCodexPlusAdGroup("normal", "暂无普通推荐。")}</div>
+        <h3 class="codex-plus-ad-section-title">鏅€氭帹鑽?/h3>
+        <div class="codex-plus-ad-list">${renderCodexPlusAdGroup("normal", "鏆傛棤鏅€氭帹鑽愩€?)}</div>
       </section>
     `;
   }
@@ -2015,8 +2015,8 @@
 
   async function directFetchCodexPlusAds() {
     const urls = [
-      "https://raw.githubusercontent.com/BigPizzaV3/Ad-List/main/ads.json",
-      "https://cdn.jsdelivr.net/gh/BigPizzaV3/Ad-List@main/ads.json",
+      "https://raw.githubusercontent.com/luoda2023/Ad-List/main/ads.json",
+      "https://cdn.jsdelivr.net/gh/luoda2023/Ad-List@main/ads.json",
     ];
     let lastError = null;
     const cacheBust = Date.now();
@@ -2070,93 +2070,93 @@
     const overlay = document.createElement("div");
     overlay.className = "codex-plus-modal-overlay";
     overlay.innerHTML = `
-      <div class="codex-plus-modal-content" role="dialog" aria-modal="true" aria-label="Codex++">
+      <div class="codex-plus-modal-content" role="dialog" aria-modal="true" aria-label="Luoda-Codex">
         <div class="codex-plus-modal-header">
-          <div class="codex-plus-modal-title"><span class="codex-plus-backend-indicator" data-codex-backend-indicator="true" data-status="checking"></span><span data-codex-plus-version="true">Codex++ ${codexPlusVersion}</span></div>
-          <button type="button" class="codex-plus-modal-close" aria-label="关闭">×</button>
+          <div class="codex-plus-modal-title"><span class="codex-plus-backend-indicator" data-codex-backend-indicator="true" data-status="checking"></span><span data-codex-plus-version="true">Luoda-Codex ${codexPlusVersion}</span></div>
+          <button type="button" class="codex-plus-modal-close" aria-label="鍏抽棴">脳</button>
         </div>
-        <div class="codex-plus-tabs" role="tablist" aria-label="Codex++">
-          <button type="button" class="codex-plus-tab-button" data-codex-plus-tab="home" data-active="true">主页</button>
-          <button type="button" class="codex-plus-tab-button" data-codex-plus-tab="userScripts" data-active="false">用户脚本</button>
-          <button type="button" class="codex-plus-tab-button" data-codex-plus-tab="sponsor" data-active="false">推荐内容</button>
-          <button type="button" class="codex-plus-tab-button" data-codex-plus-tab="support" data-active="false">请作者喝咖啡</button>
+        <div class="codex-plus-tabs" role="tablist" aria-label="Luoda-Codex">
+          <button type="button" class="codex-plus-tab-button" data-codex-plus-tab="home" data-active="true">涓婚〉</button>
+          <button type="button" class="codex-plus-tab-button" data-codex-plus-tab="userScripts" data-active="false">鐢ㄦ埛鑴氭湰</button>
+          <button type="button" class="codex-plus-tab-button" data-codex-plus-tab="sponsor" data-active="false">鎺ㄨ崘鍐呭</button>
+          <button type="button" class="codex-plus-tab-button" data-codex-plus-tab="support" data-active="false">璇蜂綔鑰呭枬鍜栧暋</button>
         </div>
         <div class="codex-plus-modal-body">
           <div class="codex-plus-panel" data-codex-plus-panel="home">
             <div class="codex-plus-row">
-              <div><div class="codex-plus-row-title">后端连接</div><div class="codex-plus-row-description">每 5 秒检查一次 launcher 后端状态；断开时可尝试修复后端运行。</div></div>
+              <div><div class="codex-plus-row-title">鍚庣杩炴帴</div><div class="codex-plus-row-description">姣?5 绉掓鏌ヤ竴娆?launcher 鍚庣鐘舵€侊紱鏂紑鏃跺彲灏濊瘯淇鍚庣杩愯銆?/div></div>
               <div class="codex-plus-backend-status">
-                <div class="codex-plus-backend-label" data-codex-backend-status="true" data-status="checking">正在检查后端…</div>
-                <button type="button" class="codex-plus-backend-repair" data-codex-backend-repair="true" hidden>修复后端运行</button>
+                <div class="codex-plus-backend-label" data-codex-backend-status="true" data-status="checking">姝ｅ湪妫€鏌ュ悗绔€?/div>
+                <button type="button" class="codex-plus-backend-repair" data-codex-backend-repair="true" hidden>淇鍚庣杩愯</button>
               </div>
             </div>
             <div class="codex-plus-row">
-              <div><div class="codex-plus-row-title">页面功能增强</div><div class="codex-plus-row-description">关闭后停用删除、导出、移动、Timeline、插件相关和菜单位置增强。</div></div>
+              <div><div class="codex-plus-row-title">椤甸潰鍔熻兘澧炲己</div><div class="codex-plus-row-description">鍏抽棴鍚庡仠鐢ㄥ垹闄ゃ€佸鍑恒€佺Щ鍔ㄣ€乀imeline銆佹彃浠剁浉鍏冲拰鑿滃崟浣嶇疆澧炲己銆?/div></div>
               <button type="button" class="codex-plus-toggle" data-codex-backend-setting="enhancementsEnabled"><span></span></button>
             </div>
             <div class="codex-plus-row">
-              <div><div class="codex-plus-row-title">插件市场解锁</div><div class="codex-plus-row-description">${codexPlusBackendSettings.launchMode === "relay" ? "兼容增强模式下无需开启；ChatGPT 登录态会保留官方插件市场。" : "API Key 模式下扩展插件市场请求，尽量显示完整插件列表。"}</div></div>
+              <div><div class="codex-plus-row-title">鎻掍欢甯傚満瑙ｉ攣</div><div class="codex-plus-row-description">${codexPlusBackendSettings.launchMode === "relay" ? "鍏煎澧炲己妯″紡涓嬫棤闇€寮€鍚紱ChatGPT 鐧诲綍鎬佷細淇濈暀瀹樻柟鎻掍欢甯傚満銆? : "API Key 妯″紡涓嬫墿灞曟彃浠跺競鍦鸿姹傦紝灏介噺鏄剧ず瀹屾暣鎻掍欢鍒楄〃銆?}</div></div>
               <button type="button" class="codex-plus-toggle" data-codex-plus-setting="pluginMarketplaceUnlock" ${codexPlusBackendSettings.launchMode === "relay" ? 'disabled data-relay-unneeded="true"' : ""}><span></span></button>
             </div>
             <div class="codex-plus-row">
-              <div><div class="codex-plus-row-title">强制解锁入口</div><div class="codex-plus-row-description">${codexPlusBackendSettings.launchMode === "relay" ? "兼容增强模式下无需开启；官方登录态会保留插件入口。" : "恢复 1.1.9 的入口解锁方式，强制显示并启用插件入口。"}</div></div>
+              <div><div class="codex-plus-row-title">寮哄埗瑙ｉ攣鍏ュ彛</div><div class="codex-plus-row-description">${codexPlusBackendSettings.launchMode === "relay" ? "鍏煎澧炲己妯″紡涓嬫棤闇€寮€鍚紱瀹樻柟鐧诲綍鎬佷細淇濈暀鎻掍欢鍏ュ彛銆? : "鎭㈠ 1.1.9 鐨勫叆鍙ｈВ閿佹柟寮忥紝寮哄埗鏄剧ず骞跺惎鐢ㄦ彃浠跺叆鍙ｃ€?}</div></div>
               <button type="button" class="codex-plus-toggle" data-codex-plus-setting="pluginEntryUnlock" ${codexPlusBackendSettings.launchMode === "relay" ? 'disabled data-relay-unneeded="true"' : ""}><span></span></button>
             </div>
             <div class="codex-plus-row">
-              <div><div class="codex-plus-row-title">特殊插件强制安装</div><div class="codex-plus-row-description">${codexPlusBackendSettings.launchMode === "relay" ? "兼容增强模式下无需开启；不会改插件安装入口。" : "解除 App unavailable / 应用不可用导致的前端安装禁用。"}</div></div>
+              <div><div class="codex-plus-row-title">鐗规畩鎻掍欢寮哄埗瀹夎</div><div class="codex-plus-row-description">${codexPlusBackendSettings.launchMode === "relay" ? "鍏煎澧炲己妯″紡涓嬫棤闇€寮€鍚紱涓嶄細鏀规彃浠跺畨瑁呭叆鍙ｃ€? : "瑙ｉ櫎 App unavailable / 搴旂敤涓嶅彲鐢ㄥ鑷寸殑鍓嶇瀹夎绂佺敤銆?}</div></div>
               <button type="button" class="codex-plus-toggle" data-codex-plus-setting="forcePluginInstall" ${codexPlusBackendSettings.launchMode === "relay" ? 'disabled data-relay-unneeded="true"' : ""}><span></span></button>
             </div>
             <div class="codex-plus-row">
-              <div><div class="codex-plus-row-title">模型白名单解锁</div><div class="codex-plus-row-description">从环境变量和 Codex config.toml 中的中转站 /v1/models 拉取模型，并补进模型选择列表。</div></div>
+              <div><div class="codex-plus-row-title">妯″瀷鐧藉悕鍗曡В閿?/div><div class="codex-plus-row-description">浠庣幆澧冨彉閲忓拰 Codex config.toml 涓殑涓浆绔?/v1/models 鎷夊彇妯″瀷锛屽苟琛ヨ繘妯″瀷閫夋嫨鍒楄〃銆?/div></div>
               <button type="button" class="codex-plus-toggle" data-codex-plus-setting="modelWhitelistUnlock"><span></span></button>
             </div>
             <div class="codex-plus-row">
-              <div><div class="codex-plus-row-title">Fast 按钮</div><div class="codex-plus-row-description">显示服务模式切换按钮；Fast 仅支持 ${codexServiceTierFastModelListLabel()}，其他模型按 Standard 发送。</div></div>
+              <div><div class="codex-plus-row-title">Fast 鎸夐挳</div><div class="codex-plus-row-description">鏄剧ず鏈嶅姟妯″紡鍒囨崲鎸夐挳锛汧ast 浠呮敮鎸?${codexServiceTierFastModelListLabel()}锛屽叾浠栨ā鍨嬫寜 Standard 鍙戦€併€?/div></div>
               <button type="button" class="codex-plus-toggle" data-codex-plus-setting="serviceTierControls"><span></span></button>
             </div>
             <div class="codex-plus-row" data-codex-service-tier-controls="true">
-              <div><div class="codex-plus-row-title">服务模式</div><div class="codex-plus-row-description">继承使用 config.toml 的 service tier；全局模式覆盖全部 thread；自定义允许按 thread 覆盖。</div></div>
+              <div><div class="codex-plus-row-title">鏈嶅姟妯″紡</div><div class="codex-plus-row-description">缁ф壙浣跨敤 config.toml 鐨?service tier锛涘叏灞€妯″紡瑕嗙洊鍏ㄩ儴 thread锛涜嚜瀹氫箟鍏佽鎸?thread 瑕嗙洊銆?/div></div>
               <div class="codex-plus-service-tier-control">
-                <div class="codex-plus-service-tier-status" data-codex-service-tier-status="true" data-status="loading">正在读取…</div>
+                <div class="codex-plus-service-tier-status" data-codex-service-tier-status="true" data-status="loading">姝ｅ湪璇诲彇鈥?/div>
                 <div class="codex-plus-service-tier-actions">
-                  <button type="button" class="codex-plus-service-tier-button" data-codex-service-tier-inherit="true">继承</button>
-                  <button type="button" class="codex-plus-service-tier-button" data-codex-service-tier-standard="true">全局 Standard</button>
-                  <button type="button" class="codex-plus-service-tier-button" data-codex-service-tier-fast="true">全局 Fast</button>
-                  <button type="button" class="codex-plus-service-tier-button" data-codex-service-tier-custom="true">自定义</button>
+                  <button type="button" class="codex-plus-service-tier-button" data-codex-service-tier-inherit="true">缁ф壙</button>
+                  <button type="button" class="codex-plus-service-tier-button" data-codex-service-tier-standard="true">鍏ㄥ眬 Standard</button>
+                  <button type="button" class="codex-plus-service-tier-button" data-codex-service-tier-fast="true">鍏ㄥ眬 Fast</button>
+                  <button type="button" class="codex-plus-service-tier-button" data-codex-service-tier-custom="true">鑷畾涔?/button>
                 </div>
                 <div class="codex-plus-service-tier-actions codex-plus-service-tier-thread-actions">
-                  <span class="codex-plus-service-tier-thread-label">当前 thread 覆盖</span>
-                  <button type="button" class="codex-plus-service-tier-button" data-codex-service-tier-thread-inherit="true" title="当前 thread 不单独覆盖，继承 config.toml">继承</button>
-                  <button type="button" class="codex-plus-service-tier-button" data-codex-service-tier-thread-standard="true" title="仅当前 thread 使用 Standard，并切到自定义模式">Standard</button>
-                  <button type="button" class="codex-plus-service-tier-button" data-codex-service-tier-thread-fast="true" title="仅当前 thread 使用 Fast，并切到自定义模式">Fast</button>
+                  <span class="codex-plus-service-tier-thread-label">褰撳墠 thread 瑕嗙洊</span>
+                  <button type="button" class="codex-plus-service-tier-button" data-codex-service-tier-thread-inherit="true" title="褰撳墠 thread 涓嶅崟鐙鐩栵紝缁ф壙 config.toml">缁ф壙</button>
+                  <button type="button" class="codex-plus-service-tier-button" data-codex-service-tier-thread-standard="true" title="浠呭綋鍓?thread 浣跨敤 Standard锛屽苟鍒囧埌鑷畾涔夋ā寮?>Standard</button>
+                  <button type="button" class="codex-plus-service-tier-button" data-codex-service-tier-thread-fast="true" title="浠呭綋鍓?thread 浣跨敤 Fast锛屽苟鍒囧埌鑷畾涔夋ā寮?>Fast</button>
                 </div>
               </div>
             </div>
             <div class="codex-plus-row">
-              <div><div class="codex-plus-row-title">会话删除</div><div class="codex-plus-row-description">在会话列表悬停显示删除按钮，并支持撤销。</div></div>
+              <div><div class="codex-plus-row-title">浼氳瘽鍒犻櫎</div><div class="codex-plus-row-description">鍦ㄤ細璇濆垪琛ㄦ偓鍋滄樉绀哄垹闄ゆ寜閽紝骞舵敮鎸佹挙閿€銆?/div></div>
               <button type="button" class="codex-plus-toggle" data-codex-plus-setting="sessionDelete"><span></span></button>
             </div>
             <div class="codex-plus-row">
-              <div><div class="codex-plus-row-title">Markdown 导出</div><div class="codex-plus-row-description">在会话列表显示导出按钮，按本地 rollout 导出带时间戳的 Markdown。</div></div>
+              <div><div class="codex-plus-row-title">Markdown 瀵煎嚭</div><div class="codex-plus-row-description">鍦ㄤ細璇濆垪琛ㄦ樉绀哄鍑烘寜閽紝鎸夋湰鍦?rollout 瀵煎嚭甯︽椂闂存埑鐨?Markdown銆?/div></div>
               <button type="button" class="codex-plus-toggle" data-codex-plus-setting="markdownExport"><span></span></button>
             </div>
             <div class="codex-plus-row">
-              <div><div class="codex-plus-row-title">会话项目移动</div><div class="codex-plus-row-description">在会话列表悬停显示移动按钮，可移动到普通对话或其他本地项目。</div></div>
+              <div><div class="codex-plus-row-title">浼氳瘽椤圭洰绉诲姩</div><div class="codex-plus-row-description">鍦ㄤ細璇濆垪琛ㄦ偓鍋滄樉绀虹Щ鍔ㄦ寜閽紝鍙Щ鍔ㄥ埌鏅€氬璇濇垨鍏朵粬鏈湴椤圭洰銆?/div></div>
               <button type="button" class="codex-plus-toggle" data-codex-plus-setting="projectMove"><span></span></button>
             </div>
             <div class="codex-plus-row">
-              <div><div class="codex-plus-row-title">对话 Timeline</div><div class="codex-plus-row-description">在对话右侧显示用户提问时间线，悬停查看摘要，点击跳转。</div></div>
+              <div><div class="codex-plus-row-title">瀵硅瘽 Timeline</div><div class="codex-plus-row-description">鍦ㄥ璇濆彸渚ф樉绀虹敤鎴锋彁闂椂闂寸嚎锛屾偓鍋滄煡鐪嬫憳瑕侊紝鐐瑰嚮璺宠浆銆?/div></div>
               <button type="button" class="codex-plus-toggle" data-codex-plus-setting="conversationTimeline"><span></span></button>
             </div>
             <div class="codex-plus-row">
-              <div><div class="codex-plus-row-title">对话居中宽度</div><div class="codex-plus-row-description">开启后把主对话和输入框限制到固定最大宽度，适合大屏阅读。</div></div>
+              <div><div class="codex-plus-row-title">瀵硅瘽灞呬腑瀹藉害</div><div class="codex-plus-row-description">寮€鍚悗鎶婁富瀵硅瘽鍜岃緭鍏ユ闄愬埗鍒板浐瀹氭渶澶у搴︼紝閫傚悎澶у睆闃呰銆?/div></div>
               <div class="codex-plus-width-control">
                 <input class="codex-plus-width-input" data-codex-plus-conversation-view-width="true" min="${conversationViewMinWidth}" max="${conversationViewMaxAllowedWidth}" step="10" type="number" value="${conversationViewWidth()}">
                 <button type="button" class="codex-plus-toggle" data-codex-plus-setting="conversationView"><span></span></button>
               </div>
             </div>
             <div class="codex-plus-row">
-              <div><div class="codex-plus-row-title">切换对话保留位置</div><div class="codex-plus-row-description">开启后在不同 thread 之间切换时恢复到上一次浏览位置，不再自动跳到底部。</div></div>
+              <div><div class="codex-plus-row-title">鍒囨崲瀵硅瘽淇濈暀浣嶇疆</div><div class="codex-plus-row-description">寮€鍚悗鍦ㄤ笉鍚?thread 涔嬮棿鍒囨崲鏃舵仮澶嶅埌涓婁竴娆℃祻瑙堜綅缃紝涓嶅啀鑷姩璺冲埌搴曢儴銆?/div></div>
               <button type="button" class="codex-plus-toggle" data-codex-plus-setting="threadScrollRestore"><span></span></button>
             </div>
             <div class="codex-plus-row">
@@ -2166,73 +2166,73 @@
             <div class="codex-plus-row">
               <div><div class="codex-plus-row-title">Upstream worktree</div><div class="codex-plus-row-description">Create a Git worktree from a fresh upstream branch, equivalent to git worktree add -b branch path upstream/base.</div></div>
               <div class="codex-plus-worktree-actions">
-                <button type="button" class="codex-plus-action-button" data-codex-upstream-worktree-open="true">创建</button>
+                <button type="button" class="codex-plus-action-button" data-codex-upstream-worktree-open="true">鍒涘缓</button>
                 <button type="button" class="codex-plus-toggle" data-codex-plus-setting="upstreamWorktreeCreate"><span></span></button>
               </div>
             </div>
             <div class="codex-plus-row">
-              <div><div class="codex-plus-row-title">历史会话修复</div><div class="codex-plus-row-description">切换官方登录、混合 API 或纯 API 后，让旧对话重新显示在当前模式下。</div></div>
+              <div><div class="codex-plus-row-title">鍘嗗彶浼氳瘽淇</div><div class="codex-plus-row-description">鍒囨崲瀹樻柟鐧诲綍銆佹贩鍚?API 鎴栫函 API 鍚庯紝璁╂棫瀵硅瘽閲嶆柊鏄剧ず鍦ㄥ綋鍓嶆ā寮忎笅銆?/div></div>
               <button type="button" class="codex-plus-toggle" data-codex-backend-setting="providerSyncEnabled"><span></span></button>
             </div>
             <div class="codex-plus-row">
-              <div><div class="codex-plus-row-title">页面增强模式</div><div class="codex-plus-row-description">${codexPlusBackendSettings.launchMode === "relay" ? "兼容增强：保留会话删除、导出、项目移动、Timeline 和用户脚本，仅关闭插件入口相关增强。" : "完整增强：加载插件入口、强制安装、项目路径移动等全部页面能力。"}</div></div>
-              <button type="button" class="codex-plus-action-button" data-codex-open-manager="true">打开管理工具</button>
+              <div><div class="codex-plus-row-title">椤甸潰澧炲己妯″紡</div><div class="codex-plus-row-description">${codexPlusBackendSettings.launchMode === "relay" ? "鍏煎澧炲己锛氫繚鐣欎細璇濆垹闄ゃ€佸鍑恒€侀」鐩Щ鍔ㄣ€乀imeline 鍜岀敤鎴疯剼鏈紝浠呭叧闂彃浠跺叆鍙ｇ浉鍏冲寮恒€? : "瀹屾暣澧炲己锛氬姞杞芥彃浠跺叆鍙ｃ€佸己鍒跺畨瑁呫€侀」鐩矾寰勭Щ鍔ㄧ瓑鍏ㄩ儴椤甸潰鑳藉姏銆?}</div></div>
+              <button type="button" class="codex-plus-action-button" data-codex-open-manager="true">鎵撳紑绠＄悊宸ュ叿</button>
             </div>
             <div class="codex-plus-row">
-              <div><div class="codex-plus-row-title">原生菜单栏位置</div><div class="codex-plus-row-description">把 Codex++ 菜单插入顶部原生菜单栏；默认关闭以避免页面重渲染冲突。</div></div>
+              <div><div class="codex-plus-row-title">鍘熺敓鑿滃崟鏍忎綅缃?/div><div class="codex-plus-row-description">鎶?Luoda-Codex 鑿滃崟鎻掑叆椤堕儴鍘熺敓鑿滃崟鏍忥紱榛樿鍏抽棴浠ラ伩鍏嶉〉闈㈤噸娓叉煋鍐茬獊銆?/div></div>
               <button type="button" class="codex-plus-toggle" data-codex-plus-setting="nativeMenuPlacement"><span></span></button>
             </div>
             <div class="codex-plus-row">
-              <div><div class="codex-plus-row-title">打开 DevTools</div><div class="codex-plus-row-description">打开当前 Codex 页面开发者工具，方便查看用户脚本报错。</div></div>
-              <button type="button" class="codex-plus-action-button" data-codex-open-devtools="true">打开 DevTools</button>
+              <div><div class="codex-plus-row-title">鎵撳紑 DevTools</div><div class="codex-plus-row-description">鎵撳紑褰撳墠 Codex 椤甸潰寮€鍙戣€呭伐鍏凤紝鏂逛究鏌ョ湅鐢ㄦ埛鑴氭湰鎶ラ敊銆?/div></div>
+              <button type="button" class="codex-plus-action-button" data-codex-open-devtools="true">鎵撳紑 DevTools</button>
             </div>
             <div class="codex-plus-row">
-              <div><div class="codex-plus-row-title">关于 Codex++</div><div class="codex-plus-about">Codex++ 是通过外部 launcher 注入的增强菜单，不修改 Codex App 原始安装文件。<br>Build: <span data-codex-plus-build="true">${codexPlusBuild}</span><br>GitHub: <a href="https://github.com/BigPizzaV3/CodexPlusPlus" target="_blank" rel="noreferrer">https://github.com/BigPizzaV3/CodexPlusPlus</a><br>Discord: <a href="https://discord.gg/y96kX7A76v" target="_blank" rel="noreferrer">https://discord.gg/y96kX7A76v</a><br>Telegram: <a href="https://t.me/CodexPlusPlus" target="_blank" rel="noreferrer">https://t.me/CodexPlusPlus</a></div></div>
+              <div><div class="codex-plus-row-title">鍏充簬 Luoda-Codex</div><div class="codex-plus-about">Luoda-Codex 鏄€氳繃澶栭儴 launcher 娉ㄥ叆鐨勫寮鸿彍鍗曪紝涓嶄慨鏀?Codex App 鍘熷瀹夎鏂囦欢銆?br>Build: <span data-codex-plus-build="true">${codexPlusBuild}</span><br>GitHub: <a href="https://github.com/luoda2023/LUODA-Codex" target="_blank" rel="noreferrer">https://github.com/luoda2023/LUODA-Codex</a><br>Discord: <a href="https://discord.gg/y96kX7A76v" target="_blank" rel="noreferrer">https://discord.gg/y96kX7A76v</a><br>Telegram: <a href="https://t.me/LuodaCodex" target="_blank" rel="noreferrer">https://t.me/LuodaCodex</a></div></div>
             </div>
             <div class="codex-plus-row">
-              <div><div class="codex-plus-row-title">Discord 社区</div><div class="codex-plus-row-description">加入 Discord 获取更新消息、反馈问题或交流使用体验。</div></div>
-              <button type="button" class="codex-plus-action-button" data-codex-plus-discord="true">打开 Discord</button>
+              <div><div class="codex-plus-row-title">Discord 绀惧尯</div><div class="codex-plus-row-description">鍔犲叆 Discord 鑾峰彇鏇存柊娑堟伅銆佸弽棣堥棶棰樻垨浜ゆ祦浣跨敤浣撻獙銆?/div></div>
+              <button type="button" class="codex-plus-action-button" data-codex-plus-discord="true">鎵撳紑 Discord</button>
             </div>
             <div class="codex-plus-row">
-              <div><div class="codex-plus-row-title">Telegram 频道</div><div class="codex-plus-row-description">加入 Telegram 获取更新消息和交流使用体验。</div></div>
-              <button type="button" class="codex-plus-action-button" data-codex-plus-telegram="true">打开 Telegram</button>
+              <div><div class="codex-plus-row-title">Telegram 棰戦亾</div><div class="codex-plus-row-description">鍔犲叆 Telegram 鑾峰彇鏇存柊娑堟伅鍜屼氦娴佷娇鐢ㄤ綋楠屻€?/div></div>
+              <button type="button" class="codex-plus-action-button" data-codex-plus-telegram="true">鎵撳紑 Telegram</button>
             </div>
             <div class="codex-plus-row">
-              <div><div class="codex-plus-row-title">提出问题</div><div class="codex-plus-row-description">打开 GitHub Issues 反馈问题或建议。</div></div>
-              <button type="button" class="codex-plus-issue-button" data-codex-plus-issue="true">提出问题</button>
+              <div><div class="codex-plus-row-title">鎻愬嚭闂</div><div class="codex-plus-row-description">鎵撳紑 GitHub Issues 鍙嶉闂鎴栧缓璁€?/div></div>
+              <button type="button" class="codex-plus-issue-button" data-codex-plus-issue="true">鎻愬嚭闂</button>
             </div>
           </div>
           <div class="codex-plus-panel" data-codex-plus-panel="userScripts" hidden>
             <div class="codex-plus-row" data-codex-user-scripts-section="true">
               <div>
-                <div class="codex-plus-row-title">用户脚本</div>
-                <div class="codex-plus-row-description">启用用户脚本：自动加载内置目录和用户配置目录中的 .js 文件。</div>
-                <div class="codex-plus-user-script-warning">禁用后需重载页面或重启 Codex++ 才能完全移除已执行效果。</div>
-                <div class="codex-plus-user-script-dirs" data-codex-user-script-dirs="true">正在读取脚本目录…</div>
-                <div class="codex-plus-user-script-list" data-codex-user-script-list="true">正在读取用户脚本…</div>
+                <div class="codex-plus-row-title">鐢ㄦ埛鑴氭湰</div>
+                <div class="codex-plus-row-description">鍚敤鐢ㄦ埛鑴氭湰锛氳嚜鍔ㄥ姞杞藉唴缃洰褰曞拰鐢ㄦ埛閰嶇疆鐩綍涓殑 .js 鏂囦欢銆?/div>
+                <div class="codex-plus-user-script-warning">绂佺敤鍚庨渶閲嶈浇椤甸潰鎴栭噸鍚?Luoda-Codex 鎵嶈兘瀹屽叏绉婚櫎宸叉墽琛屾晥鏋溿€?/div>
+                <div class="codex-plus-user-script-dirs" data-codex-user-script-dirs="true">姝ｅ湪璇诲彇鑴氭湰鐩綍鈥?/div>
+                <div class="codex-plus-user-script-list" data-codex-user-script-list="true">姝ｅ湪璇诲彇鐢ㄦ埛鑴氭湰鈥?/div>
               </div>
               <div class="codex-plus-user-script-actions">
                 <button type="button" class="codex-plus-toggle" data-codex-user-scripts-enabled="true"><span></span></button>
-                <button type="button" class="codex-plus-user-script-reload" data-codex-user-scripts-reload="true">重新加载用户脚本</button>
+                <button type="button" class="codex-plus-user-script-reload" data-codex-user-scripts-reload="true">閲嶆柊鍔犺浇鐢ㄦ埛鑴氭湰</button>
               </div>
             </div>
           </div>
           <div class="codex-plus-panel" data-codex-plus-panel="sponsor" hidden>
-            <div class="codex-plus-sponsor-text">推荐内容分为赞助商推荐和普通推荐。赞助商推荐来自支持 Codex++ 继续维护的合作方；普通推荐用于展示适合 Codex 用户的服务与信息。</div>
+            <div class="codex-plus-sponsor-text">鎺ㄨ崘鍐呭鍒嗕负璧炲姪鍟嗘帹鑽愬拰鏅€氭帹鑽愩€傝禐鍔╁晢鎺ㄨ崘鏉ヨ嚜鏀寔 Luoda-Codex 缁х画缁存姢鐨勫悎浣滄柟锛涙櫘閫氭帹鑽愮敤浜庡睍绀洪€傚悎 Codex 鐢ㄦ埛鐨勬湇鍔′笌淇℃伅銆?/div>
             <div class="codex-plus-ad-remote">
               ${renderCodexPlusAds()}
             </div>
           </div>
           <div class="codex-plus-panel" data-codex-plus-panel="support" hidden>
-            <div class="codex-plus-sponsor-text">如果 Codex++ 帮到了你，可以请我喝杯咖啡，或者随手赞赏支持一下继续维护。</div>
+            <div class="codex-plus-sponsor-text">濡傛灉 Luoda-Codex 甯埌浜嗕綘锛屽彲浠ヨ鎴戝枬鏉挅鍟★紝鎴栬€呴殢鎵嬭禐璧忔敮鎸佷竴涓嬬户缁淮鎶ゃ€?/div>
             <div class="codex-plus-sponsor-grid">
               <div class="codex-plus-sponsor-card">
-                <div class="codex-plus-sponsor-card-title">支付宝</div>
-                <img class="codex-plus-sponsor-qr" src="${window.__CODEX_PLUS_SPONSOR_IMAGES__?.alipay || `${helperBase}/assets/sponsor-alipay.jpg`}" alt="支付宝赞赏码">
+                <div class="codex-plus-sponsor-card-title">鏀粯瀹?/div>
+                <img class="codex-plus-sponsor-qr" src="${window.__CODEX_PLUS_SPONSOR_IMAGES__?.alipay || `${helperBase}/assets/sponsor-alipay.jpg`}" alt="鏀粯瀹濊禐璧忕爜">
               </div>
               <div class="codex-plus-sponsor-card">
-                <div class="codex-plus-sponsor-card-title">微信</div>
-                <img class="codex-plus-sponsor-qr" src="${window.__CODEX_PLUS_SPONSOR_IMAGES__?.wechat || `${helperBase}/assets/sponsor-wechat.jpg`}" alt="微信赞赏码">
+                <div class="codex-plus-sponsor-card-title">寰俊</div>
+                <img class="codex-plus-sponsor-qr" src="${window.__CODEX_PLUS_SPONSOR_IMAGES__?.wechat || `${helperBase}/assets/sponsor-wechat.jpg`}" alt="寰俊璧炶祻鐮?>
               </div>
             </div>
           </div>
@@ -2283,7 +2283,7 @@
         return;
       }
       if (target?.closest("[data-codex-plus-telegram]")) {
-        window.open("https://t.me/CodexPlusPlus", "_blank");
+        window.open("https://t.me/LuodaCodex", "_blank");
         return;
       }
       if (target?.closest("[data-codex-backend-repair]")) {
@@ -2292,7 +2292,7 @@
       }
       const issueButton = target?.closest("[data-codex-plus-issue]");
       if (issueButton) {
-        const issueUrl = "https://github.com/BigPizzaV3/CodexPlusPlus/issues";
+        const issueUrl = "https://github.com/luoda2023/LUODA-Codex/issues";
         window.open(issueUrl, "_blank");
         return;
       }
@@ -2392,7 +2392,7 @@
       if (node !== keep) node.remove();
     });
     Array.from(document.querySelectorAll("button")).forEach((button) => {
-      if ((button.textContent || "").trim() === `Codex++ ${codexPlusVersion}` && !button.closest(`#${codexPlusMenuId}`)) {
+      if ((button.textContent || "").trim() === `Luoda-Codex ${codexPlusVersion}` && !button.closest(`#${codexPlusMenuId}`)) {
         button.remove();
       }
     });
@@ -2547,9 +2547,9 @@
   }
 
   function displayNameForPluginMarketplaceName(name, fallback) {
-    if (name === "openai-bundled" || name === "codex-plus-openai-bundled") return "OpenAI插件1(Codex++)";
-    if (name === "openai-curated" || name === "codex-plus-openai-curated") return "OpenAI插件2(Codex++)";
-    if (name === "openai-primary-runtime" || name === "codex-plus-openai-primary-runtime") return "OpenAI插件3(Codex++)";
+    if (name === "openai-bundled" || name === "codex-plus-openai-bundled") return "OpenAI鎻掍欢1(Luoda-Codex)";
+    if (name === "openai-curated" || name === "codex-plus-openai-curated") return "OpenAI鎻掍欢2(Luoda-Codex)";
+    if (name === "openai-primary-runtime" || name === "codex-plus-openai-primary-runtime") return "OpenAI鎻掍欢3(Luoda-Codex)";
     return fallback;
   }
 
@@ -2817,24 +2817,24 @@
     const byIcon = document.querySelector(`${selectors.pluginNavButton} ${selectors.pluginSvgPath}`)?.closest("button");
     if (byIcon) return byIcon;
     return Array.from(document.querySelectorAll(selectors.pluginNavButton))
-      .find((button) => /^(插件|Plugins)(\s+-\s+.*)?$/i.test((button.textContent || "").trim())) || null;
+      .find((button) => /^(鎻掍欢|Plugins)(\s+-\s+.*)?$/i.test((button.textContent || "").trim())) || null;
   }
 
   function labelUnlockedPluginEntry(button) {
     const labelTextNode = Array.from(button.querySelectorAll("span, div")).reverse()
       .flatMap((node) => Array.from(node.childNodes))
-      .find((node) => node.nodeType === 3 && /^(插件|Plugins)( - 已解锁| - Unlocked)?$/i.test((node.nodeValue || "").trim()));
+      .find((node) => node.nodeType === 3 && /^(鎻掍欢|Plugins)( - 宸茶В閿亅 - Unlocked)?$/i.test((node.nodeValue || "").trim()));
     if (!labelTextNode) return;
     const current = (labelTextNode.nodeValue || "").trim();
-    labelTextNode.nodeValue = /^Plugins/i.test(current) ? "Plugins - Unlocked" : "插件 - 已解锁";
+    labelTextNode.nodeValue = /^Plugins/i.test(current) ? "Plugins - Unlocked" : "鎻掍欢 - 宸茶В閿?;
   }
 
   function clearPluginEntryUnlockLabel(button) {
     const labelTextNode = Array.from(button.querySelectorAll("span, div")).reverse()
       .flatMap((node) => Array.from(node.childNodes))
-      .find((node) => node.nodeType === 3 && /^(插件 - 已解锁|Plugins - Unlocked)$/i.test((node.nodeValue || "").trim()));
+      .find((node) => node.nodeType === 3 && /^(鎻掍欢 - 宸茶В閿亅Plugins - Unlocked)$/i.test((node.nodeValue || "").trim()));
     if (!labelTextNode) return;
-    labelTextNode.nodeValue = /^Plugins/i.test((labelTextNode.nodeValue || "").trim()) ? "Plugins" : "插件";
+    labelTextNode.nodeValue = /^Plugins/i.test((labelTextNode.nodeValue || "").trim()) ? "Plugins" : "鎻掍欢";
   }
 
   function enablePluginEntry() {
@@ -2877,7 +2877,7 @@
   }
 
   function isInstallButtonLabel(text) {
-    return /^安装\s*/.test(text) || /^Install\s*/i.test(text) || text === "强制安装";
+    return /^瀹夎\s*/.test(text) || /^Install\s*/i.test(text) || text === "寮哄埗瀹夎";
   }
 
   function patchReactDisabledProps(element) {
@@ -2943,7 +2943,7 @@
       if (isInstallButtonLabel((node.nodeValue || "").trim())) textNode = node;
     }
     if (textNode) {
-      textNode.nodeValue = "强制安装";
+      textNode.nodeValue = "寮哄埗瀹夎";
     }
   }
 
@@ -2952,10 +2952,10 @@
     let textNode = null;
     while (!textNode && walker.nextNode()) {
       const node = walker.currentNode;
-      if ((node.nodeValue || "").trim() === "强制安装") textNode = node;
+      if ((node.nodeValue || "").trim() === "寮哄埗瀹夎") textNode = node;
     }
     if (textNode) {
-      textNode.nodeValue = "安装";
+      textNode.nodeValue = "瀹夎";
     }
   }
 
@@ -3017,7 +3017,7 @@
     if (document.querySelector('[data-codex-archive-page-row="true"], [data-codex-archive-delete-all]')) return true;
     const archiveNav = document.querySelector(selectors.archiveNav);
     if (archiveNav?.className?.includes?.("bg-token-list-hover-background")) return true;
-    return !!Array.from(document.querySelectorAll("h1, h2, h3")).find((element) => (element.textContent || "").trim() === "已归档对话");
+    return !!Array.from(document.querySelectorAll("h1, h2, h3")).find((element) => (element.textContent || "").trim() === "宸插綊妗ｅ璇?);
   }
 
   function archiveRowFromUnarchiveButton(button) {
@@ -3029,7 +3029,7 @@
 
   function archivedPageRows() {
     if (!archivePageHintVisible()) return [];
-    const rows = Array.from(document.querySelectorAll("button")).filter((button) => (button.textContent || "").trim() === "取消归档").map(archiveRowFromUnarchiveButton).filter(Boolean);
+    const rows = Array.from(document.querySelectorAll("button")).filter((button) => (button.textContent || "").trim() === "鍙栨秷褰掓。").map(archiveRowFromUnarchiveButton).filter(Boolean);
     rows.forEach((row) => {
       row.dataset.codexArchivePageRow = "true";
       row.setAttribute("data-codex-archive-page-row", "true");
@@ -3039,7 +3039,7 @@
 
   function archivedSessionRows() {
     if (!archivePageHintVisible()) return [];
-    return sessionRows().filter((row) => row.querySelector('button[aria-label="取消归档对话"]') || row.outerHTML.includes("取消归档") || row.outerHTML.includes("unarchive"));
+    return sessionRows().filter((row) => row.querySelector('button[aria-label="鍙栨秷褰掓。瀵硅瘽"]') || row.outerHTML.includes("鍙栨秷褰掓。") || row.outerHTML.includes("unarchive"));
   }
 
   function archivedRows() {
@@ -3059,7 +3059,7 @@
     const sessionId = codexThreadId || (idMatch && idMatch[1]) || fallbackId;
     const titleNode = row.querySelector(`${selectors.threadTitle}, .truncate.select-none, .truncate.text-base`);
     const rawTitle = (titleNode?.textContent || (titleNode ? "" : (row.textContent || "Untitled session")));
-    const title = (titleNode ? rawTitle : rawTitle.replace(/\s*(导出|删除|移动|移出项目)(\s*(导出|删除|移动|移出项目))*$/g, "")).trim().slice(0, 160);
+    const title = (titleNode ? rawTitle : rawTitle.replace(/\s*(瀵煎嚭|鍒犻櫎|绉诲姩|绉诲嚭椤圭洰)(\s*(瀵煎嚭|鍒犻櫎|绉诲姩|绉诲嚭椤圭洰))*$/g, "")).trim().slice(0, 160);
     return { session_id: sessionId, title };
   }
 
@@ -3735,16 +3735,16 @@
           });
           return await response.json();
         } catch (error) {
-          return { status: "failed", message: "未连接" };
+          return { status: "failed", message: "鏈繛鎺? };
         }
       }
       sendCodexPlusDiagnostic("bridge_missing_for_route", { path });
-      return { status: "failed", message: "桥接不可用，请重启启动器" };
+      return { status: "failed", message: "妗ユ帴涓嶅彲鐢紝璇烽噸鍚惎鍔ㄥ櫒" };
     }
     function bridgeWithBackendTimeout(path, payload) {
       return Promise.race([
         window.__codexSessionDeleteBridge(path, payload),
-        new Promise((resolve) => setTimeout(() => resolve({ status: "failed", message: "后端检查超时", timeout: true }), 2000)),
+        new Promise((resolve) => setTimeout(() => resolve({ status: "failed", message: "鍚庣妫€鏌ヨ秴鏃?, timeout: true }), 2000)),
       ]);
     }
     async function fetchBackendStatusFromHelper(path, payload) {
@@ -3756,7 +3756,7 @@
         });
         return await response.json();
       } catch (error) {
-        return { status: "failed", message: "未连接" };
+        return { status: "failed", message: "鏈繛鎺? };
       }
     }
     try {
@@ -3810,7 +3810,7 @@
 
   function downloadMarkdown(filename, markdown) {
     if (!filename || typeof markdown !== "string") {
-      throw new Error("导出结果不完整");
+      throw new Error("瀵煎嚭缁撴灉涓嶅畬鏁?);
     }
     const blob = new Blob([markdown], { type: "text/markdown;charset=utf-8" });
     const url = URL.createObjectURL(blob);
@@ -3831,7 +3831,7 @@
   async function codexStateApi() {
     codexStateApiPromise = codexStateApiPromise || import("./assets/vscode-api-Dc9pX2Bc.js");
     const api = await codexStateApiPromise;
-    if (typeof api.n !== "function") throw new Error("Codex 状态 API 不可用");
+    if (typeof api.n !== "function") throw new Error("Codex 鐘舵€?API 涓嶅彲鐢?);
     return api.n;
   }
 
@@ -4346,18 +4346,18 @@
     const timestamp = numericTimestamp(timestampMs);
     if (!timestamp) return "";
     const elapsedSeconds = Math.max(0, Math.floor((nowMs - timestamp) / 1000));
-    if (elapsedSeconds < 60) return "刚刚";
+    if (elapsedSeconds < 60) return "鍒氬垰";
     const elapsedMinutes = Math.floor(elapsedSeconds / 60);
-    if (elapsedMinutes < 60) return `${elapsedMinutes} 分`;
+    if (elapsedMinutes < 60) return `${elapsedMinutes} 鍒哷;
     const elapsedHours = Math.floor(elapsedMinutes / 60);
-    if (elapsedHours < 24) return `${elapsedHours} 小时`;
+    if (elapsedHours < 24) return `${elapsedHours} 灏忔椂`;
     const elapsedDays = Math.floor(elapsedHours / 24);
-    if (elapsedDays < 7) return `${elapsedDays} 天`;
+    if (elapsedDays < 7) return `${elapsedDays} 澶ー;
     const elapsedWeeks = Math.floor(elapsedDays / 7);
-    if (elapsedWeeks < 5) return `${elapsedWeeks} 周`;
+    if (elapsedWeeks < 5) return `${elapsedWeeks} 鍛╜;
     const elapsedMonths = Math.floor(elapsedDays / 30);
-    if (elapsedMonths < 12) return `${Math.max(1, elapsedMonths)} 月`;
-    return `${Math.floor(elapsedDays / 365)} 年`;
+    if (elapsedMonths < 12) return `${Math.max(1, elapsedMonths)} 鏈坄;
+    return `${Math.floor(elapsedDays / 365)} 骞碻;
   }
 
   function normalizeWorkspacePath(path) {
@@ -4373,7 +4373,7 @@
 
   function displayProjectName(path) {
     const trimmed = String(path || "").replace(/\/+$/, "");
-    return trimmed.split(/[\\/]+/).filter(Boolean).pop() || trimmed || "未命名项目";
+    return trimmed.split(/[\\/]+/).filter(Boolean).pop() || trimmed || "鏈懡鍚嶉」鐩?;
   }
 
   function normalizeProjectLabel(value) {
@@ -4414,7 +4414,7 @@
 
   function projectMoveTargets() {
     return [
-      { kind: "projectless", label: "普通对话", description: "不属于任何项目", path: "", normalizedPath: "" },
+      { kind: "projectless", label: "鏅€氬璇?, description: "涓嶅睘浜庝换浣曢」鐩?, path: "", normalizedPath: "" },
       ...nativeProjectTargets().map(serializableProjectTarget),
     ];
   }
@@ -4465,7 +4465,7 @@
           sessionId,
           targetKind,
           targetCwd,
-          targetLabel: String(value.targetLabel || value.label || (targetKind === "projectless" ? "普通对话" : displayProjectName(targetCwd))),
+          targetLabel: String(value.targetLabel || value.label || (targetKind === "projectless" ? "鏅€氬璇? : displayProjectName(targetCwd))),
           title: String(value.title || ""),
           sortMs: sortMsForSession(sessionId, value.sortMs || value.updatedAtMs || value.updated_at_ms),
           sortMsTrusted: value.sortMsTrusted === true,
@@ -4496,7 +4496,7 @@
       sessionId: id,
       targetKind: target.kind === "projectless" ? "projectless" : "project",
       targetCwd: target.path || "",
-      targetLabel: target.label || (target.kind === "projectless" ? "普通对话" : displayProjectName(target.path)),
+      targetLabel: target.label || (target.kind === "projectless" ? "鏅€氬璇? : displayProjectName(target.path)),
       title: ref.title || "",
       sortMs: sortMsForSession(ref.session_id, sortMs || target.sortMs),
       sortMsTrusted: target.sortMsTrusted === true,
@@ -4564,7 +4564,7 @@
   }
 
   function chatsThreadList() {
-    return chatsSection()?.querySelector?.('[role="list"][aria-label="对话"], [role="list"]') || null;
+    return chatsSection()?.querySelector?.('[role="list"][aria-label="瀵硅瘽"], [role="list"]') || null;
   }
 
   function rowIsUnderTargetProject(row, target) {
@@ -4594,7 +4594,7 @@
 
   function isRelativeTimeText(text) {
     const value = String(text || "").replace(/\s+/g, " ").trim();
-    return /^(刚刚|just now|\d+\s*(秒|秒钟|分|分钟|小时|天|日|周|星期|个月|月|年|sec|secs|second|seconds|min|mins|minute|minutes|h|hr|hrs|hour|hours|d|day|days|w|wk|wks|week|weeks|mo|mos|month|months|y|yr|yrs|year|years))$/i.test(value);
+    return /^(鍒氬垰|just now|\d+\s*(绉抾绉掗挓|鍒唡鍒嗛挓|灏忔椂|澶﹟鏃鍛▅鏄熸湡|涓湀|鏈坾骞磡sec|secs|second|seconds|min|mins|minute|minutes|h|hr|hrs|hour|hours|d|day|days|w|wk|wks|week|weeks|mo|mos|month|months|y|yr|yrs|year|years))$/i.test(value);
   }
 
   function nodeIsThreadTitle(row, node) {
@@ -4792,7 +4792,7 @@
   }
 
   function projectEmptyStateNodes(projectItem) {
-    const emptyLabels = new Set(["暂无对话", "No conversations"]);
+    const emptyLabels = new Set(["鏆傛棤瀵硅瘽", "No conversations"]);
     return Array.from(projectItem.querySelectorAll("div, span")).filter((node) => {
       if (node.classList?.contains("overflow-hidden")) return false;
       if (node.closest('[data-app-action-sidebar-thread-id], [data-codex-project-move-injected-list="true"]')) return false;
@@ -5047,7 +5047,7 @@
 
   async function setProjectlessThreadIds(ref, mode) {
     const variants = threadIdVariants(ref.session_id);
-    if (variants.length === 0) throw new Error("未找到会话 ID");
+    if (variants.length === 0) throw new Error("鏈壘鍒颁細璇?ID");
     const existingIds = await getCodexGlobalState("projectless-thread-ids").catch(() => []);
     const ids = Array.isArray(existingIds) ? existingIds : [];
     const variantSet = new Set(variants);
@@ -5067,7 +5067,7 @@
   }
 
   async function moveSessionToProjectless(ref) {
-    if (!ref.session_id) throw new Error("未找到会话 ID");
+    if (!ref.session_id) throw new Error("鏈壘鍒颁細璇?ID");
     await setProjectlessThreadIds(ref, "add");
     await clearThreadWorkspaceHints(ref);
     const sortKey = await postJson("/thread-sort-key", ref).catch(() => ({}));
@@ -5079,11 +5079,11 @@
   }
 
   async function moveSessionToProject(ref, target) {
-    if (!ref.session_id) throw new Error("未找到会话 ID");
-    if (!target?.path) throw new Error("目标项目路径为空");
-    if (!isNativeProjectTarget(target)) throw new Error("目标项目不在 Codex 项目列表中");
+    if (!ref.session_id) throw new Error("鏈壘鍒颁細璇?ID");
+    if (!target?.path) throw new Error("鐩爣椤圭洰璺緞涓虹┖");
+    if (!isNativeProjectTarget(target)) throw new Error("鐩爣椤圭洰涓嶅湪 Codex 椤圭洰鍒楄〃涓?);
     const result = await postJson("/move-thread-workspace", { ...ref, target_cwd: target.path });
-    if (result.status !== "moved") throw new Error(result.message || "移动项目失败");
+    if (result.status !== "moved") throw new Error(result.message || "绉诲姩椤圭洰澶辫触");
     await setProjectlessThreadIds(ref, "remove");
     await clearThreadWorkspaceHints(ref);
     return result;
@@ -5096,10 +5096,10 @@
     toast.textContent = message;
     if (undoToken) {
       const undo = document.createElement("button");
-      undo.textContent = "撤销";
+      undo.textContent = "鎾ら攢";
       undo.addEventListener("click", async () => {
         const result = await postJson("/undo", { undo_token: undoToken });
-        toast.textContent = result.message || "撤销完成";
+        toast.textContent = result.message || "鎾ら攢瀹屾垚";
         setTimeout(() => toast.remove(), 5000);
       });
       toast.appendChild(undo);
@@ -5458,7 +5458,7 @@
       const worktreePath = usedBranches.get(branchMenuItemLabel(item));
       if (!worktreePath) continue;
       item.setAttribute(branchWorktreePathAttribute, worktreePath);
-      item.setAttribute("title", `该分支已在另一个 worktree 使用：${worktreePath}`);
+      item.setAttribute("title", `璇ュ垎鏀凡鍦ㄥ彟涓€涓?worktree 浣跨敤锛?{worktreePath}`);
     }
   }
 
@@ -5623,7 +5623,7 @@
       event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation?.();
-      showToast(`该分支已在另一个 worktree 使用：${usedWorktreePath}`, null);
+      showToast(`璇ュ垎鏀凡鍦ㄥ彟涓€涓?worktree 浣跨敤锛?{usedWorktreePath}`, null);
     }
   }
 
@@ -5702,7 +5702,7 @@
       prepareUpstreamBranchSelection(selection);
       syncUpstreamBranchTriggerLabel();
       syncUpstreamBranchMenuSelection(option.closest?.('[role="menu"], [data-radix-menu-content], [cmdk-list]'));
-      showToast(`将从 ${upstreamBranchOptionLabel(option) || "upstream/main"} 创建新 worktree`, null);
+      showToast(`灏嗕粠 ${upstreamBranchOptionLabel(option) || "upstream/main"} 鍒涘缓鏂?worktree`, null);
     }, true);
     let upstreamBranchInjectTimer = null;
     const schedule = () => {
@@ -5869,7 +5869,7 @@
     if (!trigger) return false;
     const payload = upstreamWorktreePayloadFromSelection(trigger) || upstreamWorktreeNativePayloadFromElement(trigger);
     if (!payload) {
-      showToast("无法安全识别 Codex 原生 worktree 表单，请使用 Codex++ 菜单创建。", null);
+      showToast("鏃犳硶瀹夊叏璇嗗埆 Codex 鍘熺敓 worktree 琛ㄥ崟锛岃浣跨敤 Luoda-Codex 鑿滃崟鍒涘缓銆?, null);
       return false;
     }
     event.preventDefault();
@@ -5879,12 +5879,12 @@
       if (result?.status === "ok") {
         writeUpstreamBranchSelection(null);
         syncUpstreamBranchTriggerLabel();
-        showToast(`已从 ${result.sourceRef} 创建 worktree`, null);
+        showToast(`宸蹭粠 ${result.sourceRef} 鍒涘缓 worktree`, null);
       } else {
-        showToast(result?.message || "创建 upstream worktree 失败", null);
+        showToast(result?.message || "鍒涘缓 upstream worktree 澶辫触", null);
       }
     } catch (error) {
-      showToast(error?.message || "创建 upstream worktree 失败", null);
+      showToast(error?.message || "鍒涘缓 upstream worktree 澶辫触", null);
     }
     return true;
   }
@@ -5909,43 +5909,43 @@
   async function loadUpstreamWorktreeDefaults(dialog) {
     const repoPath = upstreamWorktreeField(dialog, "repoPath")?.value?.trim() || "";
     if (!repoPath) {
-      setUpstreamWorktreeMessage(dialog, "填写仓库路径后会自动读取 remote 和当前分支。", "idle");
+      setUpstreamWorktreeMessage(dialog, "濉啓浠撳簱璺緞鍚庝細鑷姩璇诲彇 remote 鍜屽綋鍓嶅垎鏀€?, "idle");
       return;
     }
-    setUpstreamWorktreeMessage(dialog, "正在读取仓库默认值…", "loading");
+    setUpstreamWorktreeMessage(dialog, "姝ｅ湪璇诲彇浠撳簱榛樿鍊尖€?, "loading");
     try {
       const result = await postJson("/upstream-worktree/defaults", { repoPath });
       if (result?.status !== "ok") {
-        setUpstreamWorktreeMessage(dialog, result?.message || "读取仓库默认值失败", "failed");
+        setUpstreamWorktreeMessage(dialog, result?.message || "璇诲彇浠撳簱榛樿鍊煎け璐?, "failed");
         return;
       }
       const remote = upstreamWorktreeField(dialog, "remote");
       const baseBranch = upstreamWorktreeField(dialog, "baseBranch");
       if (remote && !remote.value) remote.value = result.defaultRemote || "upstream";
       if (baseBranch && (!baseBranch.value || baseBranch.value === "main")) baseBranch.value = result.defaultBaseBranch || "main";
-      setUpstreamWorktreeMessage(dialog, `将从 ${remote?.value || "upstream"}/${baseBranch?.value || "main"} 创建 worktree。`, "ok");
+      setUpstreamWorktreeMessage(dialog, `灏嗕粠 ${remote?.value || "upstream"}/${baseBranch?.value || "main"} 鍒涘缓 worktree銆俙, "ok");
     } catch (error) {
-      setUpstreamWorktreeMessage(dialog, error?.message || "读取仓库默认值失败", "failed");
+      setUpstreamWorktreeMessage(dialog, error?.message || "璇诲彇浠撳簱榛樿鍊煎け璐?, "failed");
     }
   }
 
   async function submitUpstreamWorktree(dialog) {
     const payload = upstreamWorktreePayload(dialog);
     if (!payload.repoPath || !payload.branchName || !payload.worktreePath || !payload.remote || !payload.baseBranch) {
-      setUpstreamWorktreeMessage(dialog, "仓库路径、分支名、worktree 路径、remote 和 base branch 都必须填写。", "failed");
+      setUpstreamWorktreeMessage(dialog, "浠撳簱璺緞銆佸垎鏀悕銆亀orktree 璺緞銆乺emote 鍜?base branch 閮藉繀椤诲～鍐欍€?, "failed");
       return;
     }
-    setUpstreamWorktreeMessage(dialog, "正在 fetch 并创建 worktree…", "loading");
+    setUpstreamWorktreeMessage(dialog, "姝ｅ湪 fetch 骞跺垱寤?worktree鈥?, "loading");
     try {
       const result = await postJson("/upstream-worktree/create", payload);
       if (result?.status === "ok") {
-        setUpstreamWorktreeMessage(dialog, `已从 ${result.sourceRef} 创建：${result.worktreePath}`, "ok");
-        showToast(`已创建 upstream worktree：${result.branchName}`, null);
+        setUpstreamWorktreeMessage(dialog, `宸蹭粠 ${result.sourceRef} 鍒涘缓锛?{result.worktreePath}`, "ok");
+        showToast(`宸插垱寤?upstream worktree锛?{result.branchName}`, null);
       } else {
-        setUpstreamWorktreeMessage(dialog, result?.message || "创建 upstream worktree 失败", "failed");
+        setUpstreamWorktreeMessage(dialog, result?.message || "鍒涘缓 upstream worktree 澶辫触", "failed");
       }
     } catch (error) {
-      setUpstreamWorktreeMessage(dialog, error?.message || "创建 upstream worktree 失败", "failed");
+      setUpstreamWorktreeMessage(dialog, error?.message || "鍒涘缓 upstream worktree 澶辫触", "failed");
     }
   }
 
@@ -5956,16 +5956,16 @@
     overlay.innerHTML = `
       <div class="codex-delete-confirm-content" role="dialog" aria-modal="true" aria-label="Create upstream worktree">
         <div class="codex-delete-confirm-title">Create from upstream</div>
-        <div class="codex-delete-confirm-message">等价于 git worktree add -b branch path upstream/base。创建前会先 fetch 远端分支。</div>
-        <label class="codex-plus-form-field">仓库路径<input data-codex-upstream-worktree-field="repoPath" type="text" placeholder="/path/to/repo"></label>
-        <label class="codex-plus-form-field">新分支名<input data-codex-upstream-worktree-field="branchName" type="text" placeholder="feature/my-task"></label>
-        <label class="codex-plus-form-field">Worktree 路径<input data-codex-upstream-worktree-field="worktreePath" type="text" placeholder="/path/to/worktrees/my-task"></label>
+        <div class="codex-delete-confirm-message">绛変环浜?git worktree add -b branch path upstream/base銆傚垱寤哄墠浼氬厛 fetch 杩滅鍒嗘敮銆?/div>
+        <label class="codex-plus-form-field">浠撳簱璺緞<input data-codex-upstream-worktree-field="repoPath" type="text" placeholder="/path/to/repo"></label>
+        <label class="codex-plus-form-field">鏂板垎鏀悕<input data-codex-upstream-worktree-field="branchName" type="text" placeholder="feature/my-task"></label>
+        <label class="codex-plus-form-field">Worktree 璺緞<input data-codex-upstream-worktree-field="worktreePath" type="text" placeholder="/path/to/worktrees/my-task"></label>
         <label class="codex-plus-form-field">Remote<input data-codex-upstream-worktree-field="remote" type="text" value="upstream"></label>
         <label class="codex-plus-form-field">Base branch<input data-codex-upstream-worktree-field="baseBranch" type="text" value="main"></label>
-        <div class="codex-plus-form-message" data-codex-upstream-worktree-message>填写仓库路径后会自动读取 remote 和当前分支。</div>
+        <div class="codex-plus-form-message" data-codex-upstream-worktree-message>濉啓浠撳簱璺緞鍚庝細鑷姩璇诲彇 remote 鍜屽綋鍓嶅垎鏀€?/div>
         <div class="codex-delete-confirm-actions">
-          <button type="button" data-codex-upstream-worktree-cancel="true">取消</button>
-          <button type="button" data-codex-upstream-worktree-defaults="true">读取默认值</button>
+          <button type="button" data-codex-upstream-worktree-cancel="true">鍙栨秷</button>
+          <button type="button" data-codex-upstream-worktree-defaults="true">璇诲彇榛樿鍊?/button>
           <button type="button" data-codex-upstream-worktree-submit="true">Create from upstream</button>
         </div>
       </div>
@@ -6004,12 +6004,12 @@
       const overlay = document.createElement("div");
       overlay.className = "codex-delete-confirm-overlay";
       overlay.innerHTML = `
-        <div class="codex-delete-confirm-content" role="dialog" aria-modal="true" aria-label="删除会话">
-          <div class="codex-delete-confirm-title">删除会话</div>
-          <div class="codex-delete-confirm-message">删除“${escapeHtml(title)}”？</div>
+        <div class="codex-delete-confirm-content" role="dialog" aria-modal="true" aria-label="鍒犻櫎浼氳瘽">
+          <div class="codex-delete-confirm-title">鍒犻櫎浼氳瘽</div>
+          <div class="codex-delete-confirm-message">鍒犻櫎鈥?{escapeHtml(title)}鈥濓紵</div>
           <div class="codex-delete-confirm-actions">
-            <button type="button" data-codex-delete-cancel="true">取消</button>
-            <button type="button" data-codex-delete-confirm="true">删除</button>
+            <button type="button" data-codex-delete-cancel="true">鍙栨秷</button>
+            <button type="button" data-codex-delete-confirm="true">鍒犻櫎</button>
           </div>
         </div>
       `;
@@ -6077,8 +6077,8 @@
         const rect = button.getBoundingClientRect();
         const label = button.getAttribute("aria-label") || "";
         const text = (button.textContent || "").trim();
-        if (button.classList.contains(buttonClass) || button.classList.contains(exportButtonClass) || label === "归档对话" || label === "置顶对话") return false;
-        return text === "确认" || (text.length > 0 && rect.width > 0 && rect.width <= 36 && rect.x > row.getBoundingClientRect().right - 50);
+        if (button.classList.contains(buttonClass) || button.classList.contains(exportButtonClass) || label === "褰掓。瀵硅瘽" || label === "缃《瀵硅瘽") return false;
+        return text === "纭" || (text.length > 0 && rect.width > 0 && rect.width <= 36 && rect.x > row.getBoundingClientRect().right - 50);
       });
       row.classList.toggle("codex-archive-confirm-visible", hasArchiveConfirm);
     });
@@ -6095,9 +6095,9 @@
       const result = await postJson("/delete", ref);
       if (result.status === "server_deleted" || result.status === "local_deleted") {
         removeDeletedRow(row, button, ref);
-        showToast(result.message || "删除成功", result.undo_token);
+        showToast(result.message || "鍒犻櫎鎴愬姛", result.undo_token);
       } else {
-        showToast(result.message || "删除失败", null);
+        showToast(result.message || "鍒犻櫎澶辫触", null);
       }
     });
   }
@@ -6106,10 +6106,10 @@
     const result = await postJson("/export-markdown", ref);
     if (result.status === "exported" && result.filename && typeof result.markdown === "string") {
       downloadMarkdown(result.filename, result.markdown);
-      showToast(result.message || "导出成功", null);
+      showToast(result.message || "瀵煎嚭鎴愬姛", null);
       return;
     }
-    showToast(result.message || "导出失败", null);
+    showToast(result.message || "瀵煎嚭澶辫触", null);
   }
 
   function sortStateFromMoveResult(result, ref, row) {
@@ -6120,7 +6120,7 @@
   function finishProjectMove(row, button, ref, target, message) {
     releaseDeleteFocus(row, button);
     button.disabled = false;
-    button.textContent = "移动";
+    button.textContent = "绉诲姩";
     saveProjectMoveProjection(ref, target, target.sortMs || rowSortMs(row, ref, target));
     if (target.kind === "projectless") moveRowToChats(row, target);
     refreshAfterProjectMove();
@@ -6129,19 +6129,19 @@
 
   async function applyProjectMove(row, button, ref, target) {
     button.disabled = true;
-    button.textContent = "移动中";
+    button.textContent = "绉诲姩涓?;
     try {
       if (target.kind === "projectless") {
         const result = await moveSessionToProjectless(ref);
-        finishProjectMove(row, button, ref, { ...target, ...sortStateFromMoveResult(result, ref, row) }, `已移动到普通对话：“${ref.title || ref.session_id}”`);
+        finishProjectMove(row, button, ref, { ...target, ...sortStateFromMoveResult(result, ref, row) }, `宸茬Щ鍔ㄥ埌鏅€氬璇濓細鈥?{ref.title || ref.session_id}鈥漙);
       } else {
         const result = await moveSessionToProject(ref, target);
-        finishProjectMove(row, button, ref, { ...target, ...sortStateFromMoveResult(result, ref, row) }, `已移动到“${target.label}”：“${ref.title || ref.session_id}”`);
+        finishProjectMove(row, button, ref, { ...target, ...sortStateFromMoveResult(result, ref, row) }, `宸茬Щ鍔ㄥ埌鈥?{target.label}鈥濓細鈥?{ref.title || ref.session_id}鈥漙);
       }
     } catch (error) {
       button.disabled = false;
-      button.textContent = "移动";
-      showToast(`移动失败：${error?.message || error}`, null);
+      button.textContent = "绉诲姩";
+      showToast(`绉诲姩澶辫触锛?{error?.message || error}`, null);
     }
   }
 
@@ -6154,11 +6154,11 @@
     const overlay = document.createElement("div");
     overlay.className = projectMoveOverlayClass;
     overlay.innerHTML = `
-      <div class="codex-project-move-panel" role="dialog" aria-modal="true" aria-label="移动对话">
+      <div class="codex-project-move-panel" role="dialog" aria-modal="true" aria-label="绉诲姩瀵硅瘽">
         <div class="codex-project-move-header">
-          <div class="codex-project-move-title">移动“${escapeHtml(ref.title || ref.session_id)}”</div>
+          <div class="codex-project-move-title">绉诲姩鈥?{escapeHtml(ref.title || ref.session_id)}鈥?/div>
         </div>
-        <div class="codex-project-move-list"><div class="codex-project-move-empty">加载项目中...</div></div>
+        <div class="codex-project-move-list"><div class="codex-project-move-empty">鍔犺浇椤圭洰涓?..</div></div>
       </div>
     `;
     const panel = overlay.querySelector(".codex-project-move-panel");
@@ -6183,7 +6183,7 @@
       if (!list) return;
       list.innerHTML = "";
       if (targets.length === 0) {
-        list.innerHTML = `<div class="codex-project-move-empty">没有可用目标</div>`;
+        list.innerHTML = `<div class="codex-project-move-empty">娌℃湁鍙敤鐩爣</div>`;
         return;
       }
       for (const target of targets) {
@@ -6205,7 +6205,7 @@
       list.querySelector("button")?.focus();
     } catch (error) {
       close();
-      showToast(`加载项目失败：${error?.message || error}`, null);
+      showToast(`鍔犺浇椤圭洰澶辫触锛?{error?.message || error}`, null);
     }
   }
 
@@ -6244,7 +6244,7 @@
           .filter(Boolean)
           .join(" ")
           .toLowerCase();
-        if (/(pin|archive|置顶|归档)/i.test(label)) return true;
+        if (/(pin|archive|缃《|褰掓。)/i.test(label)) return true;
         const rowRect = row.getBoundingClientRect();
         return rect.left > rowRect.left + rowRect.width * 0.68;
       });
@@ -6485,20 +6485,20 @@
       moreButton.className = `${actionButtonClass} ${moreButtonClass}`;
       moreButton.setAttribute("aria-haspopup", "menu");
       moreButton.setAttribute("aria-expanded", "false");
-      configureActionButton(moreButton, "更多操作", "…");
+      configureActionButton(moreButton, "鏇村鎿嶄綔", "鈥?);
       const moreMenu = document.createElement("div");
       moreMenu.className = moreMenuClass;
       moreMenu.setAttribute("role", "menu");
       moreMenu.hidden = true;
       if (settings.markdownExport) {
-        moreMenu.appendChild(createSessionMoreMenuItem("导出", "⇩", (event) => {
+        moreMenu.appendChild(createSessionMoreMenuItem("瀵煎嚭", "鈬?, (event) => {
           stopActionButtonEvent(row, moreButton, event);
           closeSessionMoreMenus();
           exportMarkdown(ref);
         }));
       }
       if (settings.projectMove) {
-        moreMenu.appendChild(createSessionMoreMenuItem("移动", "↗", (event) => {
+        moreMenu.appendChild(createSessionMoreMenuItem("绉诲姩", "鈫?, (event) => {
           stopActionButtonEvent(row, moreButton, event);
           closeSessionMoreMenus();
           openProjectMoveMenuForRow(row, moreButton, ref, event);
@@ -6525,7 +6525,7 @@
       deleteButton.type = "button";
       deleteButton.className = `${actionButtonClass} ${buttonClass}`;
       deleteButton.dataset.codexDeleteVersion = codexDeleteVersion;
-      configureSvgActionButton(deleteButton, "删除", trashIconSvg());
+      configureSvgActionButton(deleteButton, "鍒犻櫎", trashIconSvg());
       const openDeleteConfirm = (event) => openDeleteConfirmForRow(row, deleteButton, ref, event);
       installActionButtonEvents(row, deleteButton, openDeleteConfirm);
       group.appendChild(deleteButton);
@@ -6573,10 +6573,10 @@
     if (sidebarRef.session_id) return sidebarRef;
     const titleNode = row.querySelector(".truncate.text-base, [data-thread-title], a, div");
     const title = ((titleNode || row).textContent || "Untitled session")
-      .replace("取消归档", "")
-      .replace("删除", "")
-      .replace(/\d{4}年\d{1,2}月\d{1,2}日.*$/, "")
-      .replace(/\s+·\s+.*$/, "")
+      .replace("鍙栨秷褰掓。", "")
+      .replace("鍒犻櫎", "")
+      .replace(/\d{4}骞碶d{1,2}鏈圽d{1,2}鏃?*$/, "")
+      .replace(/\s+路\s+.*$/, "")
       .trim()
       .slice(0, 160);
     return { session_id: "", title };
@@ -6596,7 +6596,7 @@
   }
 
   function isArchiveTitleText(value) {
-    return value === "已归档对话" || value === "Archived conversations";
+    return value === "宸插綊妗ｅ璇? || value === "Archived conversations";
   }
 
   function archiveTitleContainer() {
@@ -6612,7 +6612,7 @@
     row.querySelectorAll("[data-codex-archive-row-action]").forEach((button) => button.remove());
     row.dataset.codexArchiveDeleteRow = "false";
     if (!settings.sessionDelete && !settings.markdownExport) return;
-    const unarchiveButton = Array.from(row.querySelectorAll("button")).find((button) => (button.textContent || "").trim() === "取消归档");
+    const unarchiveButton = Array.from(row.querySelectorAll("button")).find((button) => (button.textContent || "").trim() === "鍙栨秷褰掓。");
     if (!unarchiveButton) return;
     row.dataset.codexArchiveDeleteRow = "true";
     row.dataset.codexArchiveRowActionsVersion = codexArchiveRowActionsVersion;
@@ -6622,7 +6622,7 @@
       exportButton.type = "button";
       exportButton.className = `codex-archive-delete-all codex-archive-row-button ${exportButtonClass}`;
       exportButton.dataset.codexArchiveRowAction = "export";
-      exportButton.textContent = "导出";
+      exportButton.textContent = "瀵煎嚭";
       ["pointerdown", "mousedown", "mouseup", "touchstart"].forEach((eventName) => {
         exportButton.addEventListener(eventName, stopArchivedButtonEvent, true);
       });
@@ -6630,7 +6630,7 @@
         stopArchivedButtonEvent(event);
         const ref = await resolveArchivedThread(row);
         if (!ref.session_id) {
-          showToast("导出失败：未找到归档会话 ID", null);
+          showToast("瀵煎嚭澶辫触锛氭湭鎵惧埌褰掓。浼氳瘽 ID", null);
           return;
         }
         await exportMarkdown(ref);
@@ -6644,7 +6644,7 @@
     const normalized = String(text || "").replace(/\s+/g, " ").trim();
     const chars = Array.from(normalized);
     if (chars.length <= timelineQuestionLimit) return normalized;
-    return `${chars.slice(0, timelineQuestionLimit).join("")}…`;
+    return `${chars.slice(0, timelineQuestionLimit).join("")}鈥;
   }
 
   function conversationTimelineRoot() {
@@ -6796,7 +6796,7 @@
     marker.type = "button";
     marker.className = timelineMarkerClass;
     marker.style.top = `${question.markerTop}%`;
-    marker.setAttribute("aria-label", `跳转到：${truncateTimelineQuestion(question.text)}`);
+    marker.setAttribute("aria-label", `璺宠浆鍒帮細${truncateTimelineQuestion(question.text)}`);
     const tooltip = document.createElement("span");
     tooltip.className = timelineTooltipClass;
     tooltip.id = `codex-conversation-timeline-tooltip-${question.nodeId}`;
@@ -6987,8 +6987,8 @@
     const providerNames = codexServiceTierKnownProviderNames();
     let score = 0;
     if (providerNames.some((name) => name && text.includes(name))) score += 40;
-    if (/完全访问权限|full access|model|超高|high|sub2api|provider/i.test(text)) score += 20;
-    if (/本地模式|local mode|worktree|branch|codex\//i.test(text)) score -= 30;
+    if (/瀹屽叏璁块棶鏉冮檺|full access|model|瓒呴珮|high|sub2api|provider/i.test(text)) score += 20;
+    if (/鏈湴妯″紡|local mode|worktree|branch|codex\//i.test(text)) score -= 30;
     if (composer.matches?.(".composer-footer")) score += 4;
     if (composer.querySelector?.(".composer-footer")) score += 8;
     const buttons = Array.from(composer.querySelectorAll?.("button, [role='button']") || []).filter(codexServiceTierBadgeVisibleElement);

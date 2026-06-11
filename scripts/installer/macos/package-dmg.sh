@@ -7,16 +7,16 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
 DIST="$ROOT/dist/macos"
 STAGE="$DIST/stage"
 BINARY_DIR="${BINARY_DIR:-$ROOT/target/release}"
-DMG="$DIST/CodexPlusPlus-${VERSION}-macos-${ARCH}.dmg"
+DMG="$DIST/Luoda-Codex-${VERSION}-macos-${ARCH}.dmg"
 ICON_SOURCE="$ROOT/apps/codex-plus-manager/src-tauri/icons/icon.png"
-ICON_NAME="codex-plus-plus.icns"
+ICON_NAME="luoda-codex.icns"
 ICON_ICNS="$DIST/$ICON_NAME"
 
 rm -rf "$DIST"
 mkdir -p "$STAGE"
 
 prepare_icon() {
-  local iconset="$DIST/codex-plus-plus.iconset"
+  local iconset="$DIST/luoda-codex.iconset"
   rm -rf "$iconset"
   mkdir -p "$iconset"
 
@@ -118,15 +118,15 @@ verify_app() {
 }
 
 prepare_icon
-create_app "Codex++" "CodexPlusPlus" "$BINARY_DIR/codex-plus-plus" "com.bigpizzav3.codexplusplus" "true"
-create_app "Codex++ 管理工具" "CodexPlusPlusManager" "$BINARY_DIR/codex-plus-plus-manager" "com.bigpizzav3.codexplusplus.manager" "false"
+create_app "Luoda-Codex" "Luoda-Codex" "$BINARY_DIR/luoda-codex" "com.luodadev.luodacodex" "true"
+create_app "Luoda-Codex 绠＄悊宸ュ叿" "Luoda-CodexManager" "$BINARY_DIR/luoda-codex-manager" "com.luodadev.luodacodex.manager" "false"
 ln -s /Applications "$STAGE/Applications"
 
-sign_app "$STAGE/Codex++.app"
-sign_app "$STAGE/Codex++ 管理工具.app"
+sign_app "$STAGE/Luoda-Codex.app"
+sign_app "$STAGE/Luoda-Codex 绠＄悊宸ュ叿.app"
 
-verify_app "$STAGE/Codex++.app"
-verify_app "$STAGE/Codex++ 管理工具.app"
+verify_app "$STAGE/Luoda-Codex.app"
+verify_app "$STAGE/Luoda-Codex 绠＄悊宸ュ叿.app"
 
-hdiutil create -volname "Codex++" -srcfolder "$STAGE" -ov -format UDZO "$DMG"
+hdiutil create -volname "Luoda-Codex" -srcfolder "$STAGE" -ov -format UDZO "$DMG"
 echo "$DMG"

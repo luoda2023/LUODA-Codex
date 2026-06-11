@@ -63,7 +63,7 @@ fn windows_binaries_request_administrator_privileges() {
         .and_then(std::path::Path::parent)
         .and_then(std::path::Path::parent)
         .unwrap()
-        .join("scripts/installer/windows/CodexPlusPlus.nsi");
+        .join("scripts/installer/windows/Luoda-Codex.nsi");
     let windows_installer =
         std::fs::read_to_string(&windows_installer).expect("read windows installer");
 
@@ -99,12 +99,12 @@ fn macos_packager_hides_silent_launcher_but_not_manager() {
     assert!(script.contains("<key>LSUIElement</key>"));
     assert!(script.contains("ARCH=\"${2:-$(uname -m)}\""));
     assert!(script.contains("BINARY_DIR=\"${BINARY_DIR:-$ROOT/target/release}\""));
-    assert!(script.contains("CodexPlusPlus-${VERSION}-macos-${ARCH}.dmg"));
+    assert!(script.contains("Luoda-Codex-${VERSION}-macos-${ARCH}.dmg"));
     assert!(script.contains(
-        "create_app \"Codex++\" \"CodexPlusPlus\" \"$BINARY_DIR/codex-plus-plus\" \"com.bigpizzav3.codexplusplus\" \"true\""
+        "create_app \"Luoda-Codex\" \"Luoda-Codex\" \"$BINARY_DIR/luoda-codex\" \"com.luoda2023.Luoda-Codex\" \"true\""
     ));
     assert!(script.contains(
-        "create_app \"Codex++ 管理工具\" \"CodexPlusPlusManager\" \"$BINARY_DIR/codex-plus-plus-manager\" \"com.bigpizzav3.codexplusplus.manager\" \"false\""
+        "create_app \"Luoda-Codex 绠＄悊宸ュ叿\" \"Luoda-CodexManager\" \"$BINARY_DIR/luoda-codex-manager\" \"com.luoda2023.Luoda-Codex.manager\" \"false\""
     ));
 }
 
@@ -154,9 +154,9 @@ fn relay_settings_keeps_profile_config_and_auth_files_isolated() {
     assert!(app_tsx.contains("snapshotActiveRelayFilesBeforeSwitch"));
     assert!(app_tsx.contains("backfill_relay_profile_from_live"));
     assert!(app_tsx.contains("relayProfileSwitchValidation(selectedBeforeSave)"));
-    assert!(app_tsx.contains("缺少独立 config.toml"));
+    assert!(app_tsx.contains("缂哄皯鐙珛 config.toml"));
     assert!(app_tsx.contains("const command = relayProfileSwitchCommand(selectedAfterSave)"));
-    assert!(!commands_rs.contains("缺少独立 auth.json"));
+    assert!(!commands_rs.contains("缂哄皯鐙珛 auth.json"));
     assert!(commands_rs.contains("backfill_relay_profile_from_live"));
     assert!(commands_rs.contains("apply_relay_profile_to_home_with_switch_rules"));
 }
@@ -169,12 +169,12 @@ fn relay_context_management_is_global_not_supplier_scoped() {
     let styles = manifest_dir.parent().unwrap().join("src/styles.css");
     let styles = std::fs::read_to_string(&styles).expect("read manager styles.css");
 
-    assert!(app_tsx.contains("作为全局配置独立管理"));
-    assert!(app_tsx.contains("label: \"工具与插件\""));
-    assert!(app_tsx.contains("title=\"Codex 工具与插件\""));
-    assert!(!app_tsx.contains("label: \"上下文配置\""));
-    assert!(!app_tsx.contains("title=\"上下文配置\""));
-    assert!(!app_tsx.contains("<strong>Codex 上下文</strong>"));
+    assert!(app_tsx.contains("浣滀负鍏ㄥ眬閰嶇疆鐙珛绠＄悊"));
+    assert!(app_tsx.contains("label: \"宸ュ叿涓庢彃浠禱""));
+    assert!(app_tsx.contains("title=\"Codex 宸ュ叿涓庢彃浠禱""));
+    assert!(!app_tsx.contains("label: \"涓婁笅鏂囬厤缃甛""));
+    assert!(!app_tsx.contains("title=\"涓婁笅鏂囬厤缃甛""));
+    assert!(!app_tsx.contains("<strong>Codex 涓婁笅鏂?/strong>"));
     assert!(app_tsx.contains("id: \"context\""));
     assert!(app_tsx.contains("function ContextScreen"));
     assert!(app_tsx.contains("route === \"context\""));
@@ -191,11 +191,11 @@ fn relay_context_management_is_global_not_supplier_scoped() {
     assert!(app_tsx.contains("mergeLiveContextEntries"));
     assert!(app_tsx.contains("withLiveEntryState"));
     assert!(app_tsx.contains("contextEnabledSwitch"));
-    assert!(!app_tsx.contains("entry.enabled ? \"已启用\" : \"已禁用\""));
-    assert!(!app_tsx.contains("空配置体"));
+    assert!(!app_tsx.contains("entry.enabled ? \"宸插惎鐢╘" : \"宸茬鐢╘""));
+    assert!(!app_tsx.contains("绌洪厤缃綋"));
     assert!(app_tsx.contains("relay-context-delete"));
-    assert!(!app_tsx.contains("切换供应商时只合并勾选项"));
-    assert!(!app_tsx.contains("未勾选的条目不会写入"));
+    assert!(!app_tsx.contains("鍒囨崲渚涘簲鍟嗘椂鍙悎骞跺嬀閫夐」"));
+    assert!(!app_tsx.contains("鏈嬀閫夌殑鏉＄洰涓嶄細鍐欏叆"));
     assert!(!app_tsx.contains("className=\"context-switch\""));
     assert!(!styles.contains(".context-switch {"));
     assert!(styles.contains(".context-enabled-switch"));
@@ -218,7 +218,7 @@ fn manager_window_and_relay_detail_header_stay_usable() {
         std::fs::read_to_string(manifest_dir.join("tauri.conf.json")).expect("read tauri config");
 
     assert!(app_tsx.contains("relay-detail-sticky"));
-    assert!(!app_tsx.contains("CardHead title=\"供应商详情\""));
+    assert!(!app_tsx.contains("CardHead title=\"渚涘簲鍟嗚鎯匼""));
     assert!(styles.contains(".relay-detail-sticky"));
     assert!(styles.contains("position: sticky"));
     assert!(styles.contains("top: 0"));

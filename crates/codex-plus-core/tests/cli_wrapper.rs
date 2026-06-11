@@ -19,7 +19,7 @@ fn wrapper_source_embeds_absolute_real_codex_path() {
         &PathBuf::from(
             r"C:\Program Files\WindowsApps\OpenAI.Codex_1.0.0.0_x64__abc\app\resources\codex.exe",
         ),
-        &PathBuf::from(r"C:\Users\me\.codex-plus-plus-cli"),
+        &PathBuf::from(r"C:\Users\me\.luoda-codex-cli"),
         &settings,
     );
 
@@ -79,14 +79,14 @@ fn resolves_packaged_resources_when_user_runtime_is_missing() {
 fn wrapper_dir_uses_roaming_codex_plus_plus() {
     assert_eq!(
         wrapper_dir_from_roaming(&PathBuf::from(r"C:\Users\me\AppData\Roaming")),
-        PathBuf::from(r"C:\Users\me\AppData\Roaming\Codex++")
+        PathBuf::from(r"C:\Users\me\AppData\Roaming\Luoda-Codex")
     );
 }
 
 #[test]
 fn repair_refreshes_when_wrapper_already_exists_even_if_setting_is_disabled() {
     let temp = tempfile::tempdir().unwrap();
-    let wrapper_dir = temp.path().join("Codex++");
+    let wrapper_dir = temp.path().join("Luoda-Codex");
     std::fs::create_dir_all(&wrapper_dir).unwrap();
     std::fs::write(wrapper_dir.join("codex-wrapper.exe"), "").unwrap();
 
@@ -109,7 +109,7 @@ fn repair_skips_when_wrapper_is_disabled_and_absent() {
 #[test]
 fn repair_preserves_existing_wrapper_api_settings_when_global_setting_is_disabled() {
     let temp = tempfile::tempdir().unwrap();
-    let wrapper_dir = temp.path().join("Codex++");
+    let wrapper_dir = temp.path().join("Luoda-Codex");
     std::fs::create_dir_all(&wrapper_dir).unwrap();
     std::fs::write(
         wrapper_dir.join("codex-wrapper.cs"),

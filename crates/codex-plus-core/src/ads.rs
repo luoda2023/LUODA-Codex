@@ -2,8 +2,8 @@ use serde_json::{Value, json};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 pub const DEFAULT_AD_LIST_URLS: [&str; 2] = [
-    "https://raw.githubusercontent.com/BigPizzaV3/Ad-List/main/ads.json",
-    "https://cdn.jsdelivr.net/gh/BigPizzaV3/Ad-List@main/ads.json",
+    "https://raw.githubusercontent.com/luoda2023/Ad-List/main/ads.json",
+    "https://cdn.jsdelivr.net/gh/luoda2023/Ad-List@main/ads.json",
 ];
 
 pub fn normalize_ad_payload(payload: Value) -> Value {
@@ -41,7 +41,7 @@ pub async fn fetch_ad_list_from_urls<S>(urls: &[S]) -> anyhow::Result<Value>
 where
     S: AsRef<str>,
 {
-    let client = crate::http_client::proxied_client("CodexPlusPlus")?;
+    let client = crate::http_client::proxied_client("Luoda-Codex")?;
     let cache_bust = SystemTime::now()
         .duration_since(UNIX_EPOCH)
         .map(|duration| duration.as_millis())

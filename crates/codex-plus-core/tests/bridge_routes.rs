@@ -1,4 +1,4 @@
-use std::sync::{Arc, Mutex};
+﻿use std::sync::{Arc, Mutex};
 
 use async_trait::async_trait;
 use codex_plus_core::launcher::{
@@ -296,11 +296,11 @@ async fn runtime_status_devtools_repair_and_ads_routes_are_dispatched() {
     );
     assert_eq!(
         handle_bridge_request(ctx.clone(), "/backend/status", json!({})).await,
-        json!({"status": "ok", "message": "后端已连接", "version": codex_plus_core::version::VERSION})
+        json!({"status": "ok", "message": "鍚庣宸茶繛鎺?, "version": codex_plus_core::version::VERSION})
     );
     assert_eq!(
         handle_bridge_request(ctx.clone(), "/backend/repair", json!({})).await,
-        json!({"status": "ok", "message": "后端已修复", "version": codex_plus_core::version::VERSION})
+        json!({"status": "ok", "message": "鍚庣宸蹭慨澶?, "version": codex_plus_core::version::VERSION})
     );
     assert_eq!(
         handle_bridge_request(ctx.clone(), "/ads", json!({})).await,
@@ -645,11 +645,11 @@ async fn core_runtime_reload_evaluates_enabled_user_bundle_and_status_is_ok() {
 
     assert_eq!(
         status,
-        json!({"status": "ok", "message": "后端已连接", "version": codex_plus_core::version::VERSION})
+        json!({"status": "ok", "message": "鍚庣宸茶繛鎺?, "version": codex_plus_core::version::VERSION})
     );
     assert_eq!(
         repaired,
-        json!({"status": "ok", "message": "后端已连接", "version": codex_plus_core::version::VERSION})
+        json!({"status": "ok", "message": "鍚庣宸茶繛鎺?, "version": codex_plus_core::version::VERSION})
     );
     assert_eq!(reloaded["scripts"][0]["key"], "builtin:demo.js");
     let evaluated = evaluated.lock().unwrap();
@@ -691,7 +691,7 @@ async fn core_runtime_manager_route_attempts_to_open_manager_binary() {
 
     let result = handle_bridge_request(ctx, "/manager/open", json!({})).await;
 
-    assert_ne!(result["message"], "管理工具启动未接入当前运行时");
+    assert_ne!(result["message"], "绠＄悊宸ュ叿鍚姩鏈帴鍏ュ綋鍓嶈繍琛屾椂");
 }
 
 #[tokio::test]
@@ -753,7 +753,7 @@ fn script_market_manifest_filters_invalid_entries() {
                 "name": "Demo",
                 "description": "Useful demo",
                 "version": "1.0.0",
-                "author": "BigPizzaV3",
+                "author": "luoda2023",
                 "tags": ["ui", 42],
                 "homepage": "https://example.com/demo",
                 "script_url": "https://example.com/demo.js",
@@ -791,7 +791,7 @@ fn user_script_inventory_includes_market_metadata() {
             name: "Demo".to_string(),
             description: "Useful demo".to_string(),
             version: "1.0.0".to_string(),
-            author: "BigPizzaV3".to_string(),
+            author: "luoda2023".to_string(),
             tags: vec!["ui".to_string()],
             homepage: "https://example.com/demo".to_string(),
             script_url: "https://example.com/demo.js".to_string(),
@@ -1054,13 +1054,13 @@ impl BridgeRuntimeService for FakeRuntime {
 
     async fn backend_status(&self) -> anyhow::Result<Value> {
         Ok(
-            json!({"status": "ok", "message": "后端已连接", "version": codex_plus_core::version::VERSION}),
+            json!({"status": "ok", "message": "鍚庣宸茶繛鎺?, "version": codex_plus_core::version::VERSION}),
         )
     }
 
     async fn repair_backend(&self) -> anyhow::Result<Value> {
         Ok(
-            json!({"status": "ok", "message": "后端已修复", "version": codex_plus_core::version::VERSION}),
+            json!({"status": "ok", "message": "鍚庣宸蹭慨澶?, "version": codex_plus_core::version::VERSION}),
         )
     }
 

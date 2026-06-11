@@ -1,11 +1,11 @@
-use anyhow::Context;
+﻿use anyhow::Context;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 use crate::user_scripts::UserScriptManager;
 
 pub const DEFAULT_MARKET_INDEX_URL: &str =
-    "https://raw.githubusercontent.com/BigPizzaV3/CodexPlusPlusScriptMarket/main/index.json";
+    "https://raw.githubusercontent.com/luoda2023/Luoda-CodexScriptMarket/main/index.json";
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 pub struct ScriptMarketManifest {

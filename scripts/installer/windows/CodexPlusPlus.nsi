@@ -6,10 +6,10 @@
 !endif
 !define ROOT "..\..\.."
 
-Name "Codex++"
+Name "Luoda-Codex"
 OutFile "${ROOT}\dist\windows\CodexPlusPlus-${VERSION}-windows-x64-setup.exe"
-InstallDir "$LOCALAPPDATA\Programs\Codex++"
-InstallDirRegKey HKCU "Software\Codex++" "InstallDir"
+InstallDir "$LOCALAPPDATA\Programs\Luoda-Codex"
+InstallDirRegKey HKCU "Software\Luoda-Codex" "InstallDir"
 RequestExecutionLevel admin
 SetCompressor /SOLID lzma
 
@@ -28,54 +28,54 @@ SetCompressor /SOLID lzma
 Section "Install"
   SetOutPath "$INSTDIR"
 
-  nsExec::ExecToLog 'taskkill /IM codex-plus-plus.exe /F'
+  nsExec::ExecToLog 'taskkill /IM luoda-codex.exe /F'
   Pop $0
-  nsExec::ExecToLog 'taskkill /IM codex-plus-plus-manager.exe /F'
+  nsExec::ExecToLog 'taskkill /IM luoda-codex-manager.exe /F'
   Pop $0
 
-  File "${ROOT}\dist\windows\app\codex-plus-plus.exe"
-  File "${ROOT}\dist\windows\app\codex-plus-plus-manager.exe"
+  File "${ROOT}\dist\windows\app\luoda-codex.exe"
+  File "${ROOT}\dist\windows\app\luoda-codex-manager.exe"
 
-  Delete "$DESKTOP\Codex++ 绠＄悊宸ュ叿.lnk"
-  Delete "$SMPROGRAMS\Codex++\Codex++ 绠＄悊宸ュ叿.lnk"
+  Delete "$DESKTOP\Luoda-Codex 绠＄悊宸ュ叿.lnk"
+  Delete "$SMPROGRAMS\Luoda-Codex\Luoda-Codex 绠＄悊宸ュ叿.lnk"
 
-  CreateShortcut "$DESKTOP\Codex++.lnk" "$INSTDIR\codex-plus-plus.exe" "" "$INSTDIR\codex-plus-plus.exe"
-  CreateShortcut "$DESKTOP\Codex++ 管理工具.lnk" "$INSTDIR\codex-plus-plus-manager.exe" "" "$INSTDIR\codex-plus-plus-manager.exe"
-  CreateDirectory "$SMPROGRAMS\Codex++"
-  CreateShortcut "$SMPROGRAMS\Codex++\Codex++.lnk" "$INSTDIR\codex-plus-plus.exe" "" "$INSTDIR\codex-plus-plus.exe"
-  CreateShortcut "$SMPROGRAMS\Codex++\Codex++ 管理工具.lnk" "$INSTDIR\codex-plus-plus-manager.exe" "" "$INSTDIR\codex-plus-plus-manager.exe"
-  CreateShortcut "$SMPROGRAMS\Codex++\卸载 Codex++.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\codex-plus-plus-manager.exe"
+  CreateShortcut "$DESKTOP\Luoda-Codex.lnk" "$INSTDIR\luoda-codex.exe" "" "$INSTDIR\luoda-codex.exe"
+  CreateShortcut "$DESKTOP\Luoda-Codex 管理工具.lnk" "$INSTDIR\luoda-codex-manager.exe" "" "$INSTDIR\luoda-codex-manager.exe"
+  CreateDirectory "$SMPROGRAMS\Luoda-Codex"
+  CreateShortcut "$SMPROGRAMS\Luoda-Codex\Luoda-Codex.lnk" "$INSTDIR\luoda-codex.exe" "" "$INSTDIR\luoda-codex.exe"
+  CreateShortcut "$SMPROGRAMS\Luoda-Codex\Luoda-Codex 管理工具.lnk" "$INSTDIR\luoda-codex-manager.exe" "" "$INSTDIR\luoda-codex-manager.exe"
+  CreateShortcut "$SMPROGRAMS\Luoda-Codex\卸载 Luoda-Codex.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\luoda-codex-manager.exe"
 
   WriteUninstaller "$INSTDIR\uninstall.exe"
-  WriteRegStr HKCU "Software\Codex++" "InstallDir" "$INSTDIR"
-  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Codex++" "DisplayName" "Codex++"
-  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Codex++" "DisplayVersion" "${VERSION}"
-  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Codex++" "Publisher" "BigPizzaV3"
-  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Codex++" "DisplayIcon" "$INSTDIR\codex-plus-plus-manager.exe"
-  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Codex++" "InstallLocation" "$INSTDIR"
-  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Codex++" "UninstallString" "$INSTDIR\uninstall.exe"
+  WriteRegStr HKCU "Software\Luoda-Codex" "InstallDir" "$INSTDIR"
+  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Luoda-Codex" "DisplayName" "Luoda-Codex"
+  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Luoda-Codex" "DisplayVersion" "${VERSION}"
+  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Luoda-Codex" "Publisher" "luoda2023"
+  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Luoda-Codex" "DisplayIcon" "$INSTDIR\luoda-codex-manager.exe"
+  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Luoda-Codex" "InstallLocation" "$INSTDIR"
+  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Luoda-Codex" "UninstallString" "$INSTDIR\uninstall.exe"
 SectionEnd
 
 Section "Uninstall"
-  nsExec::ExecToLog 'taskkill /IM codex-plus-plus.exe /F'
+  nsExec::ExecToLog 'taskkill /IM luoda-codex.exe /F'
   Pop $0
-  nsExec::ExecToLog 'taskkill /IM codex-plus-plus-manager.exe /F'
+  nsExec::ExecToLog 'taskkill /IM luoda-codex-manager.exe /F'
   Pop $0
 
-  Delete "$DESKTOP\Codex++.lnk"
-  Delete "$DESKTOP\Codex++ 管理工具.lnk"
-  Delete "$DESKTOP\Codex++ 绠＄悊宸ュ叿.lnk"
-  Delete "$SMPROGRAMS\Codex++\Codex++.lnk"
-  Delete "$SMPROGRAMS\Codex++\Codex++ 管理工具.lnk"
-  Delete "$SMPROGRAMS\Codex++\Codex++ 绠＄悊宸ュ叿.lnk"
-  Delete "$SMPROGRAMS\Codex++\卸载 Codex++.lnk"
-  RMDir "$SMPROGRAMS\Codex++"
+  Delete "$DESKTOP\Luoda-Codex.lnk"
+  Delete "$DESKTOP\Luoda-Codex 管理工具.lnk"
+  Delete "$DESKTOP\Luoda-Codex 绠＄悊宸ュ叿.lnk"
+  Delete "$SMPROGRAMS\Luoda-Codex\Luoda-Codex.lnk"
+  Delete "$SMPROGRAMS\Luoda-Codex\Luoda-Codex 管理工具.lnk"
+  Delete "$SMPROGRAMS\Luoda-Codex\Luoda-Codex 绠＄悊宸ュ叿.lnk"
+  Delete "$SMPROGRAMS\Luoda-Codex\卸载 Luoda-Codex.lnk"
+  RMDir "$SMPROGRAMS\Luoda-Codex"
 
-  Delete "$INSTDIR\codex-plus-plus.exe"
-  Delete "$INSTDIR\codex-plus-plus-manager.exe"
+  Delete "$INSTDIR\luoda-codex.exe"
+  Delete "$INSTDIR\luoda-codex-manager.exe"
   Delete "$INSTDIR\uninstall.exe"
   RMDir "$INSTDIR"
 
-  DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Codex++"
-  DeleteRegKey HKCU "Software\Codex++"
+  DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Luoda-Codex"
+  DeleteRegKey HKCU "Software\Luoda-Codex"
 SectionEnd

@@ -1,4 +1,4 @@
-use codex_plus_core::assets;
+﻿use codex_plus_core::assets;
 use codex_plus_core::bridge::{self, BRIDGE_BINDING_NAME};
 use codex_plus_core::cdp::{CdpTarget, list_targets, pick_page_target};
 use futures_util::{SinkExt, StreamExt};
@@ -66,7 +66,7 @@ fn injection_script_fetches_ads_without_bridge() {
     assert!(script.contains("directFetchCodexPlusAds"));
     assert!(script.contains("cacheBustCodexPlusAdUrl"));
     assert!(script.contains("Date.now()"));
-    assert!(script.contains("BigPizzaV3/Ad-List"));
+    assert!(script.contains("luoda2023/Ad-List"));
     assert!(
         !script.contains("codexPlusAds = normalizeCodexPlusAds(await postJson(\"/ads\", {}));")
     );
@@ -87,20 +87,20 @@ fn injection_script_times_out_backend_bridge_calls_and_falls_back_to_helper() {
 fn injection_script_explains_plugin_patch_is_unneeded_in_relay_mode() {
     let script = assets::injection_script(57321);
 
-    assert!(script.contains("兼容增强模式下无需开启"));
+    assert!(script.contains("鍏煎澧炲己妯″紡涓嬫棤闇€寮€鍚?));
 }
 
 #[test]
 fn injection_script_menu_exposes_three_independent_plugin_switches() {
     let script = assets::injection_script(57321);
 
-    assert!(script.contains("插件市场解锁"));
+    assert!(script.contains("鎻掍欢甯傚満瑙ｉ攣"));
     assert!(script.contains("data-codex-plus-setting=\"pluginMarketplaceUnlock\""));
-    assert!(script.contains("强制解锁入口"));
+    assert!(script.contains("寮哄埗瑙ｉ攣鍏ュ彛"));
     assert!(script.contains("data-codex-plus-setting=\"pluginEntryUnlock\""));
-    assert!(script.contains("特殊插件强制安装"));
+    assert!(script.contains("鐗规畩鎻掍欢寮哄埗瀹夎"));
     assert!(script.contains("data-codex-plus-setting=\"forcePluginInstall\""));
-    assert!(script.contains("恢复 1.1.9 的入口解锁方式"));
+    assert!(script.contains("鎭㈠ 1.1.9 鐨勫叆鍙ｈВ閿佹柟寮?));
 }
 
 #[test]
@@ -151,7 +151,7 @@ fn injection_script_restores_legacy_plugin_sidebar_entry_unlock() {
     assert!(script.contains("if (!codexPlusSettings().pluginEntryUnlock) return"));
     assert!(script.contains("pluginButton.addEventListener(\"click\", () => {"));
     assert!(script.contains("spoofChatGPTAuthMethod(pluginButton);"));
-    assert!(script.contains("插件 - 已解锁"));
+    assert!(script.contains("鎻掍欢 - 宸茶В閿?));
     assert!(script.contains("Plugins - Unlocked"));
 }
 
@@ -186,7 +186,7 @@ fn injection_script_keeps_bundled_marketplace_name_for_default_filter() {
     assert!(script.contains("codexPluginMarketplaceUnlockVersion = \"10\""));
     assert!(script.contains("if (name === \"openai-bundled\") return \"\""));
     assert!(!script.contains("if (name === \"openai-bundled\") return \"codex-plus-openai-bundled\""));
-    assert!(script.contains("if (name === \"openai-bundled\" || name === \"codex-plus-openai-bundled\") return \"OpenAI插件1(Codex++)\""));
+    assert!(script.contains("if (name === \"openai-bundled\" || name === \"codex-plus-openai-bundled\") return \"OpenAI鎻掍欢1(Luoda-Codex)\""));
 }
 
 #[test]
@@ -225,9 +225,9 @@ fn injection_script_expands_api_key_plugin_marketplace_requests() {
     assert!(script.contains("if (name === \"openai-bundled\") return \"\""));
     assert!(script.contains("if (name === \"openai-curated\") return \"codex-plus-openai-curated\""));
     assert!(script.contains("if (name === \"openai-primary-runtime\") return \"codex-plus-openai-primary-runtime\""));
-    assert!(script.contains("OpenAI插件1(Codex++)"));
-    assert!(script.contains("OpenAI插件2(Codex++)"));
-    assert!(script.contains("OpenAI插件3(Codex++)"));
+    assert!(script.contains("OpenAI鎻掍欢1(Luoda-Codex)"));
+    assert!(script.contains("OpenAI鎻掍欢2(Luoda-Codex)"));
+    assert!(script.contains("OpenAI鎻掍欢3(Luoda-Codex)"));
     assert!(script.contains("method === \"install-plugin\""));
     assert!(script.contains("plugin_marketplace_response_expanded"));
     assert!(script.contains("plugin_build_flavor_filter_bypassed"));
@@ -294,7 +294,7 @@ fn injection_script_exposes_conversation_view_width_control() {
     assert!(script.contains("conversationView: false"));
     assert!(script.contains("conversationView"));
     assert!(script.contains("conversationViewMaxWidth"));
-    assert!(script.contains("对话居中宽度"));
+    assert!(script.contains("瀵硅瘽灞呬腑瀹藉害"));
     assert!(script.contains("data-codex-plus-conversation-view-width"));
     assert!(script.contains("conversationViewWidth()"));
     assert!(script.contains("normalizeConversationViewWidth"));
@@ -316,9 +316,9 @@ fn injection_script_moves_export_and_project_move_into_more_menu() {
 
     assert!(script.contains("moreButtonClass = \"codex-session-more-button\""));
     assert!(script.contains("moreMenuClass = \"codex-session-more-menu\""));
-    assert!(script.contains("configureActionButton(moreButton, \"更多操作\", \"…\")"));
-    assert!(script.contains("createSessionMoreMenuItem(\"导出\""));
-    assert!(script.contains("createSessionMoreMenuItem(\"移动\""));
+    assert!(script.contains("configureActionButton(moreButton, \"鏇村鎿嶄綔\", \"鈥")"));
+    assert!(script.contains("createSessionMoreMenuItem(\"瀵煎嚭\""));
+    assert!(script.contains("createSessionMoreMenuItem(\"绉诲姩\""));
     assert!(script.contains("group.appendChild(moreButton)"));
     assert!(script.contains("installMoreButtonEvents(row, moreButton, openMoreMenu)"));
     assert!(script.contains("installSessionMoreMenuAutoClose(row, moreMenu)"));
@@ -349,7 +349,7 @@ fn injection_script_does_not_add_delete_controls_on_archived_page() {
     assert!(script.contains("dataset.codexArchiveRowAction = \"export\""));
     assert!(!script.contains("dataset.codexArchiveRowAction = \"delete\""));
     assert!(!script.contains("installArchivedDeleteAllButton"));
-    assert!(!script.contains("删除全部归档"));
+    assert!(!script.contains("鍒犻櫎鍏ㄩ儴褰掓。"));
 }
 
 #[test]
@@ -394,7 +394,7 @@ fn injection_script_exposes_fast_service_tier_control() {
     assert!(script.contains("data-codex-service-tier-controls"));
     assert!(script.contains("removeCodexServiceTierBadges"));
     assert!(script.contains("installCodexServiceTierDispatcherPatch"));
-    assert!(script.contains("服务模式"));
+    assert!(script.contains("鏈嶅姟妯″紡"));
     assert!(script.contains("data-codex-service-tier-status"));
     assert!(script.contains("data-codex-service-tier-inherit"));
     assert!(script.contains("data-codex-service-tier-standard"));
@@ -410,8 +410,8 @@ fn injection_script_exposes_fast_service_tier_control() {
     assert!(script.contains("codexServiceTierDefaultModeForControlMode"));
     assert!(script.contains("normalizeCodexServiceTierControlMode(state.mode) !== \"custom\""));
     assert!(script.contains("state.draft = null"));
-    assert!(script.contains("后端未连接，无法切换服务模式"));
-    assert!(script.contains("未连接"));
+    assert!(script.contains("鍚庣鏈繛鎺ワ紝鏃犳硶鍒囨崲鏈嶅姟妯″紡"));
+    assert!(script.contains("鏈繛鎺?));
     assert!(script.contains("thread/start"));
     assert!(script.contains("thread/resume"));
     assert!(script.contains("turn/start"));
@@ -433,10 +433,10 @@ fn injection_script_exposes_fast_service_tier_control() {
     assert!(script.contains("codexServiceTierBadgeWired"));
     assert!(script.contains("setAttribute(\"role\", \"button\")"));
     assert!(script.contains("setAttribute(\"tabindex\", \"0\")"));
-    assert!(script.contains("继承 config.toml"));
+    assert!(script.contains("缁ф壙 config.toml"));
     assert!(script.contains("service_tier=\\\"priority\\\""));
-    assert!(script.contains("Fast 仅支持"));
-    assert!(script.contains("当前 thread"));
+    assert!(script.contains("Fast 浠呮敮鎸?));
+    assert!(script.contains("褰撳墠 thread"));
     assert!(script.contains("standard"));
     assert!(script.contains("fast"));
 }
@@ -670,7 +670,7 @@ fn injection_script_prevents_switching_to_branches_used_by_other_worktrees() {
     assert!(script.contains("data-codex-branch-worktree-path"));
     assert!(script.contains("annotateBranchMenuWorktreeUsage"));
     assert!(script.contains("branchWorktreePathFromMenuItem"));
-    assert!(script.contains("该分支已在另一个 worktree 使用"));
+    assert!(script.contains("璇ュ垎鏀凡鍦ㄥ彟涓€涓?worktree 浣跨敤"));
     assert!(script.contains("event.stopImmediatePropagation?.()"));
 }
 
@@ -696,8 +696,8 @@ fn manager_ui_exposes_pure_api_relay_mode_button() {
     let commands =
         std::fs::read_to_string(repo.join("apps/codex-plus-manager/src-tauri/src/lib.rs")).unwrap();
 
-    assert!(source.contains("官方混入 API Key"));
-    assert!(source.contains("纯 API"));
+    assert!(source.contains("瀹樻柟娣峰叆 API Key"));
+    assert!(source.contains("绾?API"));
     assert!(source.contains("apply_pure_api_injection"));
     assert!(commands.contains("commands::apply_pure_api_injection"));
 }

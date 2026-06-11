@@ -13,9 +13,9 @@ pub fn build_app_bundle(options: &InstallOptions, manager: bool) -> MacosAppBund
     let install_root = install_root_or_default(options);
     let display_name = if manager { MANAGER_NAME } else { SILENT_NAME };
     let executable_name = if manager {
-        "CodexPlusPlusManager"
+        "LuodaCodexManager"
     } else {
-        "CodexPlusPlus"
+        "Luoda-Codex"
     };
     let binary = if manager {
         MANAGER_BINARY
@@ -127,9 +127,9 @@ fn copy_icon(resources: &Path) -> anyhow::Result<()> {
     let source = std::env::current_exe()
         .ok()
         .and_then(|path| path.parent().map(Path::to_path_buf))
-        .map(|path| path.join("codex-plus-plus.png"));
+        .map(|path| path.join("luoda-codex.png"));
     if let Some(source) = source.filter(|path| path.exists()) {
-        fs::copy(source, resources.join("codex-plus-plus.png"))?;
+        fs::copy(source, resources.join("luoda-codex.png"))?;
     }
     Ok(())
 }
@@ -141,7 +141,7 @@ fn executable_name_from_plist(plist: &str) -> String {
         .nth(1)
         .and_then(|tail| tail.split("<string>").nth(1))
         .and_then(|tail| tail.split("</string>").next())
-        .unwrap_or("CodexPlusPlus")
+        .unwrap_or("Luoda-Codex")
         .to_string()
 }
 
@@ -157,7 +157,7 @@ fn info_plist(display_name: &str, executable_name: &str, identifier_suffix: &str
   <key>CFBundleDisplayName</key>
   <string>{display_name}</string>
   <key>CFBundleIdentifier</key>
-  <string>com.bigpizzav3.codexplusplus{identifier_suffix}</string>
+  <string>com.luodadev.luodacodex{identifier_suffix}</string>
   <key>CFBundleVersion</key>
   <string>{version}</string>
   <key>CFBundleShortVersionString</key>
@@ -167,7 +167,7 @@ fn info_plist(display_name: &str, executable_name: &str, identifier_suffix: &str
   <key>CFBundleExecutable</key>
   <string>{executable_name}</string>
   <key>CFBundleIconFile</key>
-  <string>codex-plus-plus.png</string>
+  <string>luoda-codex.png</string>
   <key>LSUIElement</key>
   <true/>
   <key>LSMinimumSystemVersion</key>

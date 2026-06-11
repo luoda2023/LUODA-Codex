@@ -1,13 +1,13 @@
-# Contributing to CodexPlusPlus
+# Contributing to Luoda-Codex
 
-Thank you for your interest in contributing to CodexPlusPlus!
+Thank you for your interest in contributing to Luoda-Codex!
 
 ## Development Setup
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/BigPizzaV3/CodexPlusPlus.git
-   cd CodexPlusPlus
+   git clone https://github.com/luoda2023/LUODA-Codex.git
+   cd Luoda-Codex
    ```
 
 2. **Install Rust toolchain**
@@ -30,11 +30,11 @@ Thank you for your interest in contributing to CodexPlusPlus!
 ## Project Structure
 
 ```
-CodexPlusPlus/
-├── crates/
-│   ├── codex-plus-data/    # Data handling and provider sync
-│   └── codex-plus-core/    # Core Codex++ logic
-└── README.md               # Project documentation
+Luoda-Codex/
+鈹溾攢鈹€ crates/
+鈹?  鈹溾攢鈹€ codex-plus-data/    # Data handling and provider sync
+鈹?  鈹斺攢鈹€ codex-plus-core/    # Core Luoda-Codex logic
+鈹斺攢鈹€ README.md               # Project documentation
 ```
 
 ## Making Changes
