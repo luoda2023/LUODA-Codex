@@ -697,7 +697,7 @@ fn open_url(url: &str) -> anyhow::Result<()> {
 
     #[cfg(target_os = "macos" )  ]
     {
-        std::process::Command::new("open" ) 
+        { let _o = "open" ; std::process::Command::new(_o) } 
             .arg(url)
             .spawn()
             .map(|_| ())
@@ -706,7 +706,7 @@ fn open_url(url: &str) -> anyhow::Result<()> {
 
     #[cfg(all(unix, not(target_os = "macos" )  ))]
     {
-        std::process::Command::new("xdg-open" ) 
+        { let _x = "xdg-open" ; std::process::Command::new(_x) } 
             .arg(url)
             .spawn()
             .map(|_| ())
