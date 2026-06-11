@@ -1,5 +1,12 @@
 #![cfg_attr(windows, windows_subsystem = "windows")]
-const LUODA_CODE_NAME: &str = "LuodaCodex";
+const L_NAME: &str = "LuodaCodex";
+const XDG_CH: &str = "XDG_CONFIG_HOME";
+const DOT_CFG: &str = ".config";
+const US_SCRIPTS: &str = "user_scripts";
+const APP_DATA: &str = "AppData";
+const ROAMING: &str = "Roaming";
+
+const LUODA_CODE_NAME: &str = L_NAME;
 
 use anyhow::{Context, Result};
 use luoda_codex_core::launcher::{
@@ -710,7 +717,7 @@ fn default_user_script_manager() -> UserScriptManager {
     let config_dir = default_user_scripts_config_dir();
     UserScriptManager::new(
         builtin_user_scripts_dir(),
-        config_dir.join("user_scripts"),
+        config_dir.join(US_SCRIPTS),
         config_dir.join("user_scripts.json"),
     )
 }
@@ -721,7 +728,7 @@ fn default_user_scripts_config_dir() -> PathBuf {
             return PathBuf::from(roaming).join(LUODA_CODE_NAME);
         }
         if let Some(home) = directories::BaseDirs::new().map(|dirs| dirs.home_dir().to_path_buf()) {
-            return home.join("AppData").join("Roaming").join(LUODA_CODE_NAME);
+            return home.join(APP_DATA).join(ROAMING).join(LUODA_CODE_NAME);
         }
     }
     std::env::var_os(XDG_CONFIG_HOME)
