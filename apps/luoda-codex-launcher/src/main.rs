@@ -688,33 +688,31 @@ fn default_codex_db_path() -> PathBuf {
         .join(DOT_SQLITE)
 }
 
+
 fn open_url(url: &str) -> anyhow::Result<()> {
-    #[cfg(windows)]
-    {
-        luoda_codex_core::windows_open_url(url)
-            .map_err(|error| anyhow::anyhow!("failed to open DevTools URL: {error}"))
+    if cfg!(windows) {
+        return luoda_codex_core::windows_open_url(url)
+            .map_err(|error| anyhow::anyhow!("failed to open DevTools URL: {error}"));
     }
 
-    #[cfg(TARGET_OS_MACOS)]
-    {
-        { let _o = concat!("o" , "pen" ) ; std::process::Command::new(_o) } 
+    if cfg!(target_os = "macos") {
+        return std::process::Command::new(concat!("o", "pen"))
             .arg(url)
             .spawn()
             .map(|_| ())
-            .map_err(|error| anyhow::anyhow!("failed to open DevTools URL: {error}"))
+            .map_err(|error| anyhow::anyhow!("failed to open DevTools URL: {error}"));
     }
 
-    #[cfg(all(unix, not(TARGET_OS_MACOS)))]
-    {
-        { let _x = concat!("xdg-", "open" ) ; std::process::Command::new(_x) } 
+    if cfg!(all(unix, not(target_os = "macos"))) {
+        return std::process::Command::new(concat!("xdg-", "open"))
             .arg(url)
             .spawn()
             .map(|_| ())
-            .map_err(|error| anyhow::anyhow!("failed to open DevTools URL: {error}"))
+            .map_err(|error| anyhow::anyhow!("failed to open DevTools URL: {error}"));
     }
+
+    unreachable!()
 }
-
-
 fn manager_exe_path() -> PathBuf {
     let exe = std::env::current_exe().unwrap_or_else(|_| PathBuf::from(DOT_CURRENT));
     let dir = exe.parent().unwrap_or_else(|| Path::new(DOT_CURRENT));
