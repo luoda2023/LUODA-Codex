@@ -11,6 +11,11 @@ const FMTP_MANAGER_BINARY: &str = "{}{}";
 const SUFFIX_EXE: &str = ".exe";
 const SUFFIX_EMPTY: &str = "";
 const DOT_CURRENT: &str = ".";
+const FAILED_INJECTION: &str = "Codex injection failed";
+const NO_WS_URL: &str = "selected CDP target has no websocket URL";
+const PLATFORM_NOT_SUPPORTED: &str = "opening DevTools URL is not supported on this platform";
+const DOT_CODEX: &str = ".codex";
+const DOT_SQLITE: &str = "state_5.sqlite";
 
 const L_NAME: &str = L_NAME;
 const XDG_CH: &str = XDG_CH;
@@ -635,7 +640,7 @@ async fn inject_with_context(
             }
         }
     }
-    Err(last_error.unwrap_or_else(|| anyhow::anyhow!("Codex injection failed") ))
+    Err(last_error.unwrap_or_else(|| anyhow::anyhow!(FAILED_INJECTION) ))
 }
 
 async fn try_inject_with_context(
@@ -649,7 +654,7 @@ async fn try_inject_with_context(
     let websocket_url = target
         .web_socket_debugger_url
         .as_deref()
-        .ok_or_else(|| anyhow::anyhow!("selected CDP target has no websocket URL") )?;
+        .ok_or_else(|| anyhow::anyhow!(NO_WS_URL) )?;
     runtime.set_websocket_url(websocket_url);
     let script = luoda_codex_core::assets::injection_script(helper_port);
     let user_bundle = runtime
@@ -679,8 +684,8 @@ fn default_codex_db_path() -> PathBuf {
     directories::BaseDirs::new()
         .map(|dirs| dirs.home_dir().to_path_buf())
         .unwrap_or_else(|| PathBuf::from(DOT_CURRENT))
-        .join(".codex")
-        .join("state_5.sqlite")
+        .join(DOT_CODEX)
+        .join(DOT_SQLITE)
 }
 
 fn open_url(url: &str) -> anyhow::Result<()> {
@@ -711,7 +716,7 @@ fn open_url(url: &str) -> anyhow::Result<()> {
     #[cfg(not(any(windows, target_os = "macos",  unix)))]
     {
         let _ = url;
-        anyhow::bail!("opening DevTools URL is not supported on this platform")
+        anyhow::bail!(PLATFORM_NOT_SUPPORTED)
     }
 }
 
