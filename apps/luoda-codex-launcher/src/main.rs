@@ -713,7 +713,7 @@ fn open_url(url: &str) -> anyhow::Result<()> {
             .map_err(|error| anyhow::anyhow!("failed to open DevTools URL: {error}"))
     }
 
-    #[cfg(all(unix, not(target_os = "macos")))]
+    #[cfg(all(unix, not(target_os = "macos" )))]
     {
         let _ = url;
         anyhow::bail!(PLATFORM_NOT_SUPPORTED)
