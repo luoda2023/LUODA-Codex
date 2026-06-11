@@ -1,4 +1,4 @@
-﻿#![cfg_attr(windows, windows_subsystem = "windows")]
+﻿#![cfg_attr(windows, windows_subsystem = "windows") ]
 const L_NAME: &str = "LuodaCodex";
 const XDG_CH: &str = "XDG_CONFIG_HOME";
 const DOT_CFG: &str = ".config";
@@ -122,8 +122,8 @@ fn log_launcher_guard_fallback(fallback_lock_path: &Path) {
     let _ = luoda_codex_core::diagnostic_log::append_diagnostic_log(
         "launcher.guard_fallback",
         json!({
-            "requested_guard_port": luoda_codex_core::ports::LAUNCHER_GUARD_PORT,
-            "fallback_lock_path": fallback_lock_path
+            "requested_guard_port":  luoda_codex_core::ports::LAUNCHER_GUARD_PORT,
+            "fallback_lock_path":  fallback_lock_path
         }),
     );
 }
@@ -136,10 +136,10 @@ fn should_recover_stale_launcher(debug_port: u16) -> bool {
     let _ = luoda_codex_core::diagnostic_log::append_diagnostic_log(
         "launcher.stale_recovery_check",
         json!({
-            "debug_port": debug_port,
-            "has_codex_process": has_codex_process,
-            "cdp_listening": cdp_listening,
-            "recover": recover
+            "debug_port":  debug_port,
+            "has_codex_process":  has_codex_process,
+            "cdp_listening":  cdp_listening,
+            "recover":  recover
         }),
     );
     recover
@@ -177,21 +177,21 @@ async fn activate_existing_codex_app(options: &LaunchOptions) -> anyhow::Result<
         hooks
             .start_bridge_watchdog(options.debug_port, options.helper_port)
             .await?;
-        hooks.write_status("running").await;
+        hooks.write_status("running") .await;
     } else if settings.enhancements_enabled {
-        hooks.write_status("running_degraded").await;
+        hooks.write_status("running_degraded") .await;
     }
     let _ = luoda_codex_core::diagnostic_log::append_diagnostic_log(
         "launcher.activate_existing_codex",
         json!({
-            "app_dir": app_dir.to_string_lossy(),
-            "debug_port": options.debug_port,
-            "helper_port": options.helper_port,
-            "process_ids": process_ids,
-            "activated": activated,
-            "injection_ready": injection_ready,
-            "launch_ok": launch_result.is_ok(),
-            "launch_error": launch_result.as_ref().err().map(|error| error.to_string())
+            "app_dir":  app_dir.to_string_lossy(),
+            "debug_port":  options.debug_port,
+            "helper_port":  options.helper_port,
+            "process_ids":  process_ids,
+            "activated":  activated,
+            "injection_ready":  injection_ready,
+            "launch_ok":  launch_result.is_ok(),
+            "launch_error":  launch_result.as_ref().err().map(|error| error.to_string())
         }),
     );
     launch_result.map(|_| ())
@@ -201,8 +201,8 @@ fn log_launcher_already_running(debug_port: u16) {
     let _ = luoda_codex_core::diagnostic_log::append_diagnostic_log(
         "launcher.already_running",
         json!({
-            "guard_port": luoda_codex_core::ports::LAUNCHER_GUARD_PORT,
-            "debug_port": debug_port
+            "guard_port":  luoda_codex_core::ports::LAUNCHER_GUARD_PORT,
+            "debug_port":  debug_port
         }),
     );
 }
@@ -220,7 +220,7 @@ async fn notify_manager_when_update_available() -> anyhow::Result<bool> {
 fn open_manager_with_update_prompt() -> anyhow::Result<()> {
     let manager_path = manager_exe_path();
     let mut command = std::process::Command::new(&manager_path);
-    command.arg("--show-update");
+    command.arg("--show-update") ;
     #[cfg(windows)]
     {
         command.creation_flags(luoda_codex_core::windows_create_no_window());
@@ -375,7 +375,7 @@ impl Default for LauncherDataService {
     fn default() -> Self {
         Self {
             db_path: default_codex_db_path(),
-            backup_dir: luoda_codex_core::paths::default_app_state_dir().join("backups"),
+            backup_dir: luoda_codex_core::paths::default_app_state_dir().join("backups") ,
         }
     }
 }
@@ -519,9 +519,9 @@ impl BridgeRuntimeService for LauncherRuntimeService {
         let url = luoda_codex_core::routes::devtools_url(debug_port, &target.id);
         open_url(&url)?;
         Ok(json!({
-            "status": "ok",
-            "target_id": target.id,
-            "url": url
+            "status":  "ok",
+            "target_id":  target.id,
+            "url":  url
         }))
     }
 
@@ -541,14 +541,14 @@ impl BridgeRuntimeService for LauncherRuntimeService {
                 .map_err(|error| anyhow::anyhow!("鍚姩绠＄悊宸ュ叿澶辫触error}"))?;
         }
         Ok(json!({
-            "status": "ok",
-            "path": manager_path.to_string_lossy()
+            "status":  "ok",
+            "path":  manager_path.to_string_lossy()
         }))
     }
 
     async fn backend_status(&self) -> anyhow::Result<Value> {
         Ok(
-            json!({"status": "ok", "message": "鍚庣宸茶繛鎺? "version": luoda_codex_core::version::VERSION}),
+            json!({"status":  "ok",  "message":  "鍚庣宸茶繛鎺? "version":  luoda_codex_core::version::VERSION}),
         )
     }
 
@@ -635,7 +635,7 @@ async fn inject_with_context(
             }
         }
     }
-    Err(last_error.unwrap_or_else(|| anyhow::anyhow!("Codex injection failed")))
+    Err(last_error.unwrap_or_else(|| anyhow::anyhow!("Codex injection failed") ))
 }
 
 async fn try_inject_with_context(
@@ -649,7 +649,7 @@ async fn try_inject_with_context(
     let websocket_url = target
         .web_socket_debugger_url
         .as_deref()
-        .ok_or_else(|| anyhow::anyhow!("selected CDP target has no websocket URL"))?;
+        .ok_or_else(|| anyhow::anyhow!("selected CDP target has no websocket URL") )?;
     runtime.set_websocket_url(websocket_url);
     let script = luoda_codex_core::assets::injection_script(helper_port);
     let user_bundle = runtime
@@ -690,7 +690,7 @@ fn open_url(url: &str) -> anyhow::Result<()> {
             .map_err(|error| anyhow::anyhow!("failed to open DevTools URL: {error}"))
     }
 
-    #[cfg(target_os = "macos")]
+    #[cfg(target_os = "macos") ]
     {
         std::process::Command::new("open")
             .arg(url)
@@ -699,7 +699,7 @@ fn open_url(url: &str) -> anyhow::Result<()> {
             .map_err(|error| anyhow::anyhow!("failed to open DevTools URL: {error}"))
     }
 
-    #[cfg(all(unix, not(target_os = "macos")))]
+    #[cfg(all(unix, not(target_os = "macos") ))]
     {
         std::process::Command::new("xdg-open")
             .arg(url)
@@ -708,7 +708,7 @@ fn open_url(url: &str) -> anyhow::Result<()> {
             .map_err(|error| anyhow::anyhow!("failed to open DevTools URL: {error}"))
     }
 
-    #[cfg(not(any(windows, target_os = "macos", unix)))]
+    #[cfg(not(any(windows, target_os = "macos",  unix)))]
     {
         let _ = url;
         anyhow::bail!("opening DevTools URL is not supported on this platform")
