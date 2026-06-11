@@ -101,10 +101,10 @@ fn macos_packager_hides_silent_launcher_but_not_manager() {
     assert!(script.contains("BINARY_DIR=\"${BINARY_DIR:-$ROOT/target/release}\""));
     assert!(script.contains("LuodaCodex-${VERSION}-macos-${ARCH}.dmg"));
     assert!(script.contains(
-        "create_app \"LuodaCodex\" \"CodexPlusPlus\" \"$BINARY_DIR/luoda-codex\" \"com.dicad.luodacodex\" \"true\""
+        "create_app \"LuodaCodex\" \"LuodaCodex\" \"$BINARY_DIR/luoda-codex\" \"com.dicad.luodacodex\" \"true\""
     ));
     assert!(script.contains(
-        "create_app \"LuodaCodex 管理工具\" \"CodexPlusPlusManager\" \"$BINARY_DIR/luoda-codex-manager\" \"com.dicad.luodacodex.manager\" \"false\""
+        "create_app \"LuodaCodex 管理工具\" \"LuodaCodexManager\" \"$BINARY_DIR/luoda-codex-manager\" \"com.dicad.luodacodex.manager\" \"false\""
     ));
 }
 
