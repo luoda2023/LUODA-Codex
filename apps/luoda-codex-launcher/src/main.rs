@@ -227,7 +227,7 @@ fn open_manager_with_update_prompt() -> anyhow::Result<()> {
     command
         .spawn()
         .map(|_| ())
-        .map_err(|error| anyhow::anyhow!("鍚姩绠＄悊宸ュ叿澶辫触error}"))
+        .map_err(|error| anyhow::anyhow!("启动管理工具失败{error}"))
 }
 
 fn parse_launch_options<I, S>(args: I) -> LaunchOptions
@@ -716,7 +716,7 @@ fn manager_exe_path() -> PathBuf {
     let dir = exe.parent().unwrap_or_else(|| Path::new(DOT_CURRENT));
     let suffix = if cfg!(windows) { SUFFIX_EXE } else { SUFFIX_EMPTY };
     dir.join(format!(
-        FMTP_MANAGER_BINARY,
+    dir.join(format!("{}{}",
         luoda_codex_core::install::MANAGER_BINARY,
         suffix
     ))
