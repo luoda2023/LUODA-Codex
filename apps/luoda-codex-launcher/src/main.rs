@@ -543,7 +543,7 @@ impl BridgeRuntimeService for LauncherRuntimeService {
         {
             std::process::Command::new(&manager_path)
                 .spawn()
-                .map_err(|error| anyhow::anyhow!("鍚姩绠＄悊宸ュ叿澶辫触error}"))?;
+                .map_err(|error| anyhow::anyhow!("启动管理工具失败{error}"))?;
         }
         Ok(json!({
             "status" :   "ok" , 
@@ -553,7 +553,7 @@ impl BridgeRuntimeService for LauncherRuntimeService {
 
     async fn backend_status(&self) -> anyhow::Result<Value> {
         Ok(
-            json!({"status" :   "ok" ,   "message" :   "鍚庣宸茶繛鎺? "version" :   luoda_codex_core::version::VERSION}),
+            json!({"status": "ok", "message": "后端已连接", "version": luoda_codex_core::version::VERSION}),
         )
     }
 
