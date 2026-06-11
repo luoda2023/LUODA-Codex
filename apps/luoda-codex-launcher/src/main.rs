@@ -1,21 +1,21 @@
-﻿#![cfg_attr(windows, windows_subsystem = "windows")  ]
-const L_NAME: &str = "LuodaCodex"; 
-const XDG_CH: &str = "XDG_CONFIG_HOME"; 
-const DOT_CFG: &str = ".config"; 
-const US_SCRIPTS: &str = "user_scripts"; 
-const APP_DATA: &str = "AppData"; 
-const ROAMING: &str = "Roaming"; 
-const APPDATA_CONST: &str = "APPDATA"; 
-const US_SCRIPTS_JSON: &str = "user_scripts.json"; 
+﻿#![cfg_attr(windows, windows_subsystem = "windows" )  ]
+const L_NAME: &str = "LuodaCodex" ; 
+const XDG_CH: &str = "XDG_CONFIG_HOME" ; 
+const DOT_CFG: &str = ".config" ; 
+const US_SCRIPTS: &str = "user_scripts" ; 
+const APP_DATA: &str = "AppData" ; 
+const ROAMING: &str = "Roaming" ; 
+const APPDATA_CONST: &str = "APPDATA" ; 
+const US_SCRIPTS_JSON: &str = "user_scripts.json" ; 
 const FMTP_MANAGER_BINARY: &str = "{}{}";
-const SUFFIX_EXE: &str = ".exe"; 
+const SUFFIX_EXE: &str = ".exe" ; 
 const SUFFIX_EMPTY: &str = "";
 const DOT_CURRENT: &str = ".";
-const FAILED_INJECTION: &str = "Codex injection failed"; 
-const NO_WS_URL: &str = "selected CDP target has no websocket URL"; 
-const PLATFORM_NOT_SUPPORTED: &str = "opening DevTools URL is not supported on this platform"; 
-const DOT_CODEX: &str = ".codex"; 
-const DOT_SQLITE: &str = "state_5.sqlite"; 
+const FAILED_INJECTION: &str = "Codex injection failed" ; 
+const NO_WS_URL: &str = "selected CDP target has no websocket URL" ; 
+const PLATFORM_NOT_SUPPORTED: &str = "opening DevTools URL is not supported on this platform" ; 
+const DOT_CODEX: &str = ".codex" ; 
+const DOT_SQLITE: &str = "state_5.sqlite" ; 
 
 const L_NAME: &str = L_NAME;
 const XDG_CH: &str = XDG_CH;
@@ -125,10 +125,10 @@ fn try_acquire_single_instance_guard() -> std::io::Result<luoda_codex_core::port
 
 fn log_launcher_guard_fallback(fallback_lock_path: &Path) {
     let _ = luoda_codex_core::diagnostic_log::append_diagnostic_log(
-        "launcher.guard_fallback", 
+        "launcher.guard_fallback" , 
         json!({
-            "requested_guard_port":   luoda_codex_core::ports::LAUNCHER_GUARD_PORT,
-            "fallback_lock_path":   fallback_lock_path
+            "requested_guard_port" :   luoda_codex_core::ports::LAUNCHER_GUARD_PORT,
+            "fallback_lock_path" :   fallback_lock_path
         }),
     );
 }
@@ -139,12 +139,12 @@ fn should_recover_stale_launcher(debug_port: u16) -> bool {
     let recover =
         luoda_codex_core::watcher::should_recover_stale_launcher(has_codex_process, cdp_listening);
     let _ = luoda_codex_core::diagnostic_log::append_diagnostic_log(
-        "launcher.stale_recovery_check", 
+        "launcher.stale_recovery_check" , 
         json!({
-            "debug_port":   debug_port,
-            "has_codex_process":   has_codex_process,
-            "cdp_listening":   cdp_listening,
-            "recover":   recover
+            "debug_port" :   debug_port,
+            "has_codex_process" :   has_codex_process,
+            "cdp_listening" :   cdp_listening,
+            "recover" :   recover
         }),
     );
     recover
@@ -182,21 +182,21 @@ async fn activate_existing_codex_app(options: &LaunchOptions) -> anyhow::Result<
         hooks
             .start_bridge_watchdog(options.debug_port, options.helper_port)
             .await?;
-        hooks.write_status("running")  .await;
+        hooks.write_status("running" )  .await;
     } else if settings.enhancements_enabled {
-        hooks.write_status("running_degraded")  .await;
+        hooks.write_status("running_degraded" )  .await;
     }
     let _ = luoda_codex_core::diagnostic_log::append_diagnostic_log(
-        "launcher.activate_existing_codex", 
+        "launcher.activate_existing_codex" , 
         json!({
-            "app_dir":   app_dir.to_string_lossy(),
-            "debug_port":   options.debug_port,
-            "helper_port":   options.helper_port,
-            "process_ids":   process_ids,
-            "activated":   activated,
-            "injection_ready":   injection_ready,
-            "launch_ok":   launch_result.is_ok(),
-            "launch_error":   launch_result.as_ref().err().map(|error| error.to_string())
+            "app_dir" :   app_dir.to_string_lossy(),
+            "debug_port" :   options.debug_port,
+            "helper_port" :   options.helper_port,
+            "process_ids" :   process_ids,
+            "activated" :   activated,
+            "injection_ready" :   injection_ready,
+            "launch_ok" :   launch_result.is_ok(),
+            "launch_error" :   launch_result.as_ref().err().map(|error| error.to_string())
         }),
     );
     launch_result.map(|_| ())
@@ -204,10 +204,10 @@ async fn activate_existing_codex_app(options: &LaunchOptions) -> anyhow::Result<
 
 fn log_launcher_already_running(debug_port: u16) {
     let _ = luoda_codex_core::diagnostic_log::append_diagnostic_log(
-        "launcher.already_running", 
+        "launcher.already_running" , 
         json!({
-            "guard_port":   luoda_codex_core::ports::LAUNCHER_GUARD_PORT,
-            "debug_port":   debug_port
+            "guard_port" :   luoda_codex_core::ports::LAUNCHER_GUARD_PORT,
+            "debug_port" :   debug_port
         }),
     );
 }
@@ -225,7 +225,7 @@ async fn notify_manager_when_update_available() -> anyhow::Result<bool> {
 fn open_manager_with_update_prompt() -> anyhow::Result<()> {
     let manager_path = manager_exe_path();
     let mut command = std::process::Command::new(&manager_path);
-    command.arg("--show-update")  ;
+    command.arg("--show-update" )  ;
     #[cfg(windows)]
     {
         command.creation_flags(luoda_codex_core::windows_create_no_window());
@@ -380,7 +380,7 @@ impl Default for LauncherDataService {
     fn default() -> Self {
         Self {
             db_path: default_codex_db_path(),
-            backup_dir: luoda_codex_core::paths::default_app_state_dir().join("backups")  ,
+            backup_dir: luoda_codex_core::paths::default_app_state_dir().join("backups" )  ,
         }
     }
 }
@@ -524,9 +524,9 @@ impl BridgeRuntimeService for LauncherRuntimeService {
         let url = luoda_codex_core::routes::devtools_url(debug_port, &target.id);
         open_url(&url)?;
         Ok(json!({
-            "status":   "ok", 
-            "target_id":   target.id,
-            "url":   url
+            "status" :   "ok" , 
+            "target_id" :   target.id,
+            "url" :   url
         }))
     }
 
@@ -546,14 +546,14 @@ impl BridgeRuntimeService for LauncherRuntimeService {
                 .map_err(|error| anyhow::anyhow!("鍚姩绠＄悊宸ュ叿澶辫触error}"))?;
         }
         Ok(json!({
-            "status":   "ok", 
-            "path":   manager_path.to_string_lossy()
+            "status" :   "ok" , 
+            "path" :   manager_path.to_string_lossy()
         }))
     }
 
     async fn backend_status(&self) -> anyhow::Result<Value> {
         Ok(
-            json!({"status":   "ok",   "message":   "鍚庣宸茶繛鎺? "version":   luoda_codex_core::version::VERSION}),
+            json!({"status" :   "ok" ,   "message" :   "鍚庣宸茶繛鎺? "version" :   luoda_codex_core::version::VERSION}),
         )
     }
 
@@ -695,25 +695,25 @@ fn open_url(url: &str) -> anyhow::Result<()> {
             .map_err(|error| anyhow::anyhow!("failed to open DevTools URL: {error}"))
     }
 
-    #[cfg(target_os = "macos")  ]
+    #[cfg(target_os = "macos" )  ]
     {
-        std::process::Command::new("open") 
+        std::process::Command::new("open" ) 
             .arg(url)
             .spawn()
             .map(|_| ())
             .map_err(|error| anyhow::anyhow!("failed to open DevTools URL: {error}"))
     }
 
-    #[cfg(all(unix, not(target_os = "macos")  ))]
+    #[cfg(all(unix, not(target_os = "macos" )  ))]
     {
-        std::process::Command::new("xdg-open") 
+        std::process::Command::new("xdg-open" ) 
             .arg(url)
             .spawn()
             .map(|_| ())
             .map_err(|error| anyhow::anyhow!("failed to open DevTools URL: {error}"))
     }
 
-    #[cfg(not(any(windows, target_os = "macos",   unix)))]
+    #[cfg(not(any(windows, target_os = "macos" ,   unix)))]
     {
         let _ = url;
         anyhow::bail!(PLATFORM_NOT_SUPPORTED)
