@@ -119,14 +119,14 @@ verify_app() {
 
 prepare_icon
 create_app "Luoda-Codex" "Luoda-Codex" "$BINARY_DIR/luoda-codex" "com.luodadev.luodacodex" "true"
-create_app "Luoda-Codex 绠＄悊宸ュ叿" "Luoda-CodexManager" "$BINARY_DIR/luoda-codex-manager" "com.luodadev.luodacodex.manager" "false"
+create_app "Luoda-Codex 管理工具" "Luoda-CodexManager" "$BINARY_DIR/luoda-codex-manager" "com.luodadev.luodacodex.manager" "false"
 ln -s /Applications "$STAGE/Applications"
 
 sign_app "$STAGE/Luoda-Codex.app"
-sign_app "$STAGE/Luoda-Codex 绠＄悊宸ュ叿.app"
+sign_app "$STAGE/Luoda-Codex 管理工具.app"
 
 verify_app "$STAGE/Luoda-Codex.app"
-verify_app "$STAGE/Luoda-Codex 绠＄悊宸ュ叿.app"
+verify_app "$STAGE/Luoda-Codex 管理工具.app"
 
 hdiutil create -volname "Luoda-Codex" -srcfolder "$STAGE" -ov -format UDZO "$DMG"
 echo "$DMG"

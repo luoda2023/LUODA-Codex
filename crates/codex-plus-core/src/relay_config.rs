@@ -1793,7 +1793,7 @@ fn create_live_backup(
 
     let backup_dir = home
         .join("backups")
-        .join(format!("codex-plus-live-{}", timestamp_millis()));
+        .join(format!("luoda-codex-live-{}", timestamp_millis()));
     std::fs::create_dir_all(&backup_dir)?;
     if let Some(config) = config {
         std::fs::write(backup_dir.join("config.toml"), config)?;

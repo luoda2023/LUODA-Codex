@@ -892,7 +892,7 @@ async fn list_targets_can_query_ipv6_loopback_cdp_endpoint() {
 #[tokio::test]
 async fn install_bridge_routes_binding_while_waiting_for_command_response() {
     let temp = tempfile::tempdir().unwrap();
-    let log_path = temp.path().join("codex-plus.log");
+    let log_path = temp.path().join("luoda-codex.log");
     codex_plus_core::diagnostic_log::set_diagnostic_log_path_for_tests(Some(log_path.clone()));
     let (url, request_rx) = spawn_cdp_server(|mut socket| async move {
         for expected_id in 1..=4 {

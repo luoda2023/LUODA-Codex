@@ -1416,7 +1416,7 @@ export function App() {
   useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");
     document.documentElement.classList.toggle("light", theme === "light");
-    window.localStorage.setItem("codex-plus-theme", theme);
+    window.localStorage.setItem("luoda-codex-theme", theme);
   }, [theme]);
 
   const saveCodexAppPath = async (appPath: string) => {
@@ -5247,7 +5247,7 @@ function stringifyError(error: unknown) {
 
 function loadInitialTheme(): Theme {
   if (typeof window === "undefined") return "dark";
-  return window.localStorage.getItem("codex-plus-theme") === "light" ? "light" : "dark";
+  return window.localStorage.getItem("luoda-codex-theme") === "light" ? "light" : "dark";
 }
 
 function loadInitialRoute(): Route {

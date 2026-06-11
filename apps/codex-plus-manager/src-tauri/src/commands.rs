@@ -2511,7 +2511,7 @@ mod tests {
     #[test]
     fn startup_options_honors_show_update_argument() {
         assert!(should_show_update(
-            ["codex-plus-plus-manager.exe", "--show-update"],
+            ["luoda-codex-manager.exe", "--show-update"],
             None
         ));
     }
