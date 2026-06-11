@@ -712,6 +712,7 @@ fn open_url(url: &str) -> anyhow::Result<()> {
             .map(|_| ())
             .map_err(|error| anyhow::anyhow!("failed to open DevTools URL: {error}"))
     }
+}
 
 
 fn manager_exe_path() -> PathBuf {
