@@ -5,6 +5,14 @@ const DOT_CFG: &str = ".config";
 const US_SCRIPTS: &str = "user_scripts";
 const APP_DATA: &str = "AppData";
 const ROAMING: &str = "Roaming";
+const APPDATA_CONST: &str = "APPDATA";
+
+const L_NAME: &str = L_NAME;
+const XDG_CH: &str = XDG_CH;
+const DOT_CFG: &str = DOT_CFG;
+const US_SCRIPTS: &str = US_SCRIPTS;
+const APP_DATA: &str = APP_DATA;
+const ROAMING: &str = ROAMING;
 
 const LUODA_CODE_NAME: &str = L_NAME;
 
@@ -724,7 +732,7 @@ fn default_user_script_manager() -> UserScriptManager {
 
 fn default_user_scripts_config_dir() -> PathBuf {
     if cfg!(windows) {
-        if let Some(roaming) = std::env::var_os("APPDATA") {
+        if let Some(roaming) = std::env::var_os(APPDATA_CONST) {
             return PathBuf::from(roaming).join(LUODA_CODE_NAME);
         }
         if let Some(home) = directories::BaseDirs::new().map(|dirs| dirs.home_dir().to_path_buf()) {
