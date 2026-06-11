@@ -3843,6 +3843,7 @@ function routeTitle(route: Route) {
 
 function routeSubtitle(route: Route) {
   const subtitles: Record<Route, string> = {
+    home: "Codex 主控面板，快速查看系统状态",
     overview: "检查问题、启动与快速修复",
     relay: "管理 API 供应商、协议、Key 与配置文件",
     sessions: "查看、删除和修复 Codex 本地会话",
