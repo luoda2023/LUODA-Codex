@@ -7,6 +7,7 @@ const APP_DATA: &str = "AppData";
 const ROAMING: &str = "Roaming";
 const APPDATA_CONST: &str = "APPDATA";
 const US_SCRIPTS_JSON: &str = "user_scripts.json";
+const FMTP_MANAGER_BINARY: &str = "{}{}";
 
 const L_NAME: &str = L_NAME;
 const XDG_CH: &str = XDG_CH;
@@ -716,7 +717,7 @@ fn manager_exe_path() -> PathBuf {
     let dir = exe.parent().unwrap_or_else(|| Path::new("."));
     let suffix = if cfg!(windows) { ".exe" } else { "" };
     dir.join(format!(
-        "{}{}",
+        FMTP_MANAGER_BINARY,
         luoda_codex_core::install::MANAGER_BINARY,
         suffix
     ))
