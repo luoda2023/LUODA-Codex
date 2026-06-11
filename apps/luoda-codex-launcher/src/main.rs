@@ -8,6 +8,8 @@ const ROAMING: &str = "Roaming";
 const APPDATA_CONST: &str = "APPDATA";
 const US_SCRIPTS_JSON: &str = "user_scripts.json";
 const FMTP_MANAGER_BINARY: &str = "{}{}";
+const SUFFIX_EXE: &str = ".exe";
+const SUFFIX_EMPTY: &str = "";
 
 const L_NAME: &str = L_NAME;
 const XDG_CH: &str = XDG_CH;
@@ -715,7 +717,7 @@ fn open_url(url: &str) -> anyhow::Result<()> {
 fn manager_exe_path() -> PathBuf {
     let exe = std::env::current_exe().unwrap_or_else(|_| PathBuf::from("."));
     let dir = exe.parent().unwrap_or_else(|| Path::new("."));
-    let suffix = if cfg!(windows) { ".exe" } else { "" };
+    let suffix = if cfg!(windows) { SUFFIX_EXE } else { SUFFIX_EMPTY };
     dir.join(format!(
         FMTP_MANAGER_BINARY,
         luoda_codex_core::install::MANAGER_BINARY,
