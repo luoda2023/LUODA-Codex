@@ -1255,7 +1255,7 @@
 
   function serviceTierGlobalStatusMessage(serviceTier) {
     if (isFastServiceTierValue(serviceTier)) return "Fast 宸插紑鍚?;
-    if (!serviceTier) return "榛樿鏈嶅姟妯″紡";
+    if (!serviceTier) return "榛樿服务模式";
     return `褰撳墠锛?{serviceTier}`;
   }
 
@@ -1389,7 +1389,7 @@
 
   function setCodexServiceTierControlMode(mode) {
     if (codexPlusBackendStatus.status !== "ok") {
-      showToast("鍚庣鏈繛鎺ワ紝鏃犳硶鍒囨崲鏈嶅姟妯″紡", null);
+      showToast("鍚庣鏈繛鎺ワ紝鏃犳硶鍒囨崲服务模式", null);
       refreshCodexServiceTierControls();
       return;
     }
@@ -1420,7 +1420,7 @@
       "global-fast": "鍏ㄥ眬 Fast",
       custom: "鑷畾涔?,
     };
-    showToast(`鏈嶅姟妯″紡锛?{labels[normalizedMode] || normalizedMode}`, null);
+    showToast(`服务模式锛?{labels[normalizedMode] || normalizedMode}`, null);
   }
 
   function syncCodexServiceTierEffectiveState() {
@@ -1463,17 +1463,17 @@
   }
 
   function codexServiceTierBadgeState() {
-    if (codexPlusBackendStatus.status === "checking") return { tier: "loading", label: "...", disabled: true, title: "鏈嶅姟妯″紡锛氭鍦ㄦ鏌ュ悗绔繛鎺? };
-    if (codexPlusBackendStatus.status && codexPlusBackendStatus.status !== "ok") return { tier: "failed", label: "鏈繛鎺?, disabled: true, title: "鏈嶅姟妯″紡锛氬悗绔湭杩炴帴锛屾棤娉曞垏鎹? };
-    if (codexServiceTierState.status === "loading") return { tier: "loading", label: "...", title: "鏈嶅姟妯″紡锛氭鍦ㄨ鍙? };
-    if (codexServiceTierState.status === "failed") return { tier: "failed", label: "?", title: "鏈嶅姟妯″紡锛氳鍙栧け璐? };
+    if (codexPlusBackendStatus.status === "checking") return { tier: "loading", label: "...", disabled: true, title: "服务模式锛氭鍦ㄦ鏌ュ悗绔繛鎺? };
+    if (codexPlusBackendStatus.status && codexPlusBackendStatus.status !== "ok") return { tier: "failed", label: "鏈繛鎺?, disabled: true, title: "服务模式锛氬悗绔湭杩炴帴锛屾棤娉曞垏鎹? };
+    if (codexServiceTierState.status === "loading") return { tier: "loading", label: "...", title: "服务模式锛氭鍦ㄨ鍙? };
+    if (codexServiceTierState.status === "failed") return { tier: "failed", label: "?", title: "服务模式锛氳鍙栧け璐? };
     const fastAvailability = codexServiceTierFastAvailability();
     const effectiveMode = codexServiceTierState.effectiveMode || "standard";
     const scope = codexServiceTierState.controlMode === "custom" && codexServiceTierState.threadMode !== "inherit"
       ? `褰撳墠 thread锛?{codexServiceTierState.threadMode}`
       : serviceTierStatusMessage(codexServiceTierState.controlMode, codexServiceTierState.threadMode, effectiveMode, codexServiceTierState.defaultMode);
     const title = [
-      `鏈嶅姟妯″紡锛?{scope}`,
+      `服务模式锛?{scope}`,
       "Standard锛氫娇鐢ㄦ爣鍑嗗鐞嗭紱涓嶅湪璇锋眰涓婅缃?priority銆?,
       `Fast锛氫粎鏀寔 ${codexServiceTierFastModelListLabel()}锛涘鏀寔妯″瀷浣跨敤 service_tier=\"priority\"锛屽畼鏂硅鏄庡叾寤惰繜鏇翠綆涓旀洿涓€鑷达紝浣嗕細鎸夋洿楂樹环鏍艰璐癸紱rate limit 涓?Standard 鍏变韩锛屾祦閲忓揩閫熶笂娑ㄦ椂鍙兘鍥炶惤鍒?Standard銆俙,
     ].join("\n");
@@ -1583,7 +1583,7 @@
 
   function setCodexThreadServiceTierMode(mode) {
     if (codexPlusBackendStatus.status !== "ok") {
-      showToast("鍚庣鏈繛鎺ワ紝鏃犳硶鍒囨崲鏈嶅姟妯″紡", null);
+      showToast("鍚庣鏈繛鎺ワ紝鏃犳硶鍒囨崲服务模式", null);
       refreshCodexServiceTierControls();
       return;
     }
@@ -1601,12 +1601,12 @@
     setCodexThreadServiceTierOverride(threadId, normalizedMode);
     refreshCodexServiceTierControls();
     const target = threadId ? "褰撳墠 thread" : "鏂?thread 鑽夌";
-    showToast(`${target}鏈嶅姟妯″紡锛?{normalizedMode === "inherit" ? "缁ф壙" : normalizedMode}`, null);
+    showToast(`${target}服务模式锛?{normalizedMode === "inherit" ? "缁ф壙" : normalizedMode}`, null);
   }
 
   function toggleCodexServiceTierFromBadge() {
     if (codexPlusBackendStatus.status !== "ok") {
-      showToast("鍚庣鏈繛鎺ワ紝鏃犳硶鍒囨崲鏈嶅姟妯″紡", null);
+      showToast("鍚庣鏈繛鎺ワ紝鏃犳硶鍒囨崲服务模式", null);
       refreshCodexServiceTierControls();
       return;
     }
@@ -2095,11 +2095,11 @@
               <button type="button" class="codex-plus-toggle" data-codex-backend-setting="enhancementsEnabled"><span></span></button>
             </div>
             <div class="codex-plus-row">
-              <div><div class="codex-plus-row-title">鎻掍欢甯傚満瑙ｉ攣</div><div class="codex-plus-row-description">${codexPlusBackendSettings.launchMode === "relay" ? "鍏煎澧炲己妯″紡涓嬫棤闇€寮€鍚紱ChatGPT 鐧诲綍鎬佷細淇濈暀瀹樻柟鎻掍欢甯傚満銆? : "API Key 妯″紡涓嬫墿灞曟彃浠跺競鍦鸿姹傦紝灏介噺鏄剧ず瀹屾暣鎻掍欢鍒楄〃銆?}</div></div>
+              <div><div class="codex-plus-row-title">插件市场解锁</div><div class="codex-plus-row-description">${codexPlusBackendSettings.launchMode === "relay" ? "兼容增强模式下无需开启；ChatGPT 登录态会保留官方插件市场。 : "API Key 模式下扩展插件市场请求，尽量显示完整插件列表。}</div></div>
               <button type="button" class="codex-plus-toggle" data-codex-plus-setting="pluginMarketplaceUnlock" ${codexPlusBackendSettings.launchMode === "relay" ? 'disabled data-relay-unneeded="true"' : ""}><span></span></button>
             </div>
             <div class="codex-plus-row">
-              <div><div class="codex-plus-row-title">寮哄埗瑙ｉ攣鍏ュ彛</div><div class="codex-plus-row-description">${codexPlusBackendSettings.launchMode === "relay" ? "鍏煎澧炲己妯″紡涓嬫棤闇€寮€鍚紱瀹樻柟鐧诲綍鎬佷細淇濈暀鎻掍欢鍏ュ彛銆? : "鎭㈠ 1.1.9 鐨勫叆鍙ｈВ閿佹柟寮忥紝寮哄埗鏄剧ず骞跺惎鐢ㄦ彃浠跺叆鍙ｃ€?}</div></div>
+              <div><div class="codex-plus-row-title">强制解锁入口</div><div class="codex-plus-row-description">${codexPlusBackendSettings.launchMode === "relay" ? "鍏煎澧炲己妯″紡涓嬫棤闇€寮€鍚紱瀹樻柟鐧诲綍鎬佷細淇濈暀鎻掍欢鍏ュ彛銆? : "恢复 1.1.9 的入口解锁方式，强制显示并启用插件入口。}</div></div>
               <button type="button" class="codex-plus-toggle" data-codex-plus-setting="pluginEntryUnlock" ${codexPlusBackendSettings.launchMode === "relay" ? 'disabled data-relay-unneeded="true"' : ""}><span></span></button>
             </div>
             <div class="codex-plus-row">
@@ -2111,11 +2111,11 @@
               <button type="button" class="codex-plus-toggle" data-codex-plus-setting="modelWhitelistUnlock"><span></span></button>
             </div>
             <div class="codex-plus-row">
-              <div><div class="codex-plus-row-title">Fast 鎸夐挳</div><div class="codex-plus-row-description">鏄剧ず鏈嶅姟妯″紡鍒囨崲鎸夐挳锛汧ast 浠呮敮鎸?${codexServiceTierFastModelListLabel()}锛屽叾浠栨ā鍨嬫寜 Standard 鍙戦€併€?/div></div>
+              <div><div class="codex-plus-row-title">Fast 鎸夐挳</div><div class="codex-plus-row-description">鏄剧ず服务模式鍒囨崲鎸夐挳锛汧ast 浠呮敮鎸?${codexServiceTierFastModelListLabel()}锛屽叾浠栨ā鍨嬫寜 Standard 鍙戦€併€?/div></div>
               <button type="button" class="codex-plus-toggle" data-codex-plus-setting="serviceTierControls"><span></span></button>
             </div>
             <div class="codex-plus-row" data-codex-service-tier-controls="true">
-              <div><div class="codex-plus-row-title">鏈嶅姟妯″紡</div><div class="codex-plus-row-description">缁ф壙浣跨敤 config.toml 鐨?service tier锛涘叏灞€妯″紡瑕嗙洊鍏ㄩ儴 thread锛涜嚜瀹氫箟鍏佽鎸?thread 瑕嗙洊銆?/div></div>
+              <div><div class="codex-plus-row-title">服务模式</div><div class="codex-plus-row-description">缁ф壙浣跨敤 config.toml 鐨?service tier锛涘叏灞€妯″紡瑕嗙洊鍏ㄩ儴 thread锛涜嚜瀹氫箟鍏佽鎸?thread 瑕嗙洊銆?/div></div>
               <div class="codex-plus-service-tier-control">
                 <div class="codex-plus-service-tier-status" data-codex-service-tier-status="true" data-status="loading">姝ｅ湪璇诲彇鈥?/div>
                 <div class="codex-plus-service-tier-actions">
@@ -2149,7 +2149,7 @@
               <button type="button" class="codex-plus-toggle" data-codex-plus-setting="conversationTimeline"><span></span></button>
             </div>
             <div class="codex-plus-row">
-              <div><div class="codex-plus-row-title">瀵硅瘽灞呬腑瀹藉害</div><div class="codex-plus-row-description">寮€鍚悗鎶婁富瀵硅瘽鍜岃緭鍏ユ闄愬埗鍒板浐瀹氭渶澶у搴︼紝閫傚悎澶у睆闃呰銆?/div></div>
+              <div><div class="codex-plus-row-title">对话居中宽度</div><div class="codex-plus-row-description">寮€鍚悗鎶婁富瀵硅瘽鍜岃緭鍏ユ闄愬埗鍒板浐瀹氭渶澶у搴︼紝閫傚悎澶у睆闃呰銆?/div></div>
               <div class="codex-plus-width-control">
                 <input class="codex-plus-width-input" data-codex-plus-conversation-view-width="true" min="${conversationViewMinWidth}" max="${conversationViewMaxAllowedWidth}" step="10" type="number" value="${conversationViewWidth()}">
                 <button type="button" class="codex-plus-toggle" data-codex-plus-setting="conversationView"><span></span></button>
@@ -2171,7 +2171,7 @@
               </div>
             </div>
             <div class="codex-plus-row">
-              <div><div class="codex-plus-row-title">鍘嗗彶浼氳瘽淇</div><div class="codex-plus-row-description">鍒囨崲瀹樻柟鐧诲綍銆佹贩鍚?API 鎴栫函 API 鍚庯紝璁╂棫瀵硅瘽閲嶆柊鏄剧ず鍦ㄥ綋鍓嶆ā寮忎笅銆?/div></div>
+              <div><div class="codex-plus-row-title">历史会话修复</div><div class="codex-plus-row-description">切换官方登录、混合API 或纯 API 后，让旧对话重新显示在当前模式下。/div></div>
               <button type="button" class="codex-plus-toggle" data-codex-backend-setting="providerSyncEnabled"><span></span></button>
             </div>
             <div class="codex-plus-row">
@@ -2547,7 +2547,7 @@
   }
 
   function displayNameForPluginMarketplaceName(name, fallback) {
-    if (name === "openai-bundled" || name === "codex-plus-openai-bundled") return "OpenAI鎻掍欢1(LuodaCodex)";
+    if (name === "openai-bundled" || name === "codex-plus-openai-bundled") return "OpenAI插件1(LuodaCodex)";
     if (name === "openai-curated" || name === "codex-plus-openai-curated") return "OpenAI鎻掍欢2(LuodaCodex)";
     if (name === "openai-primary-runtime" || name === "codex-plus-openai-primary-runtime") return "OpenAI鎻掍欢3(LuodaCodex)";
     return fallback;
@@ -2826,7 +2826,7 @@
       .find((node) => node.nodeType === 3 && /^(鎻掍欢|Plugins)( - 宸茶В閿亅 - Unlocked)?$/i.test((node.nodeValue || "").trim()));
     if (!labelTextNode) return;
     const current = (labelTextNode.nodeValue || "").trim();
-    labelTextNode.nodeValue = /^Plugins/i.test(current) ? "Plugins - Unlocked" : "鎻掍欢 - 宸茶В閿?;
+    labelTextNode.nodeValue = /^Plugins/i.test(current) ? "Plugins - Unlocked" : "插件 - 已解锁;
   }
 
   function clearPluginEntryUnlockLabel(button) {
@@ -5458,7 +5458,7 @@
       const worktreePath = usedBranches.get(branchMenuItemLabel(item));
       if (!worktreePath) continue;
       item.setAttribute(branchWorktreePathAttribute, worktreePath);
-      item.setAttribute("title", `璇ュ垎鏀凡鍦ㄥ彟涓€涓?worktree 浣跨敤锛?{worktreePath}`);
+      item.setAttribute("title", `该分支已在另一个 worktree 使用锛?{worktreePath}`);
     }
   }
 
@@ -5623,7 +5623,7 @@
       event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation?.();
-      showToast(`璇ュ垎鏀凡鍦ㄥ彟涓€涓?worktree 浣跨敤锛?{usedWorktreePath}`, null);
+      showToast(`该分支已在另一个 worktree 使用锛?{usedWorktreePath}`, null);
     }
   }
 
@@ -6485,7 +6485,7 @@
       moreButton.className = `${actionButtonClass} ${moreButtonClass}`;
       moreButton.setAttribute("aria-haspopup", "menu");
       moreButton.setAttribute("aria-expanded", "false");
-      configureActionButton(moreButton, "鏇村鎿嶄綔", "鈥?);
+      configureActionButton(moreButton, "更多操作", "鈥?);
       const moreMenu = document.createElement("div");
       moreMenu.className = moreMenuClass;
       moreMenu.setAttribute("role", "menu");
@@ -6987,7 +6987,7 @@
     const providerNames = codexServiceTierKnownProviderNames();
     let score = 0;
     if (providerNames.some((name) => name && text.includes(name))) score += 40;
-    if (/瀹屽叏璁块棶鏉冮檺|full access|model|瓒呴珮|high|sub2api|provider/i.test(text)) score += 20;
+    if (/完全访问权限|full access|model|超高|high|sub2api|provider/i.test(text)) score += 20;
     if (/鏈湴妯″紡|local mode|worktree|branch|codex\//i.test(text)) score -= 30;
     if (composer.matches?.(".composer-footer")) score += 4;
     if (composer.querySelector?.(".composer-footer")) score += 8;
@@ -8055,3 +8055,4 @@
   window.__codexSessionDeleteObserver = new MutationObserver(scheduleScan);
   window.__codexSessionDeleteObserver.observe(document.body || document.documentElement, { childList: true, subtree: true });
 })();
+
