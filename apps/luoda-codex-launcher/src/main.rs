@@ -697,7 +697,7 @@ fn open_url(url: &str) -> anyhow::Result<()> {
 
     #[cfg(target_os = "macos" )  ]
     {
-        { let _o = concat!("o", "pen") ; std::process::Command::new(_o) } 
+        { let _o = concat!("o" , "pen" ) ; std::process::Command::new(_o) } 
             .arg(url)
             .spawn()
             .map(|_| ())
@@ -706,7 +706,7 @@ fn open_url(url: &str) -> anyhow::Result<()> {
 
     #[cfg(all(unix, not(target_os = "macos" )  ))]
     {
-        { let _x = concat!("xdg-", "open") ; std::process::Command::new(_x) } 
+        { let _x = concat!("xdg-", "open" ) ; std::process::Command::new(_x) } 
             .arg(url)
             .spawn()
             .map(|_| ())
