@@ -3,7 +3,7 @@ export const BRAND = {
   shortName: "Luoda",
   tagline: "用 AI 点亮代码",
   description: "Luoda-Codex — 你的专属 AI 编程助手",
-  version: "1.2.4",
+  version: "2.0.1",
   colors: {
     primary: { hue: 262, saturation: 83, lightness: 58 },
     secondary: { hue: 38, saturation: 92, lightness: 50 },
