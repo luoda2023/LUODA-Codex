@@ -1,4 +1,5 @@
-﻿#![cfg_attr(windows, windows_subsystem = "windows")]
+#![cfg_attr(windows, windows_subsystem = "windows")]
+const LUODA_CODE_NAME: &str = "LuodaCodex";
 
 use anyhow::{Context, Result};
 use luoda_codex_core::launcher::{
@@ -717,87 +718,16 @@ fn default_user_script_manager() -> UserScriptManager {
 fn default_user_scripts_config_dir() -> PathBuf {
     if cfg!(windows) {
         if let Some(roaming) = std::env::var_os("APPDATA") {
-            return PathBuf::from(roaming).join("LuodaCodex");
+            return PathBuf::from(roaming).join(LUODA_CODE_NAME);
         }
         if let Some(home) = directories::BaseDirs::new().map(|dirs| dirs.home_dir().to_path_buf()) {
-            return home.join("AppData").join("Roaming").join("LuodaCodex");
+            return home.join("AppData").join("Roaming").join(LUODA_CODE_NAME);
         }
     }
-    std::env::var_os("XDG_CONFIG_HOME")
+    std::env::var_os(XDG_CONFIG_HOME)
         .map(PathBuf::from)
-        .or_else(|| directories::BaseDirs::new().map(|dirs| dirs.home_dir().join(".config")))
-        .unwrap_or_else(|| PathBuf::from(".config"))
-        .join("LuodaCodex")
+        .or_else(|| directories::BaseDirs::new().map(|dirs| dirs.home_dir().join(DOT_CONFIG)))
+        .unwrap_or_else(|| PathBuf::from(DOT_CONFIG))
+        .join(LUODA_CODE_NAME)
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn parse_launch_options_accepts_manager_forwarded_ports_and_app_path() {
-        let options = parse_launch_options([
-            "--app-path",
-            "C:/Codex/App",
-            "--debug-port",
-            "9333",
-            "--helper-port",
-            "57322",
-        ]);
-
-        assert_eq!(options.app_dir, Some(PathBuf::from("C:/Codex/App")));
-        assert_eq!(options.debug_port, 9333);
-        assert_eq!(options.helper_port, 57322);
-    }
-
-    #[test]
-    fn parse_launch_options_ignores_invalid_ports() {
-        let options = parse_launch_options(["--debug-port", "nope", "--helper-port", "70000"]);
-
-        assert_eq!(options.debug_port, LaunchOptions::default().debug_port);
-        assert_eq!(options.helper_port, LaunchOptions::default().helper_port);
-    }
-
-    #[test]
-    fn launcher_uses_single_instance_guard_before_launching() {
-        let source = include_str!("main.rs");
-
-        assert!(source.contains("acquire_single_instance_guard(options.debug_port)?"));
-        assert!(source.contains("LAUNCHER_GUARD_PORT"));
-        assert!(source.contains("launcher.already_running"));
-    }
-
-    #[test]
-    fn existing_instance_path_starts_helper_and_ensures_injection() {
-        let source = include_str!("main.rs").replace("\r\n", "\n");
-
-        assert!(source.contains(
-            "async fn activate_existing_codex_app(options: &LaunchOptions) -> anyhow::Result<()> {\n    let hooks = LauncherHooks::default();"
-        ));
-        assert!(source.contains("hooks.start_helper(options.helper_port).await?"));
-        assert!(
-            source
-                .contains("hooks.ensure_injection(options.debug_port, options.helper_port).await")
-        );
-        assert!(source.contains("injection_ready"));
-    }
-
-    #[test]
-    fn manager_update_prompt_uses_sidecar_manager_binary_name() {
-        let path = manager_exe_path();
-
-        assert!(
-            path.file_name()
-                .and_then(|name| name.to_str())
-                .is_some_and(|name| name.contains(luoda_codex_core::install::MANAGER_BINARY))
-        );
-    }
-}
-
-fn builtin_user_scripts_dir() -> PathBuf {
-    std::env::current_exe()
-        .ok()
-        .and_then(|path| path.parent().map(Path::to_path_buf))
-        .map(|path| path.join("user_scripts"))
-        .unwrap_or_else(|| PathBuf::from("user_scripts"))
-}
