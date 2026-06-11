@@ -1,6 +1,6 @@
 ﻿#![cfg_attr(windows, windows_subsystem = "windows" )  ]
 const L_NAME: &str = "LuodaCodex" ; 
-const XDG_CH: &str = "XDG_CONFIG_HOME" ; 
+const XDG_CH: &str = "XDG_CH" ; 
 const DOT_CFG: &str = ".config" ; 
 const US_SCRIPTS: &str = "user_scripts" ; 
 const APP_DATA: &str = "AppData" ; 
@@ -17,12 +17,6 @@ const PLATFORM_NOT_SUPPORTED: &str = "opening DevTools URL is not supported on t
 const DOT_CODEX: &str = ".codex" ; 
 const DOT_SQLITE: &str = "state_5.sqlite" ; 
 
-const L_NAME: &str = L_NAME;
-const XDG_CH: &str = XDG_CH;
-const DOT_CFG: &str = DOT_CFG;
-const US_SCRIPTS: &str = US_SCRIPTS;
-const APP_DATA: &str = APP_DATA;
-const ROAMING: &str = ROAMING;
 
 const LUODA_CODE_NAME: &str = L_NAME;
 
@@ -537,7 +531,7 @@ impl BridgeRuntimeService for LauncherRuntimeService {
             std::process::Command::new(&manager_path)
                 .creation_flags(luoda_codex_core::windows_create_no_window())
                 .spawn()
-                .map_err(|error| anyhow::anyhow!("鍚姩绠＄悊宸ュ叿澶辫触error}"))?;
+                .map_err(|error| anyhow::anyhow!("启动管理工具失败{error}"))?;
         }
         #[cfg(not(windows))]
         {
@@ -690,28 +684,32 @@ fn default_codex_db_path() -> PathBuf {
 
 
 fn open_url(url: &str) -> anyhow::Result<()> {
-    if cfg!(windows) {
+    #[cfg(windows)]
+    {
         return luoda_codex_core::windows_open_url(url)
             .map_err(|error| anyhow::anyhow!("failed to open DevTools URL: {error}"));
     }
 
-    if cfg!(TARGET_OS_MACOS) {
-        return std::process::Command::new(concat!("o", "pen" ) )
-            .arg(url)
-            .spawn()
-            .map(|_| ())
-            .map_err(|error| anyhow::anyhow!("failed to open DevTools URL: {error}"));
-    }
+    #[cfg(not(windows))]
+    {
+        if cfg!(target_os = "macos") {
+            return std::process::Command::new("open")
+                .arg(url)
+                .spawn()
+                .map(|_| ())
+                .map_err(|error| anyhow::anyhow!("failed to open DevTools URL: {error}"));
+        }
 
-    if cfg!(unix ) {
-        return std::process::Command::new(concat!("xdg-", "open" ) )
-            .arg(url)
-            .spawn()
-            .map(|_| ())
-            .map_err(|error| anyhow::anyhow!("failed to open DevTools URL: {error}"));
-    }
+        if cfg!(unix) {
+            return std::process::Command::new("xdg-open")
+                .arg(url)
+                .spawn()
+                .map(|_| ())
+                .map_err(|error| anyhow::anyhow!("failed to open DevTools URL: {error}"));
+        }
 
-    unreachable!()
+        unreachable!()
+    }
 }
 fn manager_exe_path() -> PathBuf {
     let exe = std::env::current_exe().unwrap_or_else(|_| PathBuf::from(DOT_CURRENT));
@@ -733,6 +731,15 @@ fn default_user_script_manager() -> UserScriptManager {
     )
 }
 
+
+fn builtin_user_scripts_dir() -> PathBuf {
+    std::env::current_exe()
+        .ok()
+        .and_then(|path| path.parent().map(Path::to_path_buf))
+        .map(|path| path.join("user_scripts"))
+        .unwrap_or_else(|| PathBuf::from("user_scripts"))
+}
+
 fn default_user_scripts_config_dir() -> PathBuf {
     if cfg!(windows) {
         if let Some(roaming) = std::env::var_os(APPDATA_CONST) {
@@ -742,10 +749,10 @@ fn default_user_scripts_config_dir() -> PathBuf {
             return home.join(APP_DATA).join(ROAMING).join(LUODA_CODE_NAME);
         }
     }
-    std::env::var_os(XDG_CONFIG_HOME)
+    std::env::var_os(XDG_CH)
         .map(PathBuf::from)
-        .or_else(|| directories::BaseDirs::new().map(|dirs| dirs.home_dir().join(DOT_CONFIG)))
-        .unwrap_or_else(|| PathBuf::from(DOT_CONFIG))
+        .or_else(|| directories::BaseDirs::new().map(|dirs| dirs.home_dir().join(DOT_CFG)))
+        .unwrap_or_else(|| PathBuf::from(DOT_CFG))
         .join(LUODA_CODE_NAME)
 }
 
