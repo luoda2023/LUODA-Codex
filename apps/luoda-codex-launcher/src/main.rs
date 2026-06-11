@@ -10,6 +10,7 @@ const US_SCRIPTS_JSON: &str = "user_scripts.json";
 const FMTP_MANAGER_BINARY: &str = "{}{}";
 const SUFFIX_EXE: &str = ".exe";
 const SUFFIX_EMPTY: &str = "";
+const DOT_CURRENT: &str = ".";
 
 const L_NAME: &str = L_NAME;
 const XDG_CH: &str = XDG_CH;
@@ -677,7 +678,7 @@ async fn try_inject_with_context(
 fn default_codex_db_path() -> PathBuf {
     directories::BaseDirs::new()
         .map(|dirs| dirs.home_dir().to_path_buf())
-        .unwrap_or_else(|| PathBuf::from("."))
+        .unwrap_or_else(|| PathBuf::from(DOT_CURRENT))
         .join(".codex")
         .join("state_5.sqlite")
 }
@@ -715,8 +716,8 @@ fn open_url(url: &str) -> anyhow::Result<()> {
 }
 
 fn manager_exe_path() -> PathBuf {
-    let exe = std::env::current_exe().unwrap_or_else(|_| PathBuf::from("."));
-    let dir = exe.parent().unwrap_or_else(|| Path::new("."));
+    let exe = std::env::current_exe().unwrap_or_else(|_| PathBuf::from(DOT_CURRENT));
+    let dir = exe.parent().unwrap_or_else(|| Path::new(DOT_CURRENT));
     let suffix = if cfg!(windows) { SUFFIX_EXE } else { SUFFIX_EMPTY };
     dir.join(format!(
         FMTP_MANAGER_BINARY,
