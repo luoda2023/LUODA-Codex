@@ -2196,6 +2196,7 @@ function UserScriptsScreen({ settings, market, actions }: { settings: SettingsRe
               <RefreshCw className="h-4 w-4" />
               刷新市场
             </Button>
+            <Button onClick={() => void actions.openExternalUrl("")} variant="secondary">
               <ExternalLink className="h-4 w-4" />
               投稿
             </Button>
@@ -2373,7 +2374,7 @@ function RecommendationsScreen({ ads, actions }: { ads: AdsResult | null; action
           <div className="recommend-hero">
             <div>
               <strong>{ads ? `已加载 ${items.length} 条推荐` : "尚未加载推荐内容"}</strong>
-            </div>
+                          </div>
             <Button onClick={() => void actions.refreshAds()}>
               <RefreshCw className="h-4 w-4" />
               刷新推荐
@@ -2547,7 +2548,20 @@ function AboutScreen({
           </Toolbar>
         </CardContent>
       </Panel>
-      
+      <Panel>
+          <div className="metric-list">
+            <Metric label="状态" value={update?.status ?? "not_checked"} />
+            <Metric label="最新版本" value={update?.latestVersion ?? "未检查"} />
+            <Metric label="资源" value={update?.assetName ?? "-"} />
+            <Metric label="进度" value={`${update?.progress ?? 0}%`} />
+          </div>
+          <Textarea className="log-view" readOnly value={update?.releaseSummary || update?.message || "尚未检查更新"} />
+          <Toolbar>
+            <Button onClick={() => void actions.checkUpdate()}>检查更新</Button>
+            <Button variant="secondary" onClick={() => void actions.performUpdate()}>下载并运行安装包</Button>
+          </Toolbar>
+        </CardContent>
+      </Panel>
       <LogsPanel logs={logs} actions={actions} />
       <DiagnosticsPanel diagnostics={diagnostics} actions={actions} />
     </>
