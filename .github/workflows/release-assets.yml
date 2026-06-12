@@ -42,8 +42,8 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force dist/windows/app | Out-Null
-          Copy-Item target/release/codex-plus-plus.exe dist/windows/app/
-          Copy-Item target/release/codex-plus-plus-manager.exe dist/windows/app/
+          Copy-Item target/release/luoda-codex.exe dist/windows/app/
+          Copy-Item target/release/luoda-codex-manager.exe dist/windows/app/
 
       - name: Build Windows installer
         shell: pwsh
@@ -54,7 +54,7 @@ jobs:
             $makensis = "makensis"
           }
           Push-Location scripts/installer/windows
-          & $makensis "/INPUTCHARSET" "UTF8" "/DVERSION=$version" CodexPlusPlus.nsi
+          & $makensis "/INPUTCHARSET" "UTF8" "/DVERSION=$version" Luoda-Codex.nsi
           Pop-Location
 
       - name: Upload Windows installer
@@ -112,7 +112,7 @@ jobs:
       - name: Verify macOS bundle structure
         run: |
           set -euo pipefail
-          for app in "dist/macos/stage/Codex++.app" "dist/macos/stage/Codex++ 管理工具.app"; do
+          for app in "dist/macos/stage/启动 Luoda-Codex.app" "dist/macos/stage/启动 Luoda-Codex 管理工具.app"; do
             test -f "$app/Contents/Info.plist"
             test -f "$app/Contents/PkgInfo"
             test -x "$app/Contents/MacOS/$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$app/Contents/Info.plist")"

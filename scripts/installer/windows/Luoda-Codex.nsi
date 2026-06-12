@@ -1,4 +1,4 @@
-﻿Unicode true
+Unicode true
 !include "MUI2.nsh"
 
 !ifndef VERSION
@@ -7,7 +7,7 @@
 !define ROOT "..\..\.."
 
 Name "Luoda-Codex"
-OutFile "${ROOT}\dist\windows\CodexPlusPlus-${VERSION}-windows-x64-setup.exe"
+OutFile "${ROOT}\dist\windows\Luoda-Codex-${VERSION}-windows-x64-setup.exe"
 InstallDir "$LOCALAPPDATA\Programs\Luoda-Codex"
 InstallDirRegKey HKCU "Software\Luoda-Codex" "InstallDir"
 RequestExecutionLevel admin
@@ -36,8 +36,8 @@ Section "Install"
   File "${ROOT}\dist\windows\app\luoda-codex.exe"
   File "${ROOT}\dist\windows\app\luoda-codex-manager.exe"
 
-  Delete "$DESKTOP\Luoda-Codex 绠＄悊宸ュ叿.lnk"
-  Delete "$SMPROGRAMS\Luoda-Codex\Luoda-Codex 绠＄悊宸ュ叿.lnk"
+  Delete "$DESKTOP\Luoda-Codex.lnk"
+  Delete "$DESKTOP\Luoda-Codex 管理工具.lnk"
 
   CreateShortcut "$DESKTOP\Luoda-Codex.lnk" "$INSTDIR\luoda-codex.exe" "" "$INSTDIR\luoda-codex.exe"
   CreateShortcut "$DESKTOP\Luoda-Codex 管理工具.lnk" "$INSTDIR\luoda-codex-manager.exe" "" "$INSTDIR\luoda-codex-manager.exe"
@@ -64,10 +64,8 @@ Section "Uninstall"
 
   Delete "$DESKTOP\Luoda-Codex.lnk"
   Delete "$DESKTOP\Luoda-Codex 管理工具.lnk"
-  Delete "$DESKTOP\Luoda-Codex 绠＄悊宸ュ叿.lnk"
   Delete "$SMPROGRAMS\Luoda-Codex\Luoda-Codex.lnk"
   Delete "$SMPROGRAMS\Luoda-Codex\Luoda-Codex 管理工具.lnk"
-  Delete "$SMPROGRAMS\Luoda-Codex\Luoda-Codex 绠＄悊宸ュ叿.lnk"
   Delete "$SMPROGRAMS\Luoda-Codex\卸载 Luoda-Codex.lnk"
   RMDir "$SMPROGRAMS\Luoda-Codex"
 

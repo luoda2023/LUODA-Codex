@@ -19,7 +19,6 @@ prepare_icon() {
   local iconset="$DIST/luoda-codex.iconset"
   rm -rf "$iconset"
   mkdir -p "$iconset"
-
   sips -z 16 16 "$ICON_SOURCE" --out "$iconset/icon_16x16.png" >/dev/null
   sips -z 32 32 "$ICON_SOURCE" --out "$iconset/icon_16x16@2x.png" >/dev/null
   sips -z 32 32 "$ICON_SOURCE" --out "$iconset/icon_32x32.png" >/dev/null
@@ -30,7 +29,6 @@ prepare_icon() {
   sips -z 512 512 "$ICON_SOURCE" --out "$iconset/icon_256x256@2x.png" >/dev/null
   sips -z 512 512 "$ICON_SOURCE" --out "$iconset/icon_512x512.png" >/dev/null
   sips -z 1024 1024 "$ICON_SOURCE" --out "$iconset/icon_512x512@2x.png" >/dev/null
-
   iconutil -c icns "$iconset" -o "$ICON_ICNS"
 }
 
@@ -101,7 +99,7 @@ verify_app() {
   local app_dir="$1"
   local plist="$app_dir/Contents/Info.plist"
   local plutil_bin
-  plutil_bin="$(command -v plutil || true)"
+  plutil_bin="$(command -v plutil)"
   if [ -n "$plutil_bin" ]; then
     "$plutil_bin" -lint "$plist" >/dev/null
   else
@@ -118,15 +116,15 @@ verify_app() {
 }
 
 prepare_icon
-create_app "Luoda-Codex" "Luoda-Codex" "$BINARY_DIR/luoda-codex" "com.luodadev.luodacodex" "true"
-create_app "Luoda-Codex 管理工具" "Luoda-CodexManager" "$BINARY_DIR/luoda-codex-manager" "com.luodadev.luodacodex.manager" "false"
+create_app "启动 Luoda-Codex" "Luoda-Codex" "$BINARY_DIR/luoda-codex" "com.luodadev.luodacodex" "true"
+create_app "启动 Luoda-Codex 管理工具" "Luoda-CodexManager" "$BINARY_DIR/luoda-codex-manager" "com.luodadev.luodacodex.manager" "false"
 ln -s /Applications "$STAGE/Applications"
 
-sign_app "$STAGE/Luoda-Codex.app"
-sign_app "$STAGE/Luoda-Codex 管理工具.app"
+sign_app "$STAGE/启动 Luoda-Codex.app"
+sign_app "$STAGE/启动 Luoda-Codex 管理工具.app"
 
-verify_app "$STAGE/Luoda-Codex.app"
-verify_app "$STAGE/Luoda-Codex 管理工具.app"
+verify_app "$STAGE/启动 Luoda-Codex.app"
+verify_app "$STAGE/启动 Luoda-Codex 管理工具.app"
 
 hdiutil create -volname "Luoda-Codex" -srcfolder "$STAGE" -ov -format UDZO "$DMG"
 echo "$DMG"
