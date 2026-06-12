@@ -281,7 +281,7 @@ pub fn launch_installer(path: &Path) -> anyhow::Result<()> {
             .creation_flags(crate::windows_integration::CREATE_NO_WINDOW)
             .spawn()
             .map(|_| ())
-            .map_err(|error| anyhow::anyhow!("鍚姩瀹夎鍖呭け璐ワ細{error}"))
+            .map_err(|error| anyhow::anyhow!("打开 DMG 失败：{error}"))
     }
 
     #[cfg(target_os = "macos")]
@@ -290,12 +290,12 @@ pub fn launch_installer(path: &Path) -> anyhow::Result<()> {
             .arg(path)
             .spawn()
             .map(|_| ())
-            .map_err(|error| anyhow::anyhow!("鎵撳紑 DMG 澶辫触锛歿error}"))
+            .map_err(|error| anyhow::anyhow!("打开 DMG 失败：{error}"))
     }
 
     #[cfg(all(not(windows), not(target_os = "macos")))]
     {
         let _ = path;
-        anyhow::bail!("褰撳墠骞冲彴涓嶆敮鎸佸惎鍔ㄥ畨瑁呭寘")
+        anyhow::bail!("签名验证失败，无法继续安装")
     }
 }
