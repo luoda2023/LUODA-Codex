@@ -2196,7 +2196,6 @@ function UserScriptsScreen({ settings, market, actions }: { settings: SettingsRe
               <RefreshCw className="h-4 w-4" />
               刷新市场
             </Button>
-            <Button onClick={() => void actions.openExternalUrl(DUMMY_URL)} variant="secondary">
               <ExternalLink className="h-4 w-4" />
               投稿
             </Button>
@@ -2374,7 +2373,6 @@ function RecommendationsScreen({ ads, actions }: { ads: AdsResult | null; action
           <div className="recommend-hero">
             <div>
               <strong>{ads ? `已加载 ${items.length} 条推荐` : "尚未加载推荐内容"}</strong>
-              
             </div>
             <Button onClick={() => void actions.refreshAds()}>
               <RefreshCw className="h-4 w-4" />
@@ -2549,6 +2547,7 @@ function AboutScreen({
           </Toolbar>
         </CardContent>
       </Panel>
+      
       <LogsPanel logs={logs} actions={actions} />
       <DiagnosticsPanel diagnostics={diagnostics} actions={actions} />
     </>
