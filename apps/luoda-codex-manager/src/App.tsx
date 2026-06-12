@@ -2549,6 +2549,8 @@ function AboutScreen({
         </CardContent>
       </Panel>
       <Panel>
+        <CardHead title="更新信息" detail={当前版本 } />
+        <CardContent>
           <div className="metric-list">
             <Metric label="状态" value={update?.status ?? "not_checked"} />
             <Metric label="最新版本" value={update?.latestVersion ?? "未检查"} />
