@@ -245,7 +245,7 @@ Yes. Releases provide both `macos-x64.dmg` and `macos-arm64.dmg`. Intel Macs sho
 
 ```bash
 # Frontend checks
-cd apps/codex-plus-manager
+cd apps/luoda-codex-manager
 npm install
 npm run check
 npm run vite:build
@@ -261,13 +261,13 @@ Project structure:
 
 ```text
 apps/
-  codex-plus-launcher/          Silent launcher
-  codex-plus-manager/           Tauri manager
+  luoda-codex-launcher/          Silent launcher
+  luoda-codex-manager/           Tauri manager
 assets/inject/
   renderer-inject.js            Enhancement script injected into Codex
 crates/
-  codex-plus-core/              Launch, injection, config, update, install, bridge
-  codex-plus-data/              Session data, export, Provider Sync
+  luoda-codex-core/              Launch, injection, config, update, install, bridge
+  luoda-codex-data/              Session data, export, Provider Sync
 scripts/installer/
   windows/Luoda-Codex.nsi     Windows NSIS installer
   macos/package-dmg.sh          macOS DMG packager

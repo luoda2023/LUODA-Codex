@@ -78,11 +78,11 @@ Add tests at the script level first:
 
 Run these checks:
 
-- `cargo test -p codex-plus-core --test upstream_worktree`
-- `cargo test -p codex-plus-core --test cdp_bridge`
-- `cargo test -p codex-plus-core --test bridge_routes`
+- `cargo test -p luoda-codex-core --test upstream_worktree`
+- `cargo test -p luoda-codex-core --test cdp_bridge`
+- `cargo test -p luoda-codex-core --test bridge_routes`
 - `node --check assets/inject/renderer-inject.js`
-- `cargo test -p codex-plus-core`
+- `cargo test -p luoda-codex-core`
 
 ## Out of Scope
 

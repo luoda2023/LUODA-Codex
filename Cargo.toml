@@ -1,10 +1,10 @@
 ﻿[workspace]
 resolver = "2"
 members = [
-  "crates/codex-plus-core",
-  "crates/codex-plus-data",
-  "apps/codex-plus-launcher",
-  "apps/codex-plus-manager/src-tauri",
+  "crates/luoda-codex-core",
+  "crates/luoda-codex-data",
+  "apps/luoda-codex-launcher",
+  "apps/luoda-codex-manager/src-tauri",
 ]
 
 [workspace.package]

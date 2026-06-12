@@ -4,7 +4,7 @@
 
 **Architecture:** Split plugin-related injection into three independently controlled layers: current marketplace request/filter patching, restored legacy plugin entry unlocking, and force install button unlocking. Backend settings persist each layer independently, while the injected Codex++ menu and manager settings expose clear toggles.
 
-**Tech Stack:** Rust settings persistence (`codex-plus-core`), Tauri manager commands/UI, React/TypeScript manager UI, and runtime JavaScript injection in `assets/inject/renderer-inject.js`.
+**Tech Stack:** Rust settings persistence (`luoda-codex-core`), Tauri manager commands/UI, React/TypeScript manager UI, and runtime JavaScript injection in `assets/inject/renderer-inject.js`.
 
 ---
 
@@ -68,7 +68,7 @@ Current code has these relevant pieces:
     - `clearPluginEntryUnlockLabel`
     - `enablePluginEntry`
 
-- `crates/codex-plus-core/src/settings.rs`
+- `crates/luoda-codex-core/src/settings.rs`
   - Already has `codex_app_plugin_entry_unlock` and `codex_app_force_plugin_install`.
   - Needs `codex_app_plugin_marketplace_unlock`.
 
@@ -170,10 +170,10 @@ Diagnostics must not include tokens or sensitive config values.
    - `scanDeferred()` invokes all three independent paths.
 
 3. Verification commands:
-   - `cargo test -p codex-plus-core settings`
-   - `cargo test -p codex-plus-core cdp_bridge -- --nocapture` if injection static tests live there
-   - `cargo check -p codex-plus-manager`
-   - `npm --prefix apps/codex-plus-manager run check`
+   - `cargo test -p luoda-codex-core settings`
+   - `cargo test -p luoda-codex-core cdp_bridge -- --nocapture` if injection static tests live there
+   - `cargo check -p luoda-codex-manager`
+   - `npm --prefix apps/luoda-codex-manager run check`
 
 ## Out of Scope
 

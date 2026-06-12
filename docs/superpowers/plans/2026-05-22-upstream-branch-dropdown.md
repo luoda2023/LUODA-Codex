@@ -6,19 +6,19 @@
 
 **Architecture:** Extend the existing upstream worktree backend defaults with structured upstream refs, then add a conservative renderer adapter that injects `Upstream` options into native branch menus and records the selected upstream ref for the existing native-create interception path. Keep the manual Codex++ dialog as fallback for now, but make the native dropdown path the primary UX.
 
-**Tech Stack:** Rust `codex-plus-core`, JSON bridge routes, plain JavaScript renderer injection, `cargo test`, `node --check`.
+**Tech Stack:** Rust `luoda-codex-core`, JSON bridge routes, plain JavaScript renderer injection, `cargo test`, `node --check`.
 
 ---
 
 ### Task 1: Backend defaults expose upstream refs
 
 **Files:**
-- Modify: `crates/codex-plus-core/src/upstream_worktree/defaults.rs`
-- Test: `crates/codex-plus-core/tests/upstream_worktree.rs`
+- Modify: `crates/luoda-codex-core/src/upstream_worktree/defaults.rs`
+- Test: `crates/luoda-codex-core/tests/upstream_worktree.rs`
 
 - [ ] **Step 1: Write failing test**
 
-Add this test to `crates/codex-plus-core/tests/upstream_worktree.rs`:
+Add this test to `crates/luoda-codex-core/tests/upstream_worktree.rs`:
 
 ```rust
 #[test]
@@ -54,7 +54,7 @@ fn defaults_response_lists_preferred_upstream_ref_for_current_branch() {
 Run:
 
 ```bash
-env -u CFLAGS -u CPPFLAGS -u LDFLAGS rustup run "1.95.0" cargo test -p codex-plus-core --test upstream_worktree defaults_response_lists_preferred_upstream_ref_for_current_branch
+env -u CFLAGS -u CPPFLAGS -u LDFLAGS rustup run "1.95.0" cargo test -p luoda-codex-core --test upstream_worktree defaults_response_lists_preferred_upstream_ref_for_current_branch
 ```
 
 Expected: fails because `upstreamRefs` is missing.
@@ -99,7 +99,7 @@ Run the same single test. Expected: PASS.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add crates/codex-plus-core/src/upstream_worktree/defaults.rs crates/codex-plus-core/tests/upstream_worktree.rs
+git add crates/luoda-codex-core/src/upstream_worktree/defaults.rs crates/luoda-codex-core/tests/upstream_worktree.rs
 git commit -m "feat(worktree): expose upstream refs in defaults"
 ```
 
@@ -107,11 +107,11 @@ git commit -m "feat(worktree): expose upstream refs in defaults"
 
 **Files:**
 - Modify: `assets/inject/renderer-inject.js`
-- Test: `crates/codex-plus-core/tests/cdp_bridge.rs`
+- Test: `crates/luoda-codex-core/tests/cdp_bridge.rs`
 
 - [ ] **Step 1: Write failing script-marker test**
 
-Add this test to `crates/codex-plus-core/tests/cdp_bridge.rs`:
+Add this test to `crates/luoda-codex-core/tests/cdp_bridge.rs`:
 
 ```rust
 #[test]
@@ -130,7 +130,7 @@ fn injection_script_installs_upstream_branch_dropdown_adapter() {
 Run:
 
 ```bash
-env -u CFLAGS -u CPPFLAGS -u LDFLAGS rustup run "1.95.0" cargo test -p codex-plus-core --test cdp_bridge injection_script_installs_upstream_branch_dropdown_adapter
+env -u CFLAGS -u CPPFLAGS -u LDFLAGS rustup run "1.95.0" cargo test -p luoda-codex-core --test cdp_bridge injection_script_installs_upstream_branch_dropdown_adapter
 ```
 
 Expected: fails because adapter names and markers are not present.
@@ -204,7 +204,7 @@ Run the single cdp bridge marker test. Expected: PASS.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add assets/inject/renderer-inject.js crates/codex-plus-core/tests/cdp_bridge.rs
+git add assets/inject/renderer-inject.js crates/luoda-codex-core/tests/cdp_bridge.rs
 git commit -m "feat(worktree): install upstream branch dropdown adapter"
 ```
 
@@ -212,7 +212,7 @@ git commit -m "feat(worktree): install upstream branch dropdown adapter"
 
 **Files:**
 - Modify: `assets/inject/renderer-inject.js`
-- Test: `crates/codex-plus-core/tests/cdp_bridge.rs`
+- Test: `crates/luoda-codex-core/tests/cdp_bridge.rs`
 
 - [ ] **Step 1: Write failing marker test**
 
@@ -306,7 +306,7 @@ Run the cdp bridge test. Expected: PASS.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add assets/inject/renderer-inject.js crates/codex-plus-core/tests/cdp_bridge.rs
+git add assets/inject/renderer-inject.js crates/luoda-codex-core/tests/cdp_bridge.rs
 git commit -m "feat(worktree): inject upstream branch menu options"
 ```
 
@@ -314,7 +314,7 @@ git commit -m "feat(worktree): inject upstream branch menu options"
 
 **Files:**
 - Modify: `assets/inject/renderer-inject.js`
-- Test: `crates/codex-plus-core/tests/cdp_bridge.rs`
+- Test: `crates/luoda-codex-core/tests/cdp_bridge.rs`
 
 - [ ] **Step 1: Write failing marker test**
 
@@ -369,7 +369,7 @@ Run the cdp bridge test. Expected: PASS.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add assets/inject/renderer-inject.js crates/codex-plus-core/tests/cdp_bridge.rs
+git add assets/inject/renderer-inject.js crates/luoda-codex-core/tests/cdp_bridge.rs
 git commit -m "feat(worktree): route native create from upstream selection"
 ```
 
@@ -382,8 +382,8 @@ git commit -m "feat(worktree): route native create from upstream selection"
 
 ```bash
 env -u CFLAGS -u CPPFLAGS -u LDFLAGS rustup run "1.95.0" cargo fmt --check
-env -u CFLAGS -u CPPFLAGS -u LDFLAGS rustup run "1.95.0" cargo test -p codex-plus-core --test upstream_worktree
-env -u CFLAGS -u CPPFLAGS -u LDFLAGS rustup run "1.95.0" cargo test -p codex-plus-core --test cdp_bridge
+env -u CFLAGS -u CPPFLAGS -u LDFLAGS rustup run "1.95.0" cargo test -p luoda-codex-core --test upstream_worktree
+env -u CFLAGS -u CPPFLAGS -u LDFLAGS rustup run "1.95.0" cargo test -p luoda-codex-core --test cdp_bridge
 node --check "assets/inject/renderer-inject.js"
 ```
 
@@ -392,7 +392,7 @@ Expected: all PASS.
 - [ ] **Step 2: Run full core tests**
 
 ```bash
-env -u CFLAGS -u CPPFLAGS -u LDFLAGS rustup run "1.95.0" cargo test -p codex-plus-core
+env -u CFLAGS -u CPPFLAGS -u LDFLAGS rustup run "1.95.0" cargo test -p luoda-codex-core
 ```
 
 Expected: PASS.
@@ -400,9 +400,9 @@ Expected: PASS.
 - [ ] **Step 3: Build and package**
 
 ```bash
-npm install --prefix "apps/codex-plus-manager"
-npm run --prefix "apps/codex-plus-manager" check
-npm run --prefix "apps/codex-plus-manager" vite:build
+npm install --prefix "apps/luoda-codex-manager"
+npm run --prefix "apps/luoda-codex-manager" check
+npm run --prefix "apps/luoda-codex-manager" vite:build
 env -u CFLAGS -u CPPFLAGS -u LDFLAGS rustup run "1.95.0" cargo build --release
 bash "scripts/installer/macos/package-dmg.sh" "1.1.5-local-upstream-dropdown" "$(uname -m)"
 ```
@@ -433,7 +433,7 @@ python3 - <<'PY'
 from pathlib import Path
 import shutil
 root = Path('/Users/carson/.codex/worktrees/b4e7/CodexPlusPlus')
-for rel in ['apps/codex-plus-manager/node_modules', 'apps/codex-plus-manager/package-lock.json']:
+for rel in ['apps/luoda-codex-manager/node_modules', 'apps/luoda-codex-manager/package-lock.json']:
     path = root / rel
     if path.is_dir():
         shutil.rmtree(path)

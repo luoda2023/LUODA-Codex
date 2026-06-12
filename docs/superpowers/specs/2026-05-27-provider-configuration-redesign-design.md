@@ -24,9 +24,9 @@ The redesign aims for high compatibility with cc-switch’s provider model and i
 
 ## Current State
 
-Today provider-like data is stored in `BackendSettings.relayProfiles` and selected by `activeRelayId` in `crates/codex-plus-core/src/settings.rs`. Each relay profile mixes persisted provider details with runtime-oriented relay configuration fields such as base URL, API key, protocol, auth/config text, and context-related relay options.
+Today provider-like data is stored in `BackendSettings.relayProfiles` and selected by `activeRelayId` in `crates/luoda-codex-core/src/settings.rs`. Each relay profile mixes persisted provider details with runtime-oriented relay configuration fields such as base URL, API key, protocol, auth/config text, and context-related relay options.
 
-The manager UI exposes settings and relay-related behavior through `apps/codex-plus-manager/src/App.tsx`, but there is no dedicated standalone provider resource layer. The backend already contains an external import path in `apps/codex-plus-manager/src-tauri/src/commands.rs` and `crates/codex-plus-core/src/ccs_import.rs`, but imports currently materialize as relay profiles.
+The manager UI exposes settings and relay-related behavior through `apps/luoda-codex-manager/src/App.tsx`, but there is no dedicated standalone provider resource layer. The backend already contains an external import path in `apps/luoda-codex-manager/src-tauri/src/commands.rs` and `crates/luoda-codex-core/src/ccs_import.rs`, but imports currently materialize as relay profiles.
 
 This creates three problems:
 

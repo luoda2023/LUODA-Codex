@@ -32,8 +32,8 @@ Thank you for your interest in contributing to Luoda-Codex!
 ```
 Luoda-Codex/
 鈹溾攢鈹€ crates/
-鈹?  鈹溾攢鈹€ codex-plus-data/    # Data handling and provider sync
-鈹?  鈹斺攢鈹€ codex-plus-core/    # Core Luoda-Codex logic
+鈹?  鈹溾攢鈹€ luoda-codex-data/    # Data handling and provider sync
+鈹?  鈹斺攢鈹€ luoda-codex-core/    # Core Luoda-Codex logic
 鈹斺攢鈹€ README.md               # Project documentation
 ```
 

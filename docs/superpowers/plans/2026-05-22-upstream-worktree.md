@@ -4,7 +4,7 @@
 
 **Goal:** Add a Codex++ enhancement that creates new Git worktrees from a fresh remote tracking ref such as `upstream/main` instead of stale local `HEAD`.
 
-**Architecture:** Add a focused Rust `upstream_worktree` module in `codex-plus-core`, expose it through existing bridge routes, wire the launcher runtime to those routes, then add a guarded renderer menu workflow. The backend uses argument-array Git commands and an explicit fetch refspec so the created worktree is equivalent to `git worktree add -b <branch> <path> upstream/<base>` with a freshly updated `upstream/<base>` ref.
+**Architecture:** Add a focused Rust `upstream_worktree` module in `luoda-codex-core`, expose it through existing bridge routes, wire the launcher runtime to those routes, then add a guarded renderer menu workflow. The backend uses argument-array Git commands and an explicit fetch refspec so the created worktree is equivalent to `git worktree add -b <branch> <path> upstream/<base>` with a freshly updated `upstream/<base>` ref.
 
 **Tech Stack:** Rust 2024, `std::process::Command`, existing `serde_json` bridge routing, existing injected `assets/inject/renderer-inject.js`, Cargo tests, `node --check` for renderer syntax validation.
 
@@ -12,12 +12,12 @@
 
 ## File Structure
 
-- Create `crates/codex-plus-core/src/upstream_worktree.rs`: Git validation, defaults, worktree creation, JSON response shaping.
-- Modify `crates/codex-plus-core/src/lib.rs`: export the new module.
-- Create `crates/codex-plus-core/tests/upstream_worktree.rs`: integration-style tests using temporary Git repositories.
-- Modify `crates/codex-plus-core/src/routes.rs`: add bridge trait methods and route dispatch for upstream worktree endpoints.
-- Modify `apps/codex-plus-launcher/src/main.rs`: implement the new bridge runtime methods for the launcher runtime.
-- Modify `crates/codex-plus-core/tests/bridge_routes.rs`: cover all new routes and fake runtime behavior.
+- Create `crates/luoda-codex-core/src/upstream_worktree.rs`: Git validation, defaults, worktree creation, JSON response shaping.
+- Modify `crates/luoda-codex-core/src/lib.rs`: export the new module.
+- Create `crates/luoda-codex-core/tests/upstream_worktree.rs`: integration-style tests using temporary Git repositories.
+- Modify `crates/luoda-codex-core/src/routes.rs`: add bridge trait methods and route dispatch for upstream worktree endpoints.
+- Modify `apps/luoda-codex-launcher/src/main.rs`: implement the new bridge runtime methods for the launcher runtime.
+- Modify `crates/luoda-codex-core/tests/bridge_routes.rs`: cover all new routes and fake runtime behavior.
 - Modify `assets/inject/renderer-inject.js`: add setting, menu row, modal, backend calls, and guarded native adapter stub.
 - Modify `README.md` and `README_EN.md`: document the user-facing enhancement after tests pass.
 
@@ -28,13 +28,13 @@ The backend and bridge work is independent from the renderer work. Implement tas
 ### Task 1: Add upstream worktree core API and validation
 
 **Files:**
-- Create: `crates/codex-plus-core/src/upstream_worktree.rs`
-- Modify: `crates/codex-plus-core/src/lib.rs`
-- Test: `crates/codex-plus-core/tests/upstream_worktree.rs`
+- Create: `crates/luoda-codex-core/src/upstream_worktree.rs`
+- Modify: `crates/luoda-codex-core/src/lib.rs`
+- Test: `crates/luoda-codex-core/tests/upstream_worktree.rs`
 
 - [ ] **Step 1: Write failing validation tests**
 
-Create `crates/codex-plus-core/tests/upstream_worktree.rs` with this initial content:
+Create `crates/luoda-codex-core/tests/upstream_worktree.rs` with this initial content:
 
 ```rust
 use codex_plus_core::upstream_worktree::{
@@ -76,14 +76,14 @@ fn default_remote_prefers_upstream_then_origin_then_first_remote() {
 Run:
 
 ```bash
-cargo test -p codex-plus-core --test upstream_worktree
+cargo test -p luoda-codex-core --test upstream_worktree
 ```
 
 Expected: FAIL because `codex_plus_core::upstream_worktree` does not exist.
 
 - [ ] **Step 3: Export the module**
 
-Add this line to `crates/codex-plus-core/src/lib.rs` near the other `pub mod` declarations:
+Add this line to `crates/luoda-codex-core/src/lib.rs` near the other `pub mod` declarations:
 
 ```rust
 pub mod upstream_worktree;
@@ -91,7 +91,7 @@ pub mod upstream_worktree;
 
 - [ ] **Step 4: Implement core types and validation**
 
-Create `crates/codex-plus-core/src/upstream_worktree.rs` with:
+Create `crates/luoda-codex-core/src/upstream_worktree.rs` with:
 
 ```rust
 use std::ffi::OsString;
@@ -287,7 +287,7 @@ fn git_in_repo(repo: &Path, args: &[&str]) -> Result<GitOutput, std::io::Error> 
 Run:
 
 ```bash
-cargo test -p codex-plus-core --test upstream_worktree branch_validation source_ref default_remote
+cargo test -p luoda-codex-core --test upstream_worktree branch_validation source_ref default_remote
 ```
 
 Expected: PASS for the four tests in this task.
@@ -297,7 +297,7 @@ Expected: PASS for the four tests in this task.
 Run:
 
 ```bash
-git add "crates/codex-plus-core/src/lib.rs" "crates/codex-plus-core/src/upstream_worktree.rs" "crates/codex-plus-core/tests/upstream_worktree.rs"
+git add "crates/luoda-codex-core/src/lib.rs" "crates/luoda-codex-core/src/upstream_worktree.rs" "crates/luoda-codex-core/tests/upstream_worktree.rs"
 git commit -m "feat(worktree): add upstream worktree validation core"
 ```
 
@@ -306,12 +306,12 @@ git commit -m "feat(worktree): add upstream worktree validation core"
 ### Task 2: Add Git defaults and upstream worktree creation
 
 **Files:**
-- Modify: `crates/codex-plus-core/src/upstream_worktree.rs`
-- Modify: `crates/codex-plus-core/tests/upstream_worktree.rs`
+- Modify: `crates/luoda-codex-core/src/upstream_worktree.rs`
+- Modify: `crates/luoda-codex-core/tests/upstream_worktree.rs`
 
 - [ ] **Step 1: Add failing Git integration tests**
 
-Append this code to `crates/codex-plus-core/tests/upstream_worktree.rs`:
+Append this code to `crates/luoda-codex-core/tests/upstream_worktree.rs`:
 
 ```rust
 use std::path::Path;
@@ -465,14 +465,14 @@ fn create_response_does_not_create_worktree_when_fetch_fails() {
 Run:
 
 ```bash
-cargo test -p codex-plus-core --test upstream_worktree
+cargo test -p luoda-codex-core --test upstream_worktree
 ```
 
 Expected: FAIL because `status_response`, `defaults_response`, and `create_response` are not implemented.
 
 - [ ] **Step 3: Implement Git discovery and response helpers**
 
-Append these functions to `crates/codex-plus-core/src/upstream_worktree.rs`:
+Append these functions to `crates/luoda-codex-core/src/upstream_worktree.rs`:
 
 ```rust
 fn git_available() -> bool {
@@ -568,7 +568,7 @@ fn defaults_for_repo(repo_path: &Path) -> UpstreamWorktreeResult<Value> {
 
 - [ ] **Step 4: Implement create flow**
 
-Append these functions to `crates/codex-plus-core/src/upstream_worktree.rs`:
+Append these functions to `crates/luoda-codex-core/src/upstream_worktree.rs`:
 
 ```rust
 fn normalize_worktree_path(repo_root: &Path, path: &Path) -> PathBuf {
@@ -709,7 +709,7 @@ fn create_worktree(payload: &Value) -> UpstreamWorktreeResult<Value> {
 Run:
 
 ```bash
-cargo test -p codex-plus-core --test upstream_worktree
+cargo test -p luoda-codex-core --test upstream_worktree
 ```
 
 Expected: PASS for all upstream worktree tests.
@@ -719,7 +719,7 @@ Expected: PASS for all upstream worktree tests.
 Run:
 
 ```bash
-git add "crates/codex-plus-core/src/upstream_worktree.rs" "crates/codex-plus-core/tests/upstream_worktree.rs"
+git add "crates/luoda-codex-core/src/upstream_worktree.rs" "crates/luoda-codex-core/tests/upstream_worktree.rs"
 git commit -m "feat(worktree): create worktrees from upstream refs"
 ```
 
@@ -728,13 +728,13 @@ git commit -m "feat(worktree): create worktrees from upstream refs"
 ### Task 3: Expose upstream worktree bridge routes
 
 **Files:**
-- Modify: `crates/codex-plus-core/src/routes.rs`
-- Modify: `apps/codex-plus-launcher/src/main.rs`
-- Modify: `crates/codex-plus-core/tests/bridge_routes.rs`
+- Modify: `crates/luoda-codex-core/src/routes.rs`
+- Modify: `apps/luoda-codex-launcher/src/main.rs`
+- Modify: `crates/luoda-codex-core/tests/bridge_routes.rs`
 
 - [ ] **Step 1: Write failing bridge route expectations**
 
-In `crates/codex-plus-core/tests/bridge_routes.rs`, add these route cases to `bridge_routes_cover_all_current_paths()` after the Zed remote cases:
+In `crates/luoda-codex-core/tests/bridge_routes.rs`, add these route cases to `bridge_routes_cover_all_current_paths()` after the Zed remote cases:
 
 ```rust
         ("/upstream-worktree/status", json!({})),
@@ -849,14 +849,14 @@ Add these methods to the `impl BridgeRuntimeService for FakeRuntime` block:
 Run:
 
 ```bash
-cargo test -p codex-plus-core --test bridge_routes upstream_worktree_routes_are_dispatched_to_runtime
+cargo test -p luoda-codex-core --test bridge_routes upstream_worktree_routes_are_dispatched_to_runtime
 ```
 
 Expected: FAIL because the trait and dispatch routes do not exist.
 
 - [ ] **Step 3: Add bridge trait methods and route dispatch**
 
-In `crates/codex-plus-core/src/routes.rs`, add these methods to `BridgeRuntimeService` after the Zed methods:
+In `crates/luoda-codex-core/src/routes.rs`, add these methods to `BridgeRuntimeService` after the Zed methods:
 
 ```rust
     async fn upstream_worktree_status(&self) -> anyhow::Result<Value>;
@@ -892,7 +892,7 @@ In `impl BridgeRuntimeService for CoreRuntimeService`, add:
 
 - [ ] **Step 4: Wire launcher runtime methods**
 
-In `apps/codex-plus-launcher/src/main.rs`, add these methods to the `impl BridgeRuntimeService for LauncherRuntimeService` block after `open_zed_remote`:
+In `apps/luoda-codex-launcher/src/main.rs`, add these methods to the `impl BridgeRuntimeService for LauncherRuntimeService` block after `open_zed_remote`:
 
 ```rust
     async fn upstream_worktree_status(&self) -> anyhow::Result<Value> {
@@ -913,7 +913,7 @@ In `apps/codex-plus-launcher/src/main.rs`, add these methods to the `impl Bridge
 Run:
 
 ```bash
-cargo test -p codex-plus-core --test bridge_routes
+cargo test -p luoda-codex-core --test bridge_routes
 ```
 
 Expected: PASS.
@@ -923,7 +923,7 @@ Expected: PASS.
 Run:
 
 ```bash
-cargo test -p codex-plus-core
+cargo test -p luoda-codex-core
 ```
 
 Expected: PASS.
@@ -933,7 +933,7 @@ Expected: PASS.
 Run:
 
 ```bash
-git add "crates/codex-plus-core/src/routes.rs" "apps/codex-plus-launcher/src/main.rs" "crates/codex-plus-core/tests/bridge_routes.rs"
+git add "crates/luoda-codex-core/src/routes.rs" "apps/luoda-codex-launcher/src/main.rs" "crates/luoda-codex-core/tests/bridge_routes.rs"
 git commit -m "feat(worktree): expose upstream worktree bridge routes"
 ```
 
@@ -1304,9 +1304,9 @@ Run:
 
 ```bash
 cargo fmt --check
-cargo test -p codex-plus-core --test upstream_worktree
-cargo test -p codex-plus-core --test bridge_routes
-cargo test -p codex-plus-core
+cargo test -p luoda-codex-core --test upstream_worktree
+cargo test -p luoda-codex-core --test bridge_routes
+cargo test -p luoda-codex-core
 node --check "assets/inject/renderer-inject.js"
 ```
 
@@ -1316,7 +1316,7 @@ Expected:
 cargo fmt --check: PASS
 upstream_worktree tests: PASS
 bridge_routes tests: PASS
-codex-plus-core tests: PASS
+luoda-codex-core tests: PASS
 node --check: PASS
 ```
 

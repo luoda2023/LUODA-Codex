@@ -54,7 +54,7 @@ When native Codex App worktree enhancement is active, the user can continue usin
 
 ## Backend Architecture
 
-Add a focused Rust module in `crates/codex-plus-core`, tentatively named `upstream_worktree`.
+Add a focused Rust module in `crates/luoda-codex-core`, tentatively named `upstream_worktree`.
 
 The module owns:
 

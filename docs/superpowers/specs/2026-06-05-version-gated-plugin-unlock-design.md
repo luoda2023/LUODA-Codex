@@ -4,7 +4,7 @@
 
 **Architecture:** Reuse backend Codex App version detection and expose the detected version to the injected runtime settings payload. The injection script compares the Codex App version against a fixed cutoff (`26.601.21317`) and chooses a legacy or modern plugin unlock strategy at scan time.
 
-**Tech Stack:** Rust backend settings/launcher helper routes, Codex++ runtime JavaScript injection, static injection tests in `codex-plus-core`, React/Tauri manager settings UI only if a status hint is added.
+**Tech Stack:** Rust backend settings/launcher helper routes, Codex++ runtime JavaScript injection, static injection tests in `luoda-codex-core`, React/Tauri manager settings UI only if a status hint is added.
 
 ---
 

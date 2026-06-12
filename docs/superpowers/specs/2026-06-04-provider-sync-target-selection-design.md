@@ -68,7 +68,7 @@ The progress message includes the chosen target:
 
 ## Architecture
 
-Keep provider sync inside `crates/codex-plus-data/src/provider_sync.rs`; do not depend on the external Node.js or .NET project at runtime.
+Keep provider sync inside `crates/luoda-codex-data/src/provider_sync.rs`; do not depend on the external Node.js or .NET project at runtime.
 
 Add three focused backend capabilities:
 
@@ -85,7 +85,7 @@ The launcher keeps calling the existing no-argument provider sync behavior so au
 
 ## Backend data model
 
-Add serializable provider target types in `crates/codex-plus-data/src/provider_sync.rs`:
+Add serializable provider target types in `crates/luoda-codex-data/src/provider_sync.rs`:
 
 ```rust
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -360,7 +360,7 @@ The returned payload continues to include `targetProvider`, update counts, skipp
 
 ## Frontend changes
 
-In `apps/codex-plus-manager/src/App.tsx`:
+In `apps/luoda-codex-manager/src/App.tsx`:
 
 - Add types for provider sync target list and target options.
 - Load targets when the app initializes and when the sessions page or sync area refreshes.
@@ -376,7 +376,7 @@ If target loading fails, the dropdown shows a disabled fallback option and sync 
 
 Launcher behavior remains compatible:
 
-- `apps/codex-plus-launcher/src/main.rs` continues calling `codex_plus_data::run_provider_sync(None)`.
+- `apps/luoda-codex-launcher/src/main.rs` continues calling `codex_plus_data::run_provider_sync(None)`.
 - Startup sync still targets current root `model_provider`.
 - No launcher UI selection is added.
 
