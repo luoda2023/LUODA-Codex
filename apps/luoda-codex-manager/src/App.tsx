@@ -1,4 +1,4 @@
-import {
+﻿import {
   closestCenter,
   DndContext,
   KeyboardSensor,
@@ -2549,7 +2549,7 @@ function AboutScreen({
         </CardContent>
       </Panel>
       <Panel>
-        <CardHead title="更新信息" detail={当前版本 } />
+        <CardHead title="更新信息" detail={`当前版本 ${overview?.current_version ?? update?.currentVersion ?? "-"}`} />
         <CardContent>
           <div className="metric-list">
             <Metric label="状态" value={update?.status ?? "not_checked"} />
@@ -5235,3 +5235,4 @@ function loadInitialRoute(): Route {
   }
   return "overview";
 }
+
