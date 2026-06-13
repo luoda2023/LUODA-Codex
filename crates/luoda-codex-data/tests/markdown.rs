@@ -83,3 +83,4 @@ fn markdown_exporter_returns_failed_for_missing_or_empty_rollout() {
 
     assert_eq!(result.status, ExportStatus::Failed);
 }
+

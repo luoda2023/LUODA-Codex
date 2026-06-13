@@ -1,6 +1,6 @@
 use luoda_codex_data::{
-    load_provider_sync_targets, run_provider_sync, run_provider_sync_with_target,
-    ProviderSyncStatus, ProviderSyncTargetSource,
+    ProviderSyncStatus, ProviderSyncTargetSource, load_provider_sync_targets, run_provider_sync,
+    run_provider_sync_with_target,
 };
 use rusqlite::Connection;
 use serde_json::json;
@@ -209,7 +209,7 @@ fn provider_sync_rewrites_all_session_meta_model_providers() {
     let rollout = home.join("sessions/2026/rollout-multi-meta.jsonl");
     write_rollout_with_providers(
         &rollout,
-        &["openai", "ccx", "Luoda-Codex"],
+        &["openai", "ccx", "CodexPlusPlus"],
         "thread-1",
         "C:/workspace",
     );
@@ -244,7 +244,7 @@ fn provider_sync_target_discovery_reads_all_session_meta_providers() {
     fs::write(home.join("config.toml"), "model_provider = \"custom\"\n").unwrap();
     write_rollout_with_providers(
         &home.join("sessions/2026/rollout-multi-meta.jsonl"),
-        &["openai", "ccx", "Luoda-Codex"],
+        &["openai", "ccx", "CodexPlusPlus"],
         "thread-1",
         "C:/workspace",
     );
@@ -258,7 +258,7 @@ fn provider_sync_target_discovery_reads_all_session_meta_providers() {
 
     assert!(ids.contains(&"openai"));
     assert!(ids.contains(&"ccx"));
-    assert!(ids.contains(&"Luoda-Codex"));
+    assert!(ids.contains(&"CodexPlusPlus"));
 }
 
 #[test]
@@ -313,6 +313,44 @@ fn provider_sync_updates_rollout_sqlite_visibility_and_creates_backup() {
 }
 
 #[test]
+fn provider_sync_updates_new_codex_sqlite_directory_db() {
+    let tmp = tempdir().unwrap();
+    let home = tmp.path().join(".codex");
+    let sqlite_dir = home.join("sqlite");
+    fs::create_dir_all(&sqlite_dir).unwrap();
+    fs::write(home.join("config.toml"), "model_provider = \"apigather\"\n").unwrap();
+    let rollout = home.join("sessions/2026/rollout-abc.jsonl");
+    write_rollout(&rollout, "openai", "thread-1", "C:/workspace");
+    let db_path = sqlite_dir.join("codex-dev.db");
+    create_state_db(&db_path);
+
+    let result = run_provider_sync(Some(&home));
+
+    assert_eq!(result.status, ProviderSyncStatus::Synced);
+    assert_eq!(result.sqlite_rows_updated, 3);
+    let db = Connection::open(&db_path).unwrap();
+    let row = db
+        .query_row(
+            "SELECT model_provider, has_user_event, cwd FROM threads WHERE id = 'thread-1'",
+            [],
+            |row| {
+                Ok((
+                    row.get::<_, String>(0)?,
+                    row.get::<_, i64>(1)?,
+                    row.get::<_, String>(2)?,
+                ))
+            },
+        )
+        .unwrap();
+    assert_eq!(
+        row,
+        ("apigather".to_string(), 1, "C:/workspace".to_string())
+    );
+    let backup_dir = result.backup_dir.unwrap();
+    assert!(backup_dir.join("db/sqlite/codex-dev.db").exists());
+}
+
+#[test]
 fn provider_sync_backup_metadata_contains_reference_fields_and_managed_marker() {
     let tmp = tempdir().unwrap();
     let home = tmp.path().join(".codex");
@@ -338,12 +376,14 @@ fn provider_sync_backup_metadata_contains_reference_fields_and_managed_marker() 
     assert_eq!(metadata["codexHome"], home.to_string_lossy().to_string());
     assert_eq!(metadata["targetProvider"], "apigather");
     assert_eq!(metadata["changedSessionFiles"], 1);
-    assert_eq!(metadata["managedBy"], "Luoda-Codex provider sync");
+    assert_eq!(metadata["managedBy"], "Codex++ provider sync");
     assert!(metadata["createdAt"].as_str().unwrap().contains('T'));
-    assert!(metadata["dbFiles"]
-        .as_array()
-        .unwrap()
-        .contains(&json!("state_5.sqlite")));
+    assert!(
+        metadata["dbFiles"]
+            .as_array()
+            .unwrap()
+            .contains(&json!("state_5.sqlite"))
+    );
 }
 
 #[test]
@@ -618,7 +658,7 @@ fn provider_sync_restores_global_state_when_later_step_fails() {
     fs::create_dir_all(home.join("backups_state/provider-sync/blocker")).unwrap();
     fs::write(
         home.join("backups_state/provider-sync/blocker/metadata.json"),
-        json!({"managedBy": "Luoda-Codex provider sync"}).to_string(),
+        json!({"managedBy": "Codex++ provider sync"}).to_string(),
     )
     .unwrap();
 
@@ -650,7 +690,7 @@ fn provider_sync_skips_when_home_missing_or_lock_exists_and_prunes_backups() {
         fs::create_dir_all(&backup).unwrap();
         fs::write(
             backup.join("metadata.json"),
-            json!({"managedBy": "Luoda-Codex provider sync"}).to_string(),
+            json!({"managedBy": "Codex++ provider sync"}).to_string(),
         )
         .unwrap();
     }
@@ -701,3 +741,4 @@ fn provider_sync_preserves_rollout_mtime() {
         "mtime drifted by {drift:?}, expected < 2s"
     );
 }
+

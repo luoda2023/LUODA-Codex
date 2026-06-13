@@ -42,7 +42,7 @@ fn normalizes_remote_ads_for_plugin_and_manager_rendering() {
             {
                 "id": "sponsor",
                 "type": "sponsor",
-                "title": "赞助商",
+                "title": "赞助�?,
                 "description": "推荐内容",
                 "url": "https://example.test",
                 "highlights": ["稳定"]
@@ -50,7 +50,7 @@ fn normalizes_remote_ads_for_plugin_and_manager_rendering() {
             {
                 "id": "normal",
                 "type": "normal",
-                "title": "普通推荐",
+                "title": "普通推�?,
                 "description": "推荐内容",
                 "url": "https://example.org"
             },
@@ -118,3 +118,4 @@ async fn fetch_ad_list_tries_backup_url_when_primary_fails() {
 
     assert_eq!(payload["ads"][0]["id"], json!("backup-ad"));
 }
+

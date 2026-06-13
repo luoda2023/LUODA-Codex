@@ -126,3 +126,4 @@ fn windows_default_install_root_uses_known_folder_before_userprofile_desktop() {
         assert_eq!(strategy, "user-dirs-desktop");
     }
 }
+

@@ -1,4 +1,4 @@
-﻿[workspace]
+[workspace]
 resolver = "2"
 members = [
   "crates/luoda-codex-core",
@@ -31,3 +31,5 @@ toml_edit = "0.22"
 url = "2"
 uuid = { version = "1", features = ["v4"] }
 winresource = "0.1"
+
+

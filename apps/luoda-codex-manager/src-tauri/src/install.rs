@@ -26,3 +26,4 @@ mod tests {
         assert!(matches!(state.management_shortcut.installed, true | false));
     }
 }
+

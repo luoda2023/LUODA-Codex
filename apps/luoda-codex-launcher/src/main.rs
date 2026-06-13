@@ -527,7 +527,7 @@ impl BridgeRuntimeService for LauncherRuntimeService {
 
     async fn backend_status(&self) -> anyhow::Result<Value> {
         Ok(
-            json!({"status": "ok", "message": "åŽç«¯å·²è¿žæŽ¥", "version": luoda_codex_core::version::VERSION}),
+json!({"status": "ok", "message": "ºó¶ËÒÑÁ¬½Ó", "version": luoda_codex_core::version::VERSION}),
         )
     }
 
@@ -655,11 +655,7 @@ async fn try_inject_with_context(
 }
 
 fn default_codex_db_path() -> PathBuf {
-    directories::BaseDirs::new()
-        .map(|dirs| dirs.home_dir().to_path_buf())
-        .unwrap_or_else(|| PathBuf::from("."))
-        .join(".codex")
-        .join("state_5.sqlite")
+    luoda_codex_core::codex_sqlite::codex_session_db_path()
 }
 
 fn open_url(url: &str) -> anyhow::Result<()> {
@@ -801,3 +797,5 @@ fn builtin_user_scripts_dir() -> PathBuf {
         .map(|path| path.join("user_scripts"))
         .unwrap_or_else(|| PathBuf::from("user_scripts"))
 }
+
+

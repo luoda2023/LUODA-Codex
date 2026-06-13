@@ -20,3 +20,4 @@ tokio.workspace = true
 
 [build-dependencies]
 winresource.workspace = true
+

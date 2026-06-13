@@ -104,3 +104,4 @@ fn stale_launcher_recovery_only_runs_when_codex_and_cdp_are_absent() {
     assert!(!should_recover_stale_launcher(false, true));
     assert!(!should_recover_stale_launcher(true, true));
 }
+

@@ -390,3 +390,4 @@ fn create_response_does_not_create_worktree_when_fetch_fails() {
     assert_eq!(result["code"], "fetch-failed");
     assert!(!temp.path().join("should-not-exist").exists());
 }
+

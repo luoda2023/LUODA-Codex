@@ -22,7 +22,7 @@ fn version_comparison_uses_numeric_segments() {
 fn github_payload_selects_platform_installer() {
     let release = release_from_github_payload(&json!({
         "tag_name": "v1.0.9",
-        "html_url": "https://github.com/luoda2023/CodexPlusPlus/releases/tag/v1.0.9",
+        "html_url": "https://github.com/BigPizzaV3/CodexPlusPlus/releases/tag/v1.0.9",
         "body": "fixes",
         "assets": [
             {"name": "source.zip", "browser_download_url": "https://example.test/source.zip"},
@@ -53,8 +53,8 @@ fn github_payload_selects_platform_installer() {
 fn latest_json_payload_selects_platform_installer_without_github_api_shape() {
     let release = release_from_latest_json_payload(&json!({
         "version": "v1.1.6",
-        "url": "https://github.com/luoda2023/CodexPlusPlus/releases/tag/v1.1.6",
-        "body": "静态更新描述",
+        "url": "https://github.com/BigPizzaV3/CodexPlusPlus/releases/tag/v1.1.6",
+        "body": "静态更新描�?,
         "assets": [
             {"name": "source.zip", "url": "https://example.test/source.zip"},
             {"name": "CodexPlusPlus-1.1.6-windows-x64-setup.exe", "url": "https://example.test/setup.exe"},
@@ -64,7 +64,7 @@ fn latest_json_payload_selects_platform_installer_without_github_api_shape() {
     .unwrap();
 
     assert_eq!(release.version, "v1.1.6");
-    assert_eq!(release.body, "静态更新描述");
+    assert_eq!(release.body, "静态更新描�?);
     if cfg!(windows) {
         assert_eq!(
             release.asset_name.as_deref(),
@@ -135,3 +135,4 @@ fn download_asset_to_writes_bytes() {
     assert_eq!(path, dir.path().join("pkg.zip"));
     assert_eq!(std::fs::read(path).unwrap(), b"abcdef");
 }
+

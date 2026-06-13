@@ -1,3 +1,4 @@
+use luoda_codex_core::codex_sqlite::codex_session_db_path_from_home;
 use luoda_codex_core::relay_config::{
     apply_pure_api_config_to_home, apply_relay_config_file_to_home, apply_relay_config_to_home,
     apply_relay_files_to_home, apply_relay_files_to_home_with_common,
@@ -12,6 +13,61 @@ use luoda_codex_core::relay_config::{
     sync_live_config_context_entries, upsert_context_entry_in_common_config,
 };
 use luoda_codex_core::settings::{RelayContextSelection, RelayMode, RelayProfile, RelayProtocol};
+
+#[test]
+fn codex_session_db_path_prefers_new_sqlite_directory_threads_db() {
+    let temp = tempfile::tempdir().unwrap();
+    let home = temp.path();
+    let sqlite_dir = home.join("sqlite");
+    std::fs::create_dir(&sqlite_dir).unwrap();
+    std::fs::write(home.join("state_5.sqlite"), b"legacy").unwrap();
+
+    let ignored = rusqlite::Connection::open(sqlite_dir.join("other.db")).unwrap();
+    ignored
+        .execute("CREATE TABLE metadata (id TEXT PRIMARY KEY)", [])
+        .unwrap();
+    drop(ignored);
+
+    let selected_path = sqlite_dir.join("codex-dev.db");
+    let selected = rusqlite::Connection::open(&selected_path).unwrap();
+    selected
+        .execute("CREATE TABLE threads (id TEXT PRIMARY KEY, cwd TEXT)", [])
+        .unwrap();
+    drop(selected);
+
+    assert_eq!(codex_session_db_path_from_home(home), selected_path);
+}
+
+#[test]
+fn codex_session_db_path_accepts_new_automation_runs_schema() {
+    let temp = tempfile::tempdir().unwrap();
+    let home = temp.path();
+    let sqlite_dir = home.join("sqlite");
+    std::fs::create_dir(&sqlite_dir).unwrap();
+
+    let selected_path = sqlite_dir.join("codex-dev.db");
+    let selected = rusqlite::Connection::open(&selected_path).unwrap();
+    selected
+        .execute(
+            "CREATE TABLE automation_runs (thread_id TEXT PRIMARY KEY)",
+            [],
+        )
+        .unwrap();
+    drop(selected);
+
+    assert_eq!(codex_session_db_path_from_home(home), selected_path);
+}
+
+#[test]
+fn codex_session_db_path_falls_back_to_legacy_state_db() {
+    let temp = tempfile::tempdir().unwrap();
+    let home = temp.path();
+
+    assert_eq!(
+        codex_session_db_path_from_home(home),
+        home.join("state_5.sqlite")
+    );
+}
 
 #[test]
 fn detects_chatgpt_login_from_auth_json_and_config_provider() {
@@ -205,7 +261,7 @@ fn apply_chat_protocol_relay_points_codex_to_local_responses_proxy() {
     assert!(updated.contains(r#"wire_api = "responses""#));
     assert!(updated.contains(r#"base_url = "http://127.0.0.1:57321/v1""#));
     assert!(updated.contains(r#"experimental_bearer_token = "sk-test-redacted""#));
-    assert!(!updated.contains("codex_plus_chat_base_url"));
+    assert!(!updated.contains("luoda_codex_chat_base_url"));
 }
 
 #[test]
@@ -236,7 +292,7 @@ base_url = "http://127.0.0.1:57321/v1"
 
     assert_eq!(profile.upstream_base_url, "https://api.deepseek.com");
     assert_eq!(profile.base_url, "https://api.deepseek.com");
-    assert!(!profile.config_contents.contains("codex_plus_chat_base_url"));
+    assert!(!profile.config_contents.contains("luoda_codex_chat_base_url"));
     assert!(
         profile
             .config_contents
@@ -245,7 +301,7 @@ base_url = "http://127.0.0.1:57321/v1"
 
     apply_relay_profile_to_home_with_switch_rules(temp.path(), &profile, "").unwrap();
     let live = std::fs::read_to_string(temp.path().join("config.toml")).unwrap();
-    assert!(!live.contains("codex_plus_chat_base_url"));
+    assert!(!live.contains("luoda_codex_chat_base_url"));
     assert!(live.contains(r#"base_url = "http://127.0.0.1:57321/v1""#));
 }
 
@@ -1033,7 +1089,7 @@ fn apply_relay_files_with_context_rejects_invalid_context_token_values() {
     )
     .unwrap_err();
 
-    assert!(error.to_string().contains("上下文大小"));
+    assert!(error.to_string().contains("上下文大�?));
 }
 
 #[test]
@@ -1929,7 +1985,8 @@ requires_openai_auth = true
 experimental_bearer_token = "22222222222222222222222222222222222"
 "#
         .to_string(),
-        auth_contents: r#"{"auth_mode":"chatgpt","tokens":{"access_token":"official"}}"#.to_string(),
+        auth_contents: r#"{"auth_mode":"chatgpt","tokens":{"access_token":"official"}}"#
+            .to_string(),
         ..RelayProfile::default()
     };
     let mut common = String::new();
@@ -1940,9 +1997,11 @@ experimental_bearer_token = "22222222222222222222222222222222222"
     assert_eq!(profile.relay_mode, RelayMode::Official);
     assert!(profile.official_mix_api_key);
     assert_eq!(profile.api_key, "333333333333333333333");
-    assert!(profile
-        .config_contents
-        .contains(r#"experimental_bearer_token = "333333333333333333333""#));
+    assert!(
+        profile
+            .config_contents
+            .contains(r#"experimental_bearer_token = "333333333333333333333""#)
+    );
     assert!(!profile.auth_contents.contains("OPENAI_API_KEY"));
 }
 
@@ -2321,3 +2380,4 @@ fn base64_url_no_pad(value: &str) -> String {
     use base64::Engine;
     base64::engine::general_purpose::URL_SAFE_NO_PAD.encode(value.as_bytes())
 }
+

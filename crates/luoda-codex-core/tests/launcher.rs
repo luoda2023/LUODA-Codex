@@ -716,7 +716,7 @@ async fn launch_lifecycle_enters_degraded_mode_and_retries_when_injection_fails(
     );
     let status = status_store.load_latest().unwrap().unwrap();
     assert_eq!(status.status, "running_degraded");
-    assert!(status.message.contains("Codex 已启动"));
+    assert!(status.message.contains("Codex 已启�?));
 
     handle.wait_for_codex_exit().await.unwrap();
     let events = events.lock().unwrap().clone();
@@ -1120,3 +1120,4 @@ impl LaunchHooks for FakeHooks {
         }
     }
 }
+

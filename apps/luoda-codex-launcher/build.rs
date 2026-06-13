@@ -9,3 +9,4 @@ fn main() {
         resource.compile().expect("compile launcher icon resource");
     }
 }
+

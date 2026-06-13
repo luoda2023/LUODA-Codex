@@ -1153,8 +1153,8 @@ fn chat_sse_converter_handles_partial_chunks_and_utf8_boundaries() {
     let sse = "data: {\"id\":\"chatcmpl_utf8\",\"created\":123,\"model\":\"gpt-5.4\",\"choices\":[{\"delta\":{\"content\":\"你好\"},\"finish_reason\":\"stop\"}]}\r\n\r\n";
     let bytes = sse.as_bytes();
     let split = bytes
-        .windows("好".len())
-        .position(|window| window == "好".as_bytes())
+        .windows("�?.len())
+        .position(|window| window == "�?.as_bytes())
         .unwrap()
         + 1;
 
@@ -1239,3 +1239,4 @@ fn models_proxy_path_matches_v1_models() {
     assert!(is_models_proxy_path("/v1/models?limit=10"));
     assert!(!is_models_proxy_path("/v1/responses"));
 }
+

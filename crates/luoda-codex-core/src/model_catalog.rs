@@ -5,16 +5,16 @@ use crate::settings::{RelayProfile, SettingsStore};
 use serde_json::{Value, json};
 
 const BASE_URL_ENV_KEYS: &[&str] = &[
-    "CODEX_PLUS_OPENAI_BASE_URL",
-    "CODEX_PLUS_BASE_URL",
+    "luoda_codex_OPENAI_BASE_URL",
+    "luoda_codex_BASE_URL",
     "OPENAI_BASE_URL",
     "OPENAI_API_BASE_URL",
     "OPENAI_API_BASE",
     "OPENAI_API_URL",
 ];
 const API_KEY_ENV_KEYS: &[&str] = &[
-    "CODEX_PLUS_OPENAI_API_KEY",
-    "CODEX_PLUS_API_KEY",
+    "luoda_codex_OPENAI_API_KEY",
+    "luoda_codex_API_KEY",
     "OPENAI_API_KEY",
 ];
 
@@ -781,3 +781,4 @@ fn unquote_toml_string(value: &str) -> String {
         .unwrap_or(value)
         .to_string()
 }
+

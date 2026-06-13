@@ -648,3 +648,4 @@ fn open_zed_remote_returns_failed_response_for_validation_error() {
         json!({"status": "failed", "message": "Cannot determine remote SSH host for this file"})
     );
 }
+
