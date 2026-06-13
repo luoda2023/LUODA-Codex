@@ -1,5 +1,4 @@
 pub mod commands;
-use tauri::Manager;
 pub mod install;
 
 pub fn run() {
@@ -27,47 +26,6 @@ pub fn run() {
                 .inner_size(1180.0, 820.0)
                 .min_inner_size(960.0, 720.0)
                 .build()?;
-
-            // Tray icon setup
-            let show_item = tauri::menu::MenuItemBuilder::with_id("show", "显示窗口").build(app)?;
-            let quit_item = tauri::menu::MenuItemBuilder::with_id("quit", "退出").build(app)?;
-            let menu = tauri::menu::MenuBuilder::new(app)
-                .item(&show_item)
-                .item(&quit_item)
-                .build()?;
-
-            let _tray = tauri::tray::TrayIconBuilder::new()
-                .icon(app.default_window_icon().unwrap().clone())
-                .menu(&menu)
-                .on_menu_event(move |app, event| {
-                    match event.id().as_ref() {
-                        "show" => {
-                            if let Some(w) = app.get_webview_window("main") {
-                                let _ = w.show();
-                                let _ = w.set_focus();
-                            }
-                        }
-                        "quit" => {
-                            app.exit(0);
-                        }
-                        _ => {}
-                    }
-                })
-                .on_tray_icon_event(|tray, event| {
-                    if let tauri::tray::TrayIconEvent::Click {
-                        button: tauri::tray::MouseButton::Left,
-                        button_state: tauri::tray::MouseButtonState::Up,
-                        ..
-                    } = event
-                    {
-                        let app = tray.app_handle();
-                        if let Some(w) = app.get_webview_window("main") {
-                            let _ = w.show();
-                            let _ = w.set_focus();
-                        }
-                    }
-                })
-                .build(app)?;
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
@@ -77,6 +35,7 @@ pub fn run() {
             commands::launch_codex_plus,
             commands::restart_codex_plus,
             commands::load_settings,
+            commands::get_config_coordination_status,
             commands::save_settings,
             commands::list_local_sessions,
             commands::list_zed_remote_projects,
@@ -124,13 +83,7 @@ pub fn run() {
             commands::apply_pure_api_injection,
             commands::clear_relay_injection
         ])
-        .on_window_event(|window, event| {
-            if let tauri::WindowEvent::CloseRequested { api, .. } = event {
-                let _ = window.hide();
-                api.prevent_close();
-            }
-        })
-.run(tauri::generate_context!());
+        .run(tauri::generate_context!());
     if let Err(error) = run_result {
         let _ = luoda_codex_core::diagnostic_log::append_diagnostic_log(
             "manager.run_failed",

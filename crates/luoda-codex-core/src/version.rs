@@ -1,4 +1,4 @@
-pub const VERSION: &str = "2.0.1";
+pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 #[cfg(test)]
 mod tests {
@@ -6,6 +6,6 @@ mod tests {
 
     #[test]
     fn exposes_workspace_version() {
-        assert_eq!(VERSION, "2.0.1");
+        assert_eq!(VERSION, env!("CARGO_PKG_VERSION"));
     }
 }

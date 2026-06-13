@@ -386,7 +386,7 @@ experimental_bearer_token = "sk-a"
 
     assert!(result.configured);
     let backup_path = result.backup_path.as_ref().expect("backup path");
-    assert!(backup_path.contains("luoda-codex-live-"));
+    assert!(backup_path.contains("codex-plus-live-"));
     assert_eq!(
         std::fs::read_to_string(std::path::Path::new(backup_path).join("config.toml")).unwrap(),
         r#"model = "old""#
@@ -1192,7 +1192,7 @@ fn apply_relay_config_file_switches_config_without_touching_auth_json() {
     let home = temp.path();
     std::fs::write(
         home.join("config.toml"),
-        "model_provider = \"Luoda-Codex\"\nbase_url = \"old\"\n",
+        "model_provider = \"CodexPlusPlus\"\nbase_url = \"old\"\n",
     )
     .unwrap();
     std::fs::write(home.join("auth.json"), "{\"auth_mode\":\"chatgpt\"}\n").unwrap();
@@ -1305,7 +1305,7 @@ model = "gpt-5-mini"
         result
             .backup_path
             .as_ref()
-            .is_some_and(|path| path.contains("luoda-codex-live-"))
+            .is_some_and(|path| path.contains("codex-plus-live-"))
     );
     assert!(updated.contains(r#"model = "gpt-5""#));
     assert!(!updated.contains("model_provider ="));

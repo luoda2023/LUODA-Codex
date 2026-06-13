@@ -1,4 +1,4 @@
-﻿use std::io::{Read, Write};
+use std::io::{Read, Write};
 use std::net::TcpListener;
 use std::thread;
 
@@ -42,16 +42,16 @@ fn normalizes_remote_ads_for_plugin_and_manager_rendering() {
             {
                 "id": "sponsor",
                 "type": "sponsor",
-                "title": "璧炲姪鍟?,
-                "description": "鎺ㄨ崘鍐呭",
+                "title": "赞助商",
+                "description": "推荐内容",
                 "url": "https://example.test",
-                "highlights": ["绋冲畾"]
+                "highlights": ["稳定"]
             },
             {
                 "id": "normal",
                 "type": "normal",
-                "title": "鏅€氭帹鑽?,
-                "description": "鎺ㄨ崘鍐呭",
+                "title": "普通推荐",
+                "description": "推荐内容",
                 "url": "https://example.org"
             },
             {

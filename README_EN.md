@@ -1,7 +1,7 @@
 # Luoda-Codex
 
 <p align="center">
-  <img src="docs/images/codex-plus-plus.png" alt="Luoda-Codex icon" width="160">
+  <img src="docs/images/luoda-codex.png" alt="Luoda-Codex icon" width="160">
 </p>
 
 <p align="center">

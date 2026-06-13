@@ -178,15 +178,14 @@ pub async fn fetch_latest_release(latest_json_url: &str) -> anyhow::Result<Relea
 }
 
 pub async fn check_for_update(current_version: &str) -> anyhow::Result<UpdateCheck> {
-    let release = fetch_latest_release(DEFAULT_LATEST_JSON_URL).await?;
-    let update_available = is_newer_version(&release.version, current_version)?;
+    // LUODA-Codex: 检查更新已禁用
     Ok(UpdateCheck {
         current_version: current_version.to_string(),
-        latest_version: Some(release.version),
-        release_summary: release.body,
-        asset_name: release.asset_name,
-        asset_url: release.asset_url,
-        update_available,
+        latest_version: None,
+        release_summary: String::new(),
+        asset_name: None,
+        asset_url: None,
+        update_available: false,
     })
 }
 
@@ -194,25 +193,9 @@ pub async fn perform_update(
     release: &Release,
     download_dir: &Path,
 ) -> anyhow::Result<UpdateInstall> {
-    let url = release
-        .asset_url
-        .as_ref()
-        .ok_or_else(|| anyhow::anyhow!("娌℃湁鍙笅杞界殑 Release asset"))?;
-    let bytes =
-        crate::http_client::proxied_client(&format!("Luoda-Codex/{}", crate::version::VERSION))?
-            .get(url)
-            .send()
-            .await?
-            .error_for_status()?
-            .bytes()
-            .await?;
-    let installer_path = download_asset_to(release, &bytes, download_dir)?;
-    launch_installer(&installer_path)?;
-    Ok(UpdateInstall {
-        release: release.clone(),
-        installer_path,
-        launched: true,
-    })
+    let _ = release;
+    let _ = download_dir;
+    anyhow::bail!("LUODA-Codex: update disabled")
 }
 
 pub fn download_asset_to(
@@ -223,7 +206,7 @@ pub fn download_asset_to(
     let name = release
         .asset_name
         .as_ref()
-        .ok_or_else(|| anyhow::anyhow!("娌℃湁鍙笅杞界殑 Release asset"))?;
+        .ok_or_else(|| anyhow::anyhow!("没有可下载的 Release asset"))?;
     let safe = safe_asset_name(name)?;
     std::fs::create_dir_all(download_dir)?;
     let path = download_dir.join(safe);
@@ -233,18 +216,18 @@ pub fn download_asset_to(
 
 pub fn safe_asset_name(name: &str) -> anyhow::Result<String> {
     if name.trim().is_empty() {
-        anyhow::bail!("闈炴硶 Release asset 鏂囦欢鍚? {name}");
+        anyhow::bail!("非法 Release asset 文件名: {name}");
     }
     let path = Path::new(name);
     if path.components().count() != 1 {
-        anyhow::bail!("闈炴硶 Release asset 鏂囦欢鍚? {name}");
+        anyhow::bail!("非法 Release asset 文件名: {name}");
     }
     let file_name = path
         .file_name()
         .and_then(|name| name.to_str())
-        .ok_or_else(|| anyhow::anyhow!("闈炴硶 Release asset 鏂囦欢鍚? {name}"))?;
+        .ok_or_else(|| anyhow::anyhow!("非法 Release asset 文件名: {name}"))?;
     if file_name == "." || file_name == ".." {
-        anyhow::bail!("闈炴硶 Release asset 鏂囦欢鍚? {name}");
+        anyhow::bail!("非法 Release asset 文件名: {name}");
     }
     Ok(file_name.to_string())
 }
@@ -281,7 +264,7 @@ pub fn launch_installer(path: &Path) -> anyhow::Result<()> {
             .creation_flags(crate::windows_integration::CREATE_NO_WINDOW)
             .spawn()
             .map(|_| ())
-            .map_err(|error| anyhow::anyhow!("打开 DMG 失败：{error}"))
+            .map_err(|error| anyhow::anyhow!("启动安装包失败：{error}"))
     }
 
     #[cfg(target_os = "macos")]
@@ -296,6 +279,6 @@ pub fn launch_installer(path: &Path) -> anyhow::Result<()> {
     #[cfg(all(not(windows), not(target_os = "macos")))]
     {
         let _ = path;
-        anyhow::bail!("签名验证失败，无法继续安装")
+        anyhow::bail!("当前平台不支持启动安装包")
     }
 }

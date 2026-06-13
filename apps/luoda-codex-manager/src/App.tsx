@@ -1,4 +1,4 @@
-﻿import {
+import {
   closestCenter,
   DndContext,
   KeyboardSensor,
@@ -49,6 +49,8 @@ import {
   Wrench,
   type LucideIcon,
 } from "lucide-react";
+import { ProviderPresetSelector } from "@/components/ProviderPresetSelector";
+import type { PresetPatch } from "@/components/ProviderPresetSelector";
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 
 import { Badge as UiBadge } from "@/components/ui/badge";
@@ -100,6 +102,7 @@ type BackendSettings = {
   providerSyncLastSelectedProvider: string;
   relayProfilesEnabled: boolean;
   ccsLinkEnabled: boolean;
+  configOwnership: ConfigOwnership;
   enhancementsEnabled: boolean;
   codexAppPluginEntryUnlock: boolean;
   codexAppPluginMarketplaceUnlock: boolean;
@@ -135,6 +138,7 @@ type BackendSettings = {
 
 type ZedOpenStrategy = "addToFocusedWorkspace" | "reuseWindow" | "newWindow" | "default";
 type LaunchMode = "patch" | "relay";
+type ConfigOwnership = "auto" | "codexPlusPlus" | "ccSwitch";
 
 type RelayProfile = {
   id: string;
@@ -186,6 +190,7 @@ type RelayProtocol = "responses" | "chatCompletions";
 type RelayMode = "official" | "mixedApi" | "pureApi";
 const PROTOCOL_PROXY_BASE_URL = "http://127.0.0.1:57321/v1";
 const CHAT_UPSTREAM_BASE_URL_KEY = "codex_plus_chat_base_url";
+const SCRIPT_MARKET_REPOSITORY_URL = "https://github.com/luoda2023/CodexPlusPlusScriptMarket";
 
 const emptyContextSelection = (): RelayContextSelection => ({
   mcpServers: [],
@@ -233,6 +238,22 @@ type RelayFilesResult = CommandResult<{
   configContents: string;
   authContents: string;
 }>;
+
+type CoordinationStatus = {
+  ccswitchDetected: boolean;
+  configuredOwnership: ConfigOwnership;
+  effectiveOwnership: ConfigOwnership;
+  lastWriter: string | null;
+  conflictDetected: boolean;
+  conflictMessage: string;
+  ccswitchCurrentProviderId: string | null;
+  ccswitchCurrentProviderName: string | null;
+  liveModelProvider: string;
+  canWriteLiveConfig: boolean;
+  guidance: string;
+};
+
+type CoordinationStatusResult = CommandResult<CoordinationStatus>;
 
 type LocalSession = {
   id: string;
@@ -504,6 +525,7 @@ const defaultSettings: BackendSettings = {
   providerSyncLastSelectedProvider: "",
   relayProfilesEnabled: true,
   ccsLinkEnabled: false,
+  configOwnership: "auto",
   enhancementsEnabled: true,
   codexAppPluginEntryUnlock: true,
   codexAppPluginMarketplaceUnlock: true,
@@ -582,6 +604,7 @@ export function App() {
     debugPort: "9229",
     helperPort: "57321",
   });
+  const prevLaunchStatusRef = useRef<string | null>(null);
   const [settingsForm, setSettingsForm] = useState<BackendSettings>({ ...defaultSettings });
   const [providerSyncProgress, setProviderSyncProgress] = useState<ProviderSyncProgress>({
     active: false,
@@ -611,6 +634,13 @@ export function App() {
   const refreshOverview = async (silent = false) => {
     const result = await run(() => call<OverviewResult>("load_overview"));
     if (result) {
+      // 崩溃检测：进程从运行状态变为停止/失败 → 弹出通知
+      const prev = prevLaunchStatusRef.current;
+      const current = result.latest_launch?.status;
+      if (prev && prev === "running" && current && (current === "stopped" || current === "failed" || current === "crashed")) {
+        showNotice("Codex 意外停止", `进程状态：${current}。是否要重新启动？`, "failed");
+      }
+      prevLaunchStatusRef.current = current ?? null;
       setOverview(result);
       if (!silent) showResultNotice("概览已检查", result, { silentSuccess: true });
     }
@@ -804,12 +834,15 @@ export function App() {
       await refreshLocalSessions(true);
       await refreshProviderSyncTargets(true);
     }
+    
     if (next === "context") {
       await refreshSettings(true);
       await refreshRelayFiles(true);
       await refreshLiveContextEntries(true);
     }
     if (next === "settings") await refreshSettings(true);
+    
+    
     if (next === "about") {
       await refreshOverview(true);
       await refreshLogs(true);
@@ -832,7 +865,7 @@ export function App() {
   const restart = async () => {
     const result = await launchCommand("restart_codex_plus");
     if (result) {
-      showNotice("重启 Codex", result.message, result.status);
+      showNotice("重启 Codex++", result.message, result.status);
       await refreshOverview(true);
     }
   };
@@ -900,6 +933,7 @@ export function App() {
     if (result) {
       setUpdate(result);
       if (!silent || result.updateAvailable) {
+        showNotice("GitHub Release 检查", result.message, result.status);
       }
     }
   };
@@ -1402,7 +1436,7 @@ export function App() {
   useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");
     document.documentElement.classList.toggle("light", theme === "light");
-    window.localStorage.setItem("luoda-codex-theme", theme);
+    window.localStorage.setItem("codex-plus-theme", theme);
   }, [theme]);
 
   const saveCodexAppPath = async (appPath: string) => {
@@ -1493,6 +1527,10 @@ export function App() {
       },
       refreshRelay,
       refreshRelayFiles,
+      refreshCoordinationStatus: async () => {
+        const result = await run(() => call<CoordinationStatusResult>("get_config_coordination_status"));
+        return result?.status === "ok" ? result : null;
+      },
       refreshLiveContextEntries,
       syncLiveContextEntries,
       importCcsProviders,
@@ -1545,7 +1583,7 @@ export function App() {
     <div className={`shell ${theme}`}>
       <aside className="sidebar">
         <div className="brand">
-          <div className="brand-mark">L</div>
+          <div className="brand-mark">C++</div>
           <div className="brand-copy">
             <div className="brand-title-row">
               <div className="brand-title">L</div>
@@ -1601,9 +1639,9 @@ export function App() {
             >
               {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
-            <Button onClick={() => void actions.restart()} title="重启 Codex" variant="outline">
+            <Button onClick={() => void actions.restart()} title="重启 Codex++" variant="outline">
               <Rocket className="h-4 w-4" />
-              重启 Codex
+              重启 Codex++
             </Button>
             <Button onClick={() => void actions.refreshCurrent()} size="icon" title="刷新当前页面" variant="outline">
               <RefreshCw className="h-4 w-4" />
@@ -1650,19 +1688,6 @@ export function App() {
           {route === "enhance" ? (
             <EnhanceScreen form={settingsForm} onFormChange={setSettingsForm} actions={actions} />
           ) : null}
-
-          {route === "maintenance" ? (
-            <MaintenanceScreen
-              overview={overview}
-              watcher={watcher}
-              settings={settings}
-              launchForm={launchForm}
-              onLaunchFormChange={setLaunchForm}
-              removeOwnedData={removeOwnedData}
-              onRemoveOwnedDataChange={setRemoveOwnedData}
-              actions={actions}
-            />
-          ) : null}
           {route === "about" ? <AboutScreen overview={overview} update={update} logs={logs} diagnostics={diagnostics} actions={actions} /> : null}
           {route === "settings" ? (
             <SettingsScreen settings={settings} theme={theme} form={settingsForm} onFormChange={setSettingsForm} actions={actions} />
@@ -1703,6 +1728,7 @@ type Actions = {
   setLaunchMode: (launchMode: LaunchMode) => Promise<void>;
   refreshRelay: () => Promise<void>;
   refreshRelayFiles: () => Promise<RelayFilesResult | null>;
+  refreshCoordinationStatus: () => Promise<CoordinationStatus | null>;
   refreshLiveContextEntries: () => Promise<LiveContextEntriesResult | null>;
   syncLiveContextEntries: (settings: BackendSettings, silent?: boolean) => Promise<LiveContextEntriesResult | null>;
   importCcsProviders: () => Promise<void>;
@@ -1758,6 +1784,37 @@ function OverviewScreen({
   const health = healthItems(overview);
   return (
     <>
+      <Panel className="jojocode-overview">
+        <CardContent>
+          <div className="jojocode-overview-layout">
+            <div className="jojocode-overview-main">
+              <div className="jojocode-overview-mark">
+                <Network className="h-5 w-5" />
+              </div>
+              <div>
+                <span className="eyebrow">官方中转站</span>
+                <h2>JOJO Code</h2>
+                <p>
+                  Codex++ 官方中转站，主打稳定接入和划算价格，支持 GPT-5.5、GPT-5.4、Claude Opus 4.8、Claude Opus 4.7、gpt-image-2 等模型与图像能力。
+                </p>
+              </div>
+            </div>
+            <div className="jojocode-overview-side">
+              <div className="jojocode-model-tags">
+                <span>GPT-5.5</span>
+                <span>GPT-5.4</span>
+                <span>Opus 4.8</span>
+                <span>Opus 4.7</span>
+                <span>gpt-image-2</span>
+              </div>
+              <Button onClick={() => void actions.openExternalUrl("https://jojocode.com/")}>
+                <ExternalLink className="h-4 w-4" />
+                打开 JOJO Code
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Panel>
       <Panel>
         <CardHead title="健康检查" detail="概览只展示关键问题，具体配置在对应页面处理" />
         <CardContent>
@@ -1803,7 +1860,7 @@ function OverviewScreen({
           <Toolbar>
             <Button onClick={() => void actions.launch()}>
               <Rocket className="h-4 w-4" />
-              启动 Luoda-Codex
+              启动 Codex++
             </Button>
             <Button variant="secondary" onClick={() => void actions.goLogs()}>
               打开关于
@@ -1917,9 +1974,32 @@ function RelayScreen({
             />
             <span>
               <strong>联动 cc-switch</strong>
-              <small>开启后读取 cc-switch Codex 供应商并保存时回写；同时使用多个管理工具可能导致 config.toml / auth.json 被反复覆盖。</small>
+              <small>开启后读取 cc-switch Codex 供应商并保存时回写；建议配合“配置所有权”避免与 CC Switch 互相覆盖。</small>
             </span>
           </label>
+          <label className="switch-row relay-ownership-row">
+            <span>
+              <strong>配置所有权</strong>
+              <small>决定由谁写入 ~/.codex/config.toml 与 auth.json。auto 在开启联动且检测到 CC Switch 时交由 CC Switch 管理。</small>
+            </span>
+            <select
+              className="select-input relay-ownership-select"
+              value={normalized.configOwnership}
+              disabled={!normalized.relayProfilesEnabled}
+              onChange={(event) => {
+                const next = {
+                  ...normalized,
+                  configOwnership: event.currentTarget.value as ConfigOwnership,
+                };
+                void saveRelaySettings(next);
+              }}
+            >
+              <option value="auto">自动（推荐）</option>
+              <option value="ccSwitch">CC Switch 管理</option>
+              <option value="codexPlusPlus">Codex++ 管理</option>
+            </select>
+          </label>
+          <CoordinationStatusBanner form={normalized} actions={actions} />
           <div className="relay-add-row">
             <Button
               variant="secondary"
@@ -1969,7 +2049,7 @@ function EnhanceScreen({
               type="checkbox"
             />
             <span>
-              <strong>启用 Luoda-Codex 页面增强</strong>
+              <strong>启用 Codex++ 页面增强</strong>
               <small>关闭后会停用删除、导出、项目移动、Timeline、插件相关和菜单位置增强。</small>
             </span>
           </label>
@@ -1993,10 +2073,10 @@ function EnhanceScreen({
             <FeatureToggle title="对话居中宽度" detail="把主对话和输入框限制到固定最大宽度，适合大屏阅读。" checked={form.codexAppConversationView} disabled={!masterEnabled} onChange={(value) => setEnhanceFlag("codexAppConversationView", value)} />
             <FeatureToggle title="切换对话保留位置" detail="切换 thread 时恢复上一次浏览位置。" checked={form.codexAppThreadScrollRestore} disabled={!masterEnabled} onChange={(value) => setEnhanceFlag("codexAppThreadScrollRestore", value)} />
             <FeatureToggle title="Zed Remote open" detail="远程 SSH 文件引用可直接用 Zed Remote Development 打开。" checked={form.codexAppZedRemoteOpen} disabled={!masterEnabled} onChange={(value) => setEnhanceFlag("codexAppZedRemoteOpen", value)} />
-            <FeatureToggle title="Zed 项目记录" detail="维护 Luoda-Codex 自己的远程项目最近列表。" checked={form.zedRemoteProjectRegistryEnabled} disabled={!masterEnabled} onChange={(value) => setEnhanceFlag("zedRemoteProjectRegistryEnabled", value)} />
+            <FeatureToggle title="Zed 项目记录" detail="维护 Codex++ 自己的远程项目最近列表。" checked={form.zedRemoteProjectRegistryEnabled} disabled={!masterEnabled} onChange={(value) => setEnhanceFlag("zedRemoteProjectRegistryEnabled", value)} />
             <FeatureToggle title="同步 Zed settings" detail="高级选项，默认关闭；当前实现不主动改写 Zed settings。" checked={form.zedRemoteSyncToZedSettings} disabled={!masterEnabled} onChange={(value) => setEnhanceFlag("zedRemoteSyncToZedSettings", value)} />
             <FeatureToggle title="Upstream worktree" detail="从最新 upstream 分支创建 Git worktree。" checked={form.codexAppUpstreamWorktreeCreate} disabled={!masterEnabled} onChange={(value) => setEnhanceFlag("codexAppUpstreamWorktreeCreate", value)} />
-            <FeatureToggle title="原生菜单栏位置" detail="把 Luoda-Codex 菜单插入 Codex 顶部原生菜单栏。" checked={form.codexAppNativeMenuPlacement} disabled={!masterEnabled} onChange={(value) => setEnhanceFlag("codexAppNativeMenuPlacement", value)} />
+            <FeatureToggle title="原生菜单栏位置" detail="把 Codex++ 菜单插入 Codex 顶部原生菜单栏。" checked={form.codexAppNativeMenuPlacement} disabled={!masterEnabled} onChange={(value) => setEnhanceFlag("codexAppNativeMenuPlacement", value)} />
           </div>
           <div className="zed-remote-settings">
             <Field label="Zed 默认打开策略">
@@ -2054,7 +2134,7 @@ function ZedRemoteScreen({
   return (
     <>
       <Panel>
-        <CardHead title="Zed 远程项目" detail={`${allProjects.length} 个 Luoda-Codex 可识别项目，默认策略：${zedStrategyLabel(form.zedRemoteOpenStrategy)}`} />
+        <CardHead title="Zed 远程项目" detail={`${allProjects.length} 个 Codex++ 可识别项目，默认策略：${zedStrategyLabel(form.zedRemoteOpenStrategy)}`} />
         <CardContent>
           <div className="metric-list">
             <Metric label="Current" value={String(currentProjects.length)} />
@@ -2082,7 +2162,7 @@ function ZedRemoteScreen({
               />
               <span>
                 <strong>记录最近打开</strong>
-                <small>保存到 Luoda-Codex state，不改写 Zed settings。</small>
+                <small>保存到 Codex++ state，不改写 Zed settings。</small>
               </span>
             </label>
           </div>
@@ -2187,7 +2267,7 @@ function UserScriptsScreen({ settings, market, actions }: { settings: SettingsRe
               <RefreshCw className="h-4 w-4" />
               刷新市场
             </Button>
-            <Button onClick={() => void actions.openExternalUrl("")} variant="secondary">
+            <Button onClick={() => void actions.openExternalUrl(SCRIPT_MARKET_REPOSITORY_URL)} variant="secondary">
               <ExternalLink className="h-4 w-4" />
               投稿
             </Button>
@@ -2312,7 +2392,7 @@ function SessionsScreen({
             />
             <span>
               <strong>启动前自动修复历史会话</strong>
-              <small>开启后，通过 Luoda-Codex 启动 Codex 前自动整理一次旧对话的归属标记。</small>
+              <small>开启后，通过 Codex++ 启动 Codex 前自动整理一次旧对话的归属标记。</small>
             </span>
           </label>
           <Toolbar>
@@ -2365,7 +2445,8 @@ function RecommendationsScreen({ ads, actions }: { ads: AdsResult | null; action
           <div className="recommend-hero">
             <div>
               <strong>{ads ? `已加载 ${items.length} 条推荐` : "尚未加载推荐内容"}</strong>
-                          </div>
+              <span>内容来自 luoda2023/Ad-List，分为赞助商推荐和普通推荐。</span>
+            </div>
             <Button onClick={() => void actions.refreshAds()}>
               <RefreshCw className="h-4 w-4" />
               刷新推荐
@@ -2432,7 +2513,7 @@ function MaintenanceScreen({
         <CardContent>
           <label className="check-row">
             <input checked={removeOwnedData} onChange={(event) => onRemoveOwnedDataChange(event.currentTarget.checked)} type="checkbox" />
-            <span>卸载时移除 Luoda-Codex 托管数据</span>
+            <span>卸载时移除 Codex++ 托管数据</span>
           </label>
           <Toolbar>
             <Button onClick={() => void actions.installEntrypoints()}>安装入口</Button>
@@ -2442,7 +2523,7 @@ function MaintenanceScreen({
         </CardContent>
       </Panel>
       <Panel>
-        <CardHead title="自动接管" detail="Watcher 用于保持 Luoda-Codex 接管状态" />
+        <CardHead title="自动接管" detail="Watcher 用于保持 Codex++ 接管状态" />
         <CardContent>
           <Toolbar>
             <Button variant="secondary" onClick={() => void actions.installWatcher()}>安装 watcher</Button>
@@ -2498,7 +2579,7 @@ function MaintenanceScreen({
             </Field>
           </div>
           <Toolbar>
-            <Button onClick={() => void actions.launch()}>启动 Luoda-Codex</Button>
+            <Button onClick={() => void actions.launch()}>启动 Codex++</Button>
             <Button variant="secondary" onClick={() => void actions.saveManualCodexAppPath()}>
               保存为默认路径
             </Button>
@@ -2525,22 +2606,35 @@ function AboutScreen({
   return (
     <>
       <Panel>
-        <CardHead title="关于 Luoda-Codex" detail="本地 Codex 增强、管理工具和安装包维护" />
+        <CardHead title="关于 Codex++" detail="本地 Codex 增强、管理工具和安装包维护" />
         <CardContent>
           <div className="metric-list">
-            <Metric label="Luoda-Codex 版本" value={overview?.current_version ?? update?.currentVersion ?? "-"} />
+            <Metric label="Codex++ 版本" value={overview?.current_version ?? update?.currentVersion ?? "-"} />
             <Metric label="Codex 版本" value={overview?.codex_version ?? "未检测到"} />
+            <Metric label="项目地址" value="github.com/luoda2023/CodexPlusPlus" />
           </div>
           <Toolbar>
+            <Button onClick={() => void actions.openExternalUrl("https://github.com/luoda2023/CodexPlusPlus")} variant="secondary">
+              <ExternalLink className="h-4 w-4" />
+              打开项目主页
+            </Button>
+            <Button onClick={() => void actions.openExternalUrl("https://github.com/luoda2023/CodexPlusPlus/issues")} variant="secondary">
+              <ExternalLink className="h-4 w-4" />
+              反馈问题
+            </Button>
             <Button onClick={() => void actions.openExternalUrl("https://discord.gg/y96kX7A76v")} variant="secondary">
               <MessageCircle className="h-4 w-4" />
               Discord
+            </Button>
+            <Button onClick={() => void actions.openExternalUrl("https://t.me/CodexPlusPlus")} variant="secondary">
+              <MessageCircle className="h-4 w-4" />
+              Telegram
             </Button>
           </Toolbar>
         </CardContent>
       </Panel>
       <Panel>
-        <CardHead title="更新信息" detail={`当前版本 ${overview?.current_version ?? update?.currentVersion ?? "-"}`} />
+        <CardHead title="GitHub Release 更新" detail={`当前版本 ${overview?.current_version ?? update?.currentVersion ?? "-"}`} />
         <CardContent>
           <div className="metric-list">
             <Metric label="状态" value={update?.status ?? "not_checked"} />
@@ -2548,11 +2642,8 @@ function AboutScreen({
             <Metric label="资源" value={update?.assetName ?? "-"} />
             <Metric label="进度" value={`${update?.progress ?? 0}%`} />
           </div>
-          <Textarea className="log-view" readOnly value={update?.releaseSummary || update?.message || "尚未检查更新"} />
-          <Toolbar>
-            <Button onClick={() => void actions.checkUpdate()}>检查更新</Button>
-            <Button variant="secondary" onClick={() => void actions.performUpdate()}>下载并运行安装包</Button>
-          </Toolbar>
+          <Textarea className="log-view" readOnly value={update?.releaseSummary || update?.message || "LUODA-Codex: 更新功能已禁用，请从 GitHub 手动下载最新版本。"} />
+          
         </CardContent>
       </Panel>
       <LogsPanel logs={logs} actions={actions} />
@@ -3066,6 +3157,13 @@ function RelayProfileEditor({
           </Button>
         )}
       </div>
+      {isNew ? (
+        <ProviderPresetSelector
+          onSelect={(patch: PresetPatch) => {
+            updateDraft(patch as unknown as Partial<RelayProfile>);
+          }}
+        />
+      ) : null}
       <div className="relay-fields">
         <Field className="relay-field-name" label="名称">
           <Input
@@ -3231,7 +3329,7 @@ function RelayProfileEditor({
       {showApiFields && profile.protocol === "chatCompletions" ? (
         <div className="hint-line relay-protocol-hint">
           <MessageCircle className="h-4 w-4" />
-          <span>此上游会通过本地 127.0.0.1:57321 转成 Responses API，需要从 Luoda-Codex 启动 Codex。</span>
+          <span>此上游会通过本地 127.0.0.1:57321 转成 Responses API，需要从 Codex++ 启动 Codex。</span>
         </div>
       ) : null}
       <div className="hint-line relay-protocol-hint">
@@ -3822,11 +3920,8 @@ function routeSubtitle(route: Route) {
     sessions: "查看、删除和修复 Codex 本地会话",
     context: "独立管理 MCP、Skills、Plugins",
     enhance: "会话删除、导出、项目移动和脚本能力",
-    
-    
-    
     maintenance: "入口安装、修复、Watcher 与手动启动",
-    about: "版本信息、项目链接、日志与诊断",
+    about: "版本信息、项目链接、GitHub Release 更新、日志与诊断",
     settings: "主题、命令包装器和启动参数",
   };
   return subtitles[route];
@@ -4431,6 +4526,46 @@ function contextSelectionForAllEntries(settings: BackendSettings): RelayContextS
   };
 }
 
+function normalizeConfigOwnership(value: ConfigOwnership | undefined): ConfigOwnership {
+  if (value === "codexPlusPlus" || value === "ccSwitch" || value === "auto") return value;
+  return "auto";
+}
+
+function configOwnershipLabel(value: ConfigOwnership): string {
+  if (value === "codexPlusPlus") return "Codex++";
+  if (value === "ccSwitch") return "CC Switch";
+  return "自动";
+}
+
+function CoordinationStatusBanner({
+  form,
+  actions,
+}: {
+  form: BackendSettings;
+  actions: Actions;
+}) {
+  const [status, setStatus] = useState<CoordinationStatus | null>(null);
+  useEffect(() => {
+    void actions.refreshCoordinationStatus().then(setStatus);
+  }, [actions, form.ccsLinkEnabled, form.configOwnership, form.relayProfilesEnabled, form.activeRelayId]);
+  if (!status) return null;
+  const tone = status.conflictDetected ? "failed" : status.effectiveOwnership === "ccSwitch" ? "success" : "info";
+  return (
+    <div className={`relay-coordination-banner relay-coordination-${tone}`}>
+      <strong>配置协调状态</strong>
+      <p>{status.guidance}</p>
+      {status.ccswitchDetected ? (
+        <small>
+          有效所有权：{configOwnershipLabel(status.effectiveOwnership)}；live model_provider：{status.liveModelProvider || "（空）"}
+          {status.ccswitchCurrentProviderName ? `；CC Switch 当前：${status.ccswitchCurrentProviderName}` : ""}
+          {status.lastWriter ? `；上次写入方：${status.lastWriter}` : ""}
+        </small>
+      ) : null}
+      {status.conflictDetected ? <small>{status.conflictMessage}</small> : null}
+    </div>
+  );
+}
+
 function relayProfileSourceLabel(profile: RelayProfile) {
   return profile.linkedCcsProviderId ? "cc-switch 联动" : "本地";
 }
@@ -4438,6 +4573,9 @@ function relayProfileSourceLabel(profile: RelayProfile) {
 function relayProfileEditorStatus(profile: RelayProfile, form: BackendSettings, isNew: boolean) {
   if (isNew) return "新建供应商需要先保存到列表";
   if (!form.relayProfilesEnabled) return "供应商配置总开关已关闭；当前只保存配置，不写入 Codex live 文件";
+  if (profile.linkedCcsProviderId && form.ccsLinkEnabled && form.configOwnership !== "codexPlusPlus") {
+    return "联动 cc-switch；切换时从 cc-switch 数据库应用配置，避免覆盖冲突";
+  }
   if (profile.linkedCcsProviderId && form.ccsLinkEnabled) return "联动 cc-switch；保存后会回写外部供应商数据库";
   if (profile.linkedCcsProviderId) return "联动 cc-switch；当前未开启保存回写";
   return profile.id === form.activeRelayId ? "当前正在使用" : "编辑后保存列表，再切换模式时会使用新配置";
@@ -4488,7 +4626,7 @@ function healthItems(overview: OverviewResult | null) {
       title: "静默启动入口",
       status: overview?.silent_shortcut.status ?? "not_checked",
       ok: overview?.silent_shortcut.status === "installed",
-      detail: overview?.silent_shortcut.path || "缺少 Luoda-Codex 静默启动快捷方式时可在安装维护页修复。",
+      detail: overview?.silent_shortcut.path || "缺少 Codex++ 静默启动快捷方式时可在安装维护页修复。",
     },
     {
       title: "管理工具入口",
@@ -4546,6 +4684,7 @@ function normalizeSettings(settings: BackendSettings): BackendSettings {
     ...settings,
     relayProfilesEnabled: settings.relayProfilesEnabled !== false,
     ccsLinkEnabled: settings.ccsLinkEnabled === true,
+    configOwnership: normalizeConfigOwnership(settings.configOwnership),
     relayCommonConfigContents,
     relayContextConfigContents,
     relayProfiles: profiles,
@@ -5208,6 +5347,18 @@ function formatTime(value: number) {
   return new Date(value).toLocaleString("zh-CN");
 }
 
+function formatDuration(startedAtMs: number): string {
+  if (!startedAtMs) return "-";
+  const elapsed = Date.now() - startedAtMs;
+  if (elapsed < 0) return formatTime(startedAtMs);
+  const mins = Math.floor(elapsed / 60000);
+  if (mins < 1) return "刚刚启动";
+  if (mins < 60) return `已运行 ${mins} 分钟`;
+  const hours = Math.floor(mins / 60);
+  const remainMins = mins % 60;
+  return `已运行 ${hours} 小时 ${remainMins} 分钟`;
+}
+
 function stringifyError(error: unknown) {
   if (error instanceof Error) return error.message;
   return String(error);
@@ -5215,7 +5366,7 @@ function stringifyError(error: unknown) {
 
 function loadInitialTheme(): Theme {
   if (typeof window === "undefined") return "dark";
-  return window.localStorage.getItem("luoda-codex-theme") === "light" ? "light" : "dark";
+  return window.localStorage.getItem("codex-plus-theme") === "light" ? "light" : "dark";
 }
 
 function loadInitialRoute(): Route {
@@ -5226,4 +5377,3 @@ function loadInitialRoute(): Route {
   }
   return "overview";
 }
-

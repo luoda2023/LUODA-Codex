@@ -1,4 +1,4 @@
-﻿use std::sync::{Arc, Mutex};
+use std::sync::{Arc, Mutex};
 
 use async_trait::async_trait;
 use luoda_codex_core::launcher::{
@@ -296,11 +296,11 @@ async fn runtime_status_devtools_repair_and_ads_routes_are_dispatched() {
     );
     assert_eq!(
         handle_bridge_request(ctx.clone(), "/backend/status", json!({})).await,
-        json!({"status": "ok", "message": "鍚庣宸茶繛鎺?, "version": luoda_codex_core::version::VERSION})
+        json!({"status": "ok", "message": "后端已连接", "version": luoda_codex_core::version::VERSION})
     );
     assert_eq!(
         handle_bridge_request(ctx.clone(), "/backend/repair", json!({})).await,
-        json!({"status": "ok", "message": "鍚庣宸蹭慨澶?, "version": luoda_codex_core::version::VERSION})
+        json!({"status": "ok", "message": "后端已修复", "version": luoda_codex_core::version::VERSION})
     );
     assert_eq!(
         handle_bridge_request(ctx.clone(), "/ads", json!({})).await,
@@ -645,11 +645,11 @@ async fn core_runtime_reload_evaluates_enabled_user_bundle_and_status_is_ok() {
 
     assert_eq!(
         status,
-        json!({"status": "ok", "message": "鍚庣宸茶繛鎺?, "version": luoda_codex_core::version::VERSION})
+        json!({"status": "ok", "message": "后端已连接", "version": luoda_codex_core::version::VERSION})
     );
     assert_eq!(
         repaired,
-        json!({"status": "ok", "message": "鍚庣宸茶繛鎺?, "version": luoda_codex_core::version::VERSION})
+        json!({"status": "ok", "message": "后端已连接", "version": luoda_codex_core::version::VERSION})
     );
     assert_eq!(reloaded["scripts"][0]["key"], "builtin:demo.js");
     let evaluated = evaluated.lock().unwrap();
@@ -691,13 +691,13 @@ async fn core_runtime_manager_route_attempts_to_open_manager_binary() {
 
     let result = handle_bridge_request(ctx, "/manager/open", json!({})).await;
 
-    assert_ne!(result["message"], "绠＄悊宸ュ叿鍚姩鏈帴鍏ュ綋鍓嶈繍琛屾椂");
+    assert_ne!(result["message"], "管理工具启动未接入当前运行时");
 }
 
 #[tokio::test]
 async fn bridge_backend_status_writes_diagnostic_log() {
     let temp = tempfile::tempdir().unwrap();
-    let log_path = temp.path().join("luoda-codex.log");
+    let log_path = temp.path().join("codex-plus.log");
     luoda_codex_core::diagnostic_log::set_diagnostic_log_path_for_tests(Some(log_path.clone()));
     let ctx = BridgeContext::core(Arc::new(CoreRuntimeService::new(
         9229,
@@ -1054,13 +1054,13 @@ impl BridgeRuntimeService for FakeRuntime {
 
     async fn backend_status(&self) -> anyhow::Result<Value> {
         Ok(
-            json!({"status": "ok", "message": "鍚庣宸茶繛鎺?, "version": luoda_codex_core::version::VERSION}),
+            json!({"status": "ok", "message": "后端已连接", "version": luoda_codex_core::version::VERSION}),
         )
     }
 
     async fn repair_backend(&self) -> anyhow::Result<Value> {
         Ok(
-            json!({"status": "ok", "message": "鍚庣宸蹭慨澶?, "version": luoda_codex_core::version::VERSION}),
+            json!({"status": "ok", "message": "后端已修复", "version": luoda_codex_core::version::VERSION}),
         )
     }
 
