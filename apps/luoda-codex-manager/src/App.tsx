@@ -804,21 +804,12 @@ export function App() {
       await refreshLocalSessions(true);
       await refreshProviderSyncTargets(true);
     }
-    if (next === "zedRemote") {
-      await refreshSettings(true);
-      await refreshZedRemoteProjects(true);
-    }
     if (next === "context") {
       await refreshSettings(true);
       await refreshRelayFiles(true);
       await refreshLiveContextEntries(true);
     }
     if (next === "settings") await refreshSettings(true);
-    if (next === "userScripts") {
-      await refreshSettings(true);
-      await refreshScriptMarket(true);
-    }
-    if (next === "recommendations") await refreshAds(true);
     if (next === "about") {
       await refreshOverview(true);
       await refreshLogs(true);
@@ -1557,7 +1548,7 @@ export function App() {
           <div className="brand-mark">L</div>
           <div className="brand-copy">
             <div className="brand-title-row">
-              <div className="brand-title">Luoda-Codex</div>
+              <div className="brand-title">L</div>
               {hasUpdate ? (
                 <button
                   className="update-dot"
@@ -3831,9 +3822,9 @@ function routeSubtitle(route: Route) {
     sessions: "查看、删除和修复 Codex 本地会话",
     context: "独立管理 MCP、Skills、Plugins",
     enhance: "会话删除、导出、项目移动和脚本能力",
-    zedRemote: "管理 Codex SSH 项目并加入 Zed workspace",
-    userScripts: "内置和用户自定义脚本清单",
-    recommendations: "赞助商推荐与普通推荐",
+    
+    
+    
     maintenance: "入口安装、修复、Watcher 与手动启动",
     about: "版本信息、项目链接、日志与诊断",
     settings: "主题、命令包装器和启动参数",
