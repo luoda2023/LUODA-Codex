@@ -634,7 +634,7 @@ fn archived_lookup_workspace_move_and_sort_keys_match_expected_shape() {
     let adapter = SQLiteStorageAdapter::new(&db_path, BackupStore::new(tmp.path().join("backups")));
 
     assert_eq!(
-        adapter.find_archived_thread_by_title("Codex Thread 2026�?�?日，1:19 · RustGUI"),
+        adapter.find_archived_thread_by_title("Codex Thread 2026年5月9日，1:19 · RustGUI"),
         Some(session("t1", "Codex Thread"))
     );
 
@@ -743,4 +743,3 @@ fn thread_usage_history_reads_rollout_token_count_events() {
         })
     );
 }
-

@@ -1,4 +1,4 @@
-use std::io::Write;
+﻿use std::io::Write;
 use std::path::PathBuf;
 use std::sync::{Mutex, OnceLock};
 use std::time::{SystemTime, UNIX_EPOCH};

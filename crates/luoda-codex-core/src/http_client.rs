@@ -1,4 +1,4 @@
-pub fn proxied_client(user_agent: &str) -> anyhow::Result<reqwest::Client> {
+﻿pub fn proxied_client(user_agent: &str) -> anyhow::Result<reqwest::Client> {
     let ua = if user_agent.trim().is_empty() {
         format!("Luoda-Codex/{}", env!("CARGO_PKG_VERSION"))
     } else {

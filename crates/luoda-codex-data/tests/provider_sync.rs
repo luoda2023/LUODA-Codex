@@ -741,4 +741,3 @@ fn provider_sync_preserves_rollout_mtime() {
         "mtime drifted by {drift:?}, expected < 2s"
     );
 }
-

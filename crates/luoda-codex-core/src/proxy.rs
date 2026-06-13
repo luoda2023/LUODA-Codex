@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+﻿use std::collections::HashMap;
 
 pub fn has_proxy_environment(env: &HashMap<String, String>) -> bool {
     [

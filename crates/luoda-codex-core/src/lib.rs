@@ -1,13 +1,12 @@
+﻿pub mod config_coordinator;
 pub mod ads;
 pub mod app_paths;
 pub mod assets;
 pub mod bridge;
 pub mod ccs_import;
-pub mod config_coordinator;
 pub mod cdp;
 pub mod cli_wrapper;
 pub mod codex_sqlite;
-pub mod config_coordinator;
 pub mod diagnostic_log;
 pub mod http_client;
 pub mod install;
@@ -46,3 +45,4 @@ pub fn windows_open_url(url: &str) -> anyhow::Result<()> {
 pub fn windows_activate_process_window(process_id: u32) -> bool {
     windows_integration::activate_process_window(process_id)
 }
+

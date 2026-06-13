@@ -1,4 +1,4 @@
-#[cfg(windows)]
+﻿#[cfg(windows)]
 use std::ffi::{OsStr, OsString};
 #[cfg(windows)]
 use std::iter::once;

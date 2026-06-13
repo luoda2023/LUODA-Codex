@@ -1,4 +1,4 @@
-use base64::Engine;
+﻿use base64::Engine;
 use serde_json::{Value, json};
 
 const RENDERER_SCRIPT: &str = include_str!("../../../assets/inject/renderer-inject.js");

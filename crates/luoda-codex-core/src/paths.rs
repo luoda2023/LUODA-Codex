@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+﻿use std::path::PathBuf;
 use std::sync::{Mutex, OnceLock};
 
 const APP_STATE_DIR: &str = ".codex-session-delete";

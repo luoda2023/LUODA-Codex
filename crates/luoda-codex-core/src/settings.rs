@@ -690,7 +690,7 @@ fn preserve_official_mix_bearer_tokens(
 
 fn set_or_replace_experimental_bearer_token(contents: &str, token: &str) -> String {
     let mut doc = parse_toml_document(contents).unwrap_or_else(|_| DocumentMut::new());
-    let provider_id = active_provider_id(&doc).unwrap_or_else(|| "luoda-codex-relay".to_string());
+    let provider_id = active_provider_id(&doc).unwrap_or_else(|| "codex-plus-relay".to_string());
     doc["model_provider"] = toml_edit::value(provider_id.as_str());
     doc["model_providers"][provider_id.as_str()]["experimental_bearer_token"] =
         toml_edit::value(token.trim());
@@ -845,7 +845,7 @@ mod tests {
 
     fn temp_dir() -> std::path::PathBuf {
         let path = std::env::temp_dir().join(format!(
-            "luoda-codex-core-settings-test-{}-{}",
+            "codex-plus-core-settings-test-{}-{}",
             std::process::id(),
             NEXT_TEMP_ID.fetch_add(1, Ordering::Relaxed)
         ));
@@ -974,7 +974,7 @@ mod tests {
         let profile: RelayProfile = serde_json::from_str(
             r#"{
                 "id":"relay-a",
-                "name":"供应�?A",
+                "name":"供应商 A",
                 "contextSelection":{
                     "mcpServers":["context7"],
                     "skills":["writer"],
@@ -1006,7 +1006,7 @@ mod tests {
         let profile: RelayProfile = serde_json::from_str(
             r#"{
                 "id":"relay-a",
-                "name":"供应�?A",
+                "name":"供应商 A",
                 "model":"gpt-5.4",
                 "baseUrl":"https://relay.example/v1",
                 "apiKey":"sk-test",
@@ -1439,7 +1439,7 @@ experimental_bearer_token = "sk-existing""#));
                 "relayProfiles": [
                     {
                         "id": "relay-a",
-                        "name": "供应�?A",
+                        "name": "供应商 A",
                         "model": "gpt-5.4",
                         "baseUrl": "https://relay.example/v1",
                         "apiKey": "sk-a",
@@ -1452,7 +1452,7 @@ experimental_bearer_token = "sk-existing""#));
             .unwrap();
 
         assert_eq!(updated.relay_profiles[0].id, "relay-a");
-        assert_eq!(updated.relay_profiles[0].name, "供应�?A");
+        assert_eq!(updated.relay_profiles[0].name, "供应商 A");
 
         let saved: Value =
             serde_json::from_str(&std::fs::read_to_string(dir.join("settings.json")).unwrap())
@@ -1606,4 +1606,3 @@ experimental_bearer_token = "sk-existing""#));
         assert_eq!(std::fs::read_to_string(&path).unwrap(), original);
     }
 }
-

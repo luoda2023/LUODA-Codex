@@ -1,4 +1,4 @@
-pub mod commands;
+﻿pub mod commands;
 pub mod install;
 
 pub fn run() {

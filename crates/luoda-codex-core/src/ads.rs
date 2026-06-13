@@ -1,4 +1,4 @@
-use serde_json::{Value, json};
+﻿use serde_json::{Value, json};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 pub const DEFAULT_AD_LIST_URLS: [&str; 2] = [

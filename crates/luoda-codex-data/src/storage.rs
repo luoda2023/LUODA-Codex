@@ -311,7 +311,7 @@ impl SQLiteStorageAdapter {
             let mut payload = json!({
                 "status": "moved",
                 "session_id": thread_id,
-                "message": "已移动对�?,
+                "message": "已移动对话",
                 "previous_cwd": previous_cwd,
                 "target_cwd": target,
                 "rollout_updated": rollout.0,
@@ -1225,4 +1225,3 @@ fn json_to_sql_value(value: &Value) -> SqlValue {
         other => SqlValue::Text(other.to_string()),
     }
 }
-

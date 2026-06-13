@@ -1,4 +1,4 @@
-use std::ffi::OsStr;
+﻿use std::ffi::OsStr;
 use std::path::{Path, PathBuf};
 
 pub fn find_latest_codex_app_dir(root: &Path) -> Option<PathBuf> {

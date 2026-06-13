@@ -1,4 +1,4 @@
-use luoda_codex_core::protocol_proxy::{
+ï»¿use luoda_codex_core::protocol_proxy::{
     ChatSseToResponsesConverter, chat_completion_to_response,
     chat_completion_to_response_with_request, chat_completions_url, chat_sse_to_responses_sse,
     chat_sse_to_responses_sse_with_request, is_chat_completions_proxy_path, is_models_proxy_path,
@@ -1153,8 +1153,8 @@ fn chat_sse_converter_handles_partial_chunks_and_utf8_boundaries() {
     let sse = "data: {\"id\":\"chatcmpl_utf8\",\"created\":123,\"model\":\"gpt-5.4\",\"choices\":[{\"delta\":{\"content\":\"ä½ å¥½\"},\"finish_reason\":\"stop\"}]}\r\n\r\n";
     let bytes = sse.as_bytes();
     let split = bytes
-        .windows("å¥?.len())
-        .position(|window| window == "å¥?.as_bytes())
+        .windows("ï¿½?.len())
+        .position(|window| window == "ï¿½?.as_bytes())
         .unwrap()
         + 1;
 

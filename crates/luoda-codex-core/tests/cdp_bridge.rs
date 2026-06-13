@@ -1,4 +1,4 @@
-use luoda_codex_core::assets;
+﻿use luoda_codex_core::assets;
 use luoda_codex_core::bridge::{self, BRIDGE_BINDING_NAME};
 use luoda_codex_core::cdp::{CdpTarget, list_targets, pick_page_target};
 use futures_util::{SinkExt, StreamExt};
@@ -87,7 +87,7 @@ fn injection_script_times_out_backend_bridge_calls_and_falls_back_to_helper() {
 fn injection_script_explains_plugin_patch_is_unneeded_in_relay_mode() {
     let script = assets::injection_script(57321);
 
-    assert!(script.contains("兼容增强模式下无需开�?));
+    assert!(script.contains("兼容增强模式下无需开�?));
 }
 
 #[test]
@@ -100,7 +100,7 @@ fn injection_script_menu_exposes_three_independent_plugin_switches() {
     assert!(script.contains("data-codex-plus-setting=\"pluginEntryUnlock\""));
     assert!(script.contains("特殊插件强制安装"));
     assert!(script.contains("data-codex-plus-setting=\"forcePluginInstall\""));
-    assert!(script.contains("恢复 1.1.9 的入口解锁方�?));
+    assert!(script.contains("恢复 1.1.9 的入口解锁方�?));
 }
 
 #[test]
@@ -151,7 +151,7 @@ fn injection_script_restores_legacy_plugin_sidebar_entry_unlock() {
     assert!(script.contains("if (!codexPlusSettings().pluginEntryUnlock) return"));
     assert!(script.contains("pluginButton.addEventListener(\"click\", () => {"));
     assert!(script.contains("spoofChatGPTAuthMethod(pluginButton);"));
-    assert!(script.contains("插件 - 已解�?));
+    assert!(script.contains("插件 - 已解�?));
     assert!(script.contains("Plugins - Unlocked"));
 }
 
@@ -411,7 +411,7 @@ fn injection_script_exposes_fast_service_tier_control() {
     assert!(script.contains("normalizeCodexServiceTierControlMode(state.mode) !== \"custom\""));
     assert!(script.contains("state.draft = null"));
     assert!(script.contains("后端未连接，无法切换服务模式"));
-    assert!(script.contains("未连�?));
+    assert!(script.contains("未连�?));
     assert!(script.contains("thread/start"));
     assert!(script.contains("thread/resume"));
     assert!(script.contains("turn/start"));
@@ -435,7 +435,7 @@ fn injection_script_exposes_fast_service_tier_control() {
     assert!(script.contains("setAttribute(\"tabindex\", \"0\")"));
     assert!(script.contains("继承 config.toml"));
     assert!(script.contains("service_tier=\\\"priority\\\""));
-    assert!(script.contains("Fast 仅支�?));
+    assert!(script.contains("Fast 仅支�?));
     assert!(script.contains("当前 thread"));
     assert!(script.contains("standard"));
     assert!(script.contains("fast"));
@@ -670,7 +670,7 @@ fn injection_script_prevents_switching_to_branches_used_by_other_worktrees() {
     assert!(script.contains("data-codex-branch-worktree-path"));
     assert!(script.contains("annotateBranchMenuWorktreeUsage"));
     assert!(script.contains("branchWorktreePathFromMenuItem"));
-    assert!(script.contains("该分支已在另一�?worktree 使用"));
+    assert!(script.contains("该分支已在另一�?worktree 使用"));
     assert!(script.contains("event.stopImmediatePropagation?.()"));
 }
 
@@ -697,7 +697,7 @@ fn manager_ui_exposes_pure_api_relay_mode_button() {
         std::fs::read_to_string(repo.join("apps/codex-plus-manager/src-tauri/src/lib.rs")).unwrap();
 
     assert!(source.contains("官方混入 API Key"));
-    assert!(source.contains("�?API"));
+    assert!(source.contains("�?API"));
     assert!(source.contains("apply_pure_api_injection"));
     assert!(commands.contains("commands::apply_pure_api_injection"));
 }

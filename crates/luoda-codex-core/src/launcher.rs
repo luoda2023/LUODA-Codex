@@ -254,7 +254,7 @@ where
             } else {
                 let degraded = launch_status(
                     "running_degraded",
-                    "Codex 已启动，Luoda-Codex 增强仍在等待页面就绪。",
+                    "Codex 已启动，Codex++ 增强仍在等待页面就绪。",
                     debug_port,
                     helper_port,
                     &app_dir,
@@ -268,7 +268,7 @@ where
         if !settings.enhancements_enabled || !injection_degraded {
             let status = launch_status(
                 "running",
-                "Luoda-Codex launcher ready",
+                "Codex++ launcher ready",
                 debug_port,
                 helper_port,
                 &app_dir,
@@ -373,7 +373,7 @@ impl LaunchHooks for DefaultLaunchHooks {
     }
 
     async fn run_provider_sync(&self) -> anyhow::Result<()> {
-        anyhow::bail!("provider sync requires launcher hooks with luoda-codex-data integration")
+        anyhow::bail!("provider sync requires launcher hooks with codex-plus-data integration")
     }
 
     async fn apply_active_relay_profile(&self, settings: &BackendSettings) -> anyhow::Result<()> {

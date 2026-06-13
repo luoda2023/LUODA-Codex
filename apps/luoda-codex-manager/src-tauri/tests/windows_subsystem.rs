@@ -1,4 +1,4 @@
-#[cfg(windows)]
+﻿#[cfg(windows)]
 #[test]
 fn manager_binary_uses_windows_gui_subsystem_in_debug_and_release() {
     let main_rs = std::fs::read_to_string(concat!(env!("CARGO_MANIFEST_DIR"), "/src/main.rs"))

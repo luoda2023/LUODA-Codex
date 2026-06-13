@@ -1,4 +1,4 @@
-//! Codex Responses API 与 OpenAI Chat Completions 的本地协议转换。
+﻿//! Codex Responses API 与 OpenAI Chat Completions 的本地协议转换。
 //!
 //! Codex Chat 与 Responses 协议之间的转换实现。
 

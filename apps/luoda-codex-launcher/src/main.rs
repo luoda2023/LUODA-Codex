@@ -1,4 +1,4 @@
-#![cfg_attr(windows, windows_subsystem = "windows")]
+ï»¿#![cfg_attr(windows, windows_subsystem = "windows")]
 
 use anyhow::{Context, Result};
 use luoda_codex_core::launcher::{
@@ -527,7 +527,7 @@ impl BridgeRuntimeService for LauncherRuntimeService {
 
     async fn backend_status(&self) -> anyhow::Result<Value> {
         Ok(
-json!({"status": "ok", "message": "ºó¶ËÒÑÁ¬½Ó", "version": luoda_codex_core::version::VERSION}),
+json!({"status": "ok", "message": "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", "version": luoda_codex_core::version::VERSION}),
         )
     }
 

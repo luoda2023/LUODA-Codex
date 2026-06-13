@@ -1,4 +1,4 @@
-#[derive(Debug, Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+﻿#[derive(Debug, Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub struct SessionRef {
     pub session_id: String,
     pub title: String,

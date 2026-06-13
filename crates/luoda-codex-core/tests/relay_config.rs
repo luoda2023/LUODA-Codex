@@ -1,4 +1,4 @@
-use luoda_codex_core::codex_sqlite::codex_session_db_path_from_home;
+﻿use luoda_codex_core::codex_sqlite::codex_session_db_path_from_home;
 use luoda_codex_core::relay_config::{
     apply_pure_api_config_to_home, apply_relay_config_file_to_home, apply_relay_config_to_home,
     apply_relay_files_to_home, apply_relay_files_to_home_with_common,
@@ -1089,7 +1089,7 @@ fn apply_relay_files_with_context_rejects_invalid_context_token_values() {
     )
     .unwrap_err();
 
-    assert!(error.to_string().contains("上下文大�?));
+    assert!(error.to_string().contains("上下文大�?));
 }
 
 #[test]
